@@ -1,0 +1,55 @@
+<ion-content>
+
+	<ion-card>
+		<ion-card-header>
+			Send Private Message
+		</ion-card-header>
+		<ion-card-content>
+
+			<form [formGroup]="formGroup">
+
+				<ion-list>
+					<ion-item *ngIf="users">
+
+						<ion-select [(ngModel)]="existingUsers"
+									formControlName="selectedUsers"
+									multiple="true">
+							<ion-option *ngFor="let user of users"
+										[value]="user">
+								<img src="{{user.imgSrc}}" />{{user.name}}
+							</ion-option>
+						</ion-select>
+					</ion-item>
+					<ion-item *ngIf="!users">
+						<p text-wrap>
+							Sorry there are no users to send a private message to.
+							When you are connected to other users then, you can select one or more users to send a private message to.
+						</p>
+					</ion-item>
+
+					<ion-item>
+						<ion-textarea formControlName="message"
+									  placeholder="Enter your message"></ion-textarea>
+					</ion-item>
+					<ion-item *ngIf="formGroup.get('message').errors">
+						<show-form-errors [control]="formGroup.get('message')"></show-form-errors>
+					</ion-item>
+				</ion-list>
+				<ion-grid>
+					<ion-row>
+						<ion-col col-12>
+							<button ion-button icon-start (click)="submit()" *ngIf="!showProgress">
+								<ion-icon name="paper-plane"></ion-icon>
+								Send
+							</button>
+							<button ion-button icon-start color="danger" (click)="close()" *ngIf="!showProgress">
+								<ion-icon name="close-circle"></ion-icon>
+								Cancel
+							</button>
+						</ion-col>
+					</ion-row>
+				</ion-grid>
+			</form>
+		</ion-card-content>
+	</ion-card>
+</ion-content>

@@ -1,0 +1,71 @@
+<ion-header>
+	<ion-navbar hideBackButton="true">
+		<ion-title>
+            Edit Netcast
+        </ion-title>
+		<ion-buttons end>
+            <button (click)="cancel()" ion-button icon-only>
+                <ion-icon name="close-circle"></ion-icon>
+            </button>
+		</ion-buttons>
+	</ion-navbar>
+</ion-header>
+<ion-content padding>
+    <form [formGroup]="formGroup">
+        <ion-grid>
+            <ion-row>
+                <ion-col>
+                    <ion-list>
+                        <ion-item text-wrap>
+                            <ion-label stacked>Title</ion-label>
+                            <ion-input type="text" formControlName="title"></ion-input>
+                        </ion-item>
+                        <ion-item text-wrap *ngIf="!formGroup.controls.title.valid && formGroup.controls.title.dirty">
+                            <show-form-errors [control]="formGroup.controls.title"></show-form-errors>
+                        </ion-item>
+                        <ion-item text-wrap>
+                            <ion-label stacked>Description</ion-label>
+                            <ion-textarea formControlName="description" rows="3"></ion-textarea>
+                        </ion-item>
+                        <ion-item text-wrap *ngIf="!formGroup.controls.description.valid && formGroup.controls.description.dirty">
+                            <show-form-errors [control]="formGroup.get('description')"></show-form-errors>
+                        </ion-item>
+
+
+                        <ion-item>
+                            <ion-label stacked>Scheduled Date &amp; Time</ion-label>
+                            <ion-datetime displayFormat="MMM DD, YYYY h:mm A" formControlName="meetingTime"></ion-datetime>
+                        </ion-item>
+                        <ion-item *ngIf="!formGroup.controls.meetingTime.valid && formGroup.controls.meetingTime.dirty">
+                            <show-form-errors [control]="formGroup.get('meetingTime')"></show-form-errors>
+                        </ion-item>
+
+                        <ion-item>
+                            <ion-label floating>Select a Meeting Length: </ion-label>
+                            <ion-select formControlName="meetingLength">
+                                <ion-option *ngFor="let length of lengths" value="{{length.value}}">{{length.key}}</ion-option>
+                            </ion-select>
+                        </ion-item>
+                        <ion-item *ngIf="!formGroup.controls.meetingLength.valid && formGroup.controls.meetingLength.dirty">
+                            <show-form-errors [control]="formGroup.get('meetingLength')"></show-form-errors>
+                        </ion-item>
+
+                        <ion-row class="bg-white">
+                            <ion-col class="text-center">
+                                <button (click)="cancel()" ion-button color="danger">Cancel</button>
+                            </ion-col>
+                            <ion-col class="text-center">
+                                <button (click)="submit()" ion-button color="brand-orange">Update Meeting</button>
+                            </ion-col>
+                        </ion-row>
+                    </ion-list>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+
+       
+    </form>
+   
+	
+</ion-content>
+<phone-ringer #phoneRinger></phone-ringer>

@@ -1,0 +1,43 @@
+<div class="container">
+    <div class="buttons">
+        <button ion-button class="btn" color="secondary" (click)="accept()" icon-only>
+            <ion-icon name="call"></ion-icon>
+        </button>
+        <button ion-button class="btn" color="danger" (click)="deny()" icon-only>
+            <ion-icon name="call" id="hangup"></ion-icon>
+        </button>
+        <button ion-button class="btn" color="bad-danger" (click)="block()" icon-only>
+            <ion-icon name="hand"></ion-icon>
+        </button>
+    </div>
+    <div class="call-animation">
+        <img class="img-circle" src="assets/images/default-avatar.png" alt="" />
+    </div>
+    <p class="label">
+        Incoming call from
+    </p>
+    <p class="name">
+        {{call.profile.email}}
+    </p>
+    <div class="buttons">
+        <button ion-button class="btn" color="secondary" (click)="accept()" icon-only>
+            <ion-icon name="call"></ion-icon>
+        </button>
+        <button ion-button class="btn" color="danger" (click)="deny()" icon-only>
+            <ion-icon name="call" id="hangup"></ion-icon>
+        </button>
+        <button ion-button class="btn" color="bad-danger" (click)="block()" icon-only>
+            <ion-icon name="hand"></ion-icon>
+        </button>
+    </div>
+</div>
+
+<!-- <ion-item *ngFor="let caller of call['callers']">
+
+                    <ion-avatar item-start *ngIf="caller.remoteGuid !== call.remoteGuid">
+                        <img src="{{caller.profile.avatarDataUri}}" />
+                    </ion-avatar>
+                    <ion-note item-end *ngIf="caller.remoteGuid !== call.remoteGuid">
+                        {{caller.profile.name}}
+                    </ion-note>
+                </ion-item> -->

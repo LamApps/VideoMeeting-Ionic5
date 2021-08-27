@@ -1,0 +1,51 @@
+<ion-content>
+	<ion-card>
+		<ion-card-header>
+			Additional Customer Information
+		</ion-card-header>
+		<ion-card-content>
+			<form [formGroup]="formGroup">
+				<ion-list>
+					<ion-item>
+						<ion-label floating>Name</ion-label>
+						<ion-input type="text"
+								   formControlName="name"></ion-input>
+					</ion-item>
+					<ion-item *ngIf="formGroup.get('name').errors">
+						<show-form-errors [control]="formGroup.get('name')"></show-form-errors>
+					</ion-item>
+					<ion-item>
+						<ion-label floating>Subject</ion-label>
+						<ion-input type="text"
+								   formControlName="subject"></ion-input>
+					</ion-item>
+					<ion-item *ngIf="formGroup.get('subject').errors">
+						<show-form-errors [control]="formGroup.get('subject')"></show-form-errors>
+					</ion-item>
+					<ion-item>
+						<label>Message</label>
+						<ion-textarea formControlName="message"
+									  placeholder="Enter your message"></ion-textarea>
+					</ion-item>
+					<ion-item *ngIf="formGroup.get('message').errors">
+						<show-form-errors [control]="formGroup.get('message')"></show-form-errors>
+					</ion-item>
+				</ion-list>
+				<ion-grid>
+					<ion-row>
+						<ion-col col-12>
+							<button ion-button icon-start (click)="submit()" *ngIf="!showProgress">
+								<ion-icon name="paper-plane"></ion-icon>
+								Update
+							</button>
+							<button ion-button icon-start color="danger" (click)="cancel()" *ngIf="!showProgress">
+								<ion-icon name="close-circle"></ion-icon>
+								Cancel
+							</button>
+						</ion-col>
+					</ion-row>
+				</ion-grid>
+			</form>
+		</ion-card-content>
+	</ion-card>
+</ion-content>

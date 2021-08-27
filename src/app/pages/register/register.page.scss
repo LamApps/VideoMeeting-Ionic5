@@ -1,0 +1,12 @@
+@import '../../../assets/variables';
+@import '../../../assets/mixins';
+
+
+.grid {
+    @include borderRadius($radiusLg);
+    overflow: hidden;
+    background-color: $white;
+}
+.register-form {
+    padding: 20px;
+}

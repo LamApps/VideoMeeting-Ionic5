@@ -1,0 +1,32 @@
+<ion-card>
+	<ion-item>
+		<ion-avatar item-start>
+			<img src="{{imgSrc}}" alt="">
+		</ion-avatar>
+		<h2>{{timer}}</h2>
+		<h2>{{email}}</h2>
+		<p *ngIf="name">{{name}}</p>
+	</ion-item>
+	<ion-row>
+		<ion-col>
+			<button ion-button icon-left clear small (click)="cancel()">Cancel</button>
+		</ion-col>
+	</ion-row>
+</ion-card>
+
+<!--<div class="outgoing-call-container">
+	<ion-card class="mat-elevation-z0 outgoing-call-card">
+		<ion-card-header>
+			<h2 mat-card-avatar class="timer">{{timer}}</h2>
+			<ion-card-title><h3>Connecting to...</h3></ion-card-title>
+		</ion-card-header>
+		<img class="animated pulse infinite" mat-card-image src="{{imgSrc}}" alt="">
+		<ion-card-content>
+			<h2>{{email}}</h2>
+			<p *ngIf="name">{{name}}</p>
+		</ion-card-content>
+		<ion-list>
+			<button ion-item color="warn" (click)="cancel()">Cancel</button>
+		</ion-list>
+	</ion-card>
+</div>-->

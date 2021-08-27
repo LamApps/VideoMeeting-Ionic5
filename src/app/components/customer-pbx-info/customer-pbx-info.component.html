@@ -1,0 +1,27 @@
+<ion-content>
+    <ion-card *ngIf="employee">
+        <ion-card-header>
+            Representative
+        </ion-card-header>
+        <img src="{{employee.imgSrc}}">
+        <ion-card-content>
+            <ion-card-title>{{employee.name}}</ion-card-title>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card *ngIf="companyProfile">
+        <ion-card-header>
+            Company
+        </ion-card-header>
+        <img src="{{companyProfile.imgSrc}}" />
+        <ion-card-content>
+            <ion-card-title>{{companyProfile.name}}</ion-card-title>
+        </ion-card-content>
+    </ion-card>
+    <p class="text-center">
+        <button ion-button icon-start color="danger" (click)="close()" *ngIf="!showProgress">
+            <ion-icon name="close-circle"></ion-icon>
+            Close
+        </button>
+    </p>
+</ion-content>

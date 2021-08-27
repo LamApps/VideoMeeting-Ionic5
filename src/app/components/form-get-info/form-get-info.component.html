@@ -1,0 +1,39 @@
+<ion-content>
+    <ion-card>
+        <ion-card-header *ngIf="title">
+            {{title}}
+        </ion-card-header>
+        <ion-card-content>
+            <ng-container *ngIf="instructions">
+                <div [innerHtml]="instructions"></div>
+            </ng-container>
+            <form [formGroup]="formGroup">
+                <ion-list *ngIf="formItems">
+                    <ng-container *ngFor="let item of formItems">
+                        <ion-item>
+                            <ion-label floating>{{item.label}}</ion-label>
+                            <ion-input type="text"
+                                       formControlName="{{item.key}}"></ion-input>
+                        </ion-item>
+                        <ion-item *ngIf="formGroup.get(item.key).errors">
+                            <show-form-errors [control]="formGroup.get(item.key)"></show-form-errors>
+                        </ion-item>
+                    </ng-container>
+                </ion-list>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col col-12>
+                            <button ion-button (click)="submit()" *ngIf="!showProgress" item-left>
+                                Submit
+                            </button>
+                            <button ion-button color="danger" (click)="cancel()" *ngIf="!showProgress" item-right>
+                                Cancel
+                            </button>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+                <!--<mat-spinner *ngIf="showProgress" mode="indeterminate" color="warn"></mat-spinner>-->
+            </form>
+        </ion-card-content>
+    </ion-card>
+</ion-content>

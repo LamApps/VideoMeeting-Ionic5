@@ -1,0 +1,130 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-menu-button auto-hide="true" color="primary"></ion-menu-button>
+        </ion-buttons>
+        <ion-title>LOG IN</ion-title>
+      </ion-toolbar>
+</ion-header>
+<ion-content class="login-content">
+
+  <ion-grid>
+      <ion-row>
+          <ion-col class="text-center">
+              <img src="assets/loginIntro.png"/>
+          </ion-col>
+      </ion-row>
+      <ion-row>
+          <ion-col class="text-center"><img id="logo" src="assets/logo.png" alt=""></ion-col>
+      </ion-row>
+      <ion-row>
+          <ion-col>
+              <p class="text-center">Application Version: 1.1</p>
+              <p class="text-center">Support: admin@livenetvideo.com</p>
+          </ion-col>
+      </ion-row>
+      <ion-row align-items-start>
+          <ion-col align-self-center>
+              <div class="controls-box">
+                  <form [formGroup]="loginForm" (ngSubmit)="login()">
+                      <ion-list class="grid">
+                          <ion-item lines="full">
+                              <ion-label position="floating">Email</ion-label>
+                              <ion-input type="text" formControlName="email"></ion-input>
+                              <ion-button slot="end" fill="clear" color="primary" type="button" style="margin-top: 30px;">
+                                  <ion-icon name="mail"></ion-icon>
+                              </ion-button>
+                          </ion-item>
+                          <ion-item class="ion-text-wrap" lines="none" *ngIf="!loginForm.controls.email.valid && loginForm.controls.email.dirty">
+                              <app-show-form-errors [control]="loginForm.controls.email"></app-show-form-errors>
+                          </ion-item>
+                          <ion-item lines="full">
+                              <ion-label  position="floating">Password</ion-label>
+                              <ion-input *ngIf="!showPasswordText" type="password" formControlName="password"></ion-input>
+                              <ion-input *ngIf="showPasswordText" type="text" formControlName="password"></ion-input>
+                              <ion-button slot="end" fill="clear" style="margin-top: 30px;" color="primary" type="button" (click)="showPasswordText = !showPasswordText">
+                                  <ion-icon *ngIf="!showPasswordText" name="eye"> </ion-icon>
+                                  <ion-icon *ngIf="showPasswordText" name="eye-off"> </ion-icon>
+                              </ion-button>
+                          </ion-item>
+                          <ion-item  class="ion-text-wrap" lines="none" *ngIf="!loginForm.controls.password.valid && loginForm.controls.password.dirty">
+                              <app-show-form-errors [control]="loginForm.controls.password"></app-show-form-errors>
+                          </ion-item>
+
+                          <ion-item lines="none">
+                              <ion-label>Remember Me</ion-label>
+                              <ion-checkbox formControlName="remember"></ion-checkbox>
+                          </ion-item>
+                      </ion-list>
+                      <ion-button expand="block" type="submit">Sign in</ion-button>
+                  </form>
+                  <ion-grid>
+                      <ion-row>
+                          <ion-col>
+                              <p class="text-center">
+                                  Not Registered? <span class="link" (click)="createAccount()">Click Here</span>
+                              </p>
+                              <p class="text-center">
+                                  Forgot Your Password? <span class="link" (click)="forgotPassword()">Click Here</span>
+                              </p>
+                          </ion-col>
+
+                      </ion-row>
+
+                  </ion-grid>
+              </div>
+          </ion-col>
+      </ion-row>
+
+      <ion-row>
+          <ion-col>
+              <hr />
+          </ion-col>
+      </ion-row>
+
+
+      <ion-row align-items-end>
+          <ion-col align-self-center>
+              <div class="controls-box">
+                  <p class="text-center">
+                      If you do not wish to create an account, please provide your email and name below to continue as a guest user.
+                  </p>
+                  <form [formGroup]="guestForm" (ngSubmit)="guestLogin()">
+                      <ion-list>
+                          <ion-item lines="full">
+                              <ion-label position="floating">Email</ion-label>
+                              <ion-input type="text" formControlName="email"></ion-input>
+                              <ion-button slot="end" fill="clear" color="primary" type="button" style="margin-top: 30px;">
+                                  <ion-icon name="mail"></ion-icon>
+                              </ion-button>
+                          </ion-item>
+                          <ion-item lines="none" class="ion-text-wrap" *ngIf="!guestForm.controls.email.valid && guestForm.controls.email.dirty">
+                              <app-show-form-errors [control]="guestForm.controls.email"></app-show-form-errors>
+                          </ion-item>
+
+                          <!--<ion-item *ngIf="guestForm.get('email').errors">
+                              <app-show-form-errors [control]="guestForm.get('email')"></app-show-form-errors>
+                          </ion-item>-->
+                          <ion-item lines="full">
+                              <ion-label position="floating">Full Name</ion-label>
+                              <ion-input type="text" formControlName="name"></ion-input>
+                              <ion-button slot="end" fill="clear" color="primary" type="button" style="margin-top: 30px;">
+                                  <ion-icon name="person"> </ion-icon>
+                              </ion-button>
+                          </ion-item>
+                          <ion-item class="ion-text-wrap" *ngIf="!guestForm.controls.name.valid && guestForm.controls.name.dirty">
+                              <app-show-form-errors [control]="guestForm.controls.name"></app-show-form-errors>
+                          </ion-item>
+                      </ion-list>
+                      <ion-button expand="block" type="submit">Continue as Guest</ion-button>
+                  </form>
+              </div>
+          </ion-col>
+      </ion-row>
+      <!--<ion-row>
+          <ion-col>
+              <button class="action-link" ion-button block clear (click)="gotoNetcasteePage()">Netcastee</button>
+          </ion-col>
+      </ion-row>-->
+  </ion-grid>
+</ion-content>

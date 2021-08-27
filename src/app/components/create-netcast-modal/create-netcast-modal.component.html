@@ -1,0 +1,133 @@
+<ion-header>
+	<ion-navbar hideBackButton="true">
+		<ion-title>
+            Create A Netcast
+        </ion-title>
+		<ion-buttons end>
+            <button (click)="cancel()" ion-button icon-only>
+                <ion-icon name="close-circle"></ion-icon>
+            </button>
+		</ion-buttons>
+	</ion-navbar>
+</ion-header>
+<ion-content padding>
+	
+	<form [formGroup]="formGroup">
+        <ion-grid>
+            <ion-row>
+                <ion-col>
+                    <ion-list>
+
+                        <ion-item>
+                            <ion-label stacked>Title</ion-label>
+                            <ion-input type="text" formControlName="title"></ion-input>
+                        </ion-item>
+                        <ion-item text-wrap *ngIf="!formGroup.controls.title.valid && formGroup.controls.title.dirty">
+                            <show-form-errors [control]="formGroup.controls.title"></show-form-errors>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label stacked>Description</ion-label>
+                            <ion-textarea formControlName="description" rows="3"></ion-textarea>
+                        </ion-item>
+                        <ion-item *ngIf="!formGroup.controls.description.valid && formGroup.controls.description.dirty">
+                            <show-form-errors [control]="formGroup.get('description')"></show-form-errors>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label stacked>Select a Genre: </ion-label>
+                            <ion-select formControlName="netcastGenreId">
+                                <ion-option *ngFor="let genre of genres" value="{{genre.value}}">{{genre.key}}</ion-option>
+                            </ion-select>
+                        </ion-item>
+                        <ion-item *ngIf="!formGroup.controls.netcastGenreId.valid && formGroup.controls.netcastGenreId.dirty">
+                            <show-form-errors [control]="formGroup.get('netcastGenreId')"></show-form-errors>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label stacked>Tags</ion-label>
+                            <ion-input type="text" formControlName="tags"></ion-input>
+                        </ion-item>
+                        <ion-item *ngIf="!formGroup.controls.tags.valid && formGroup.controls.tags.dirty">
+                            <show-form-errors [control]="formGroup.get('tags')"></show-form-errors>
+                        </ion-item>
+                      
+
+                        <ion-item>
+                            <ion-label stacked>Scheduled Date &amp; Time</ion-label>
+                            <ion-datetime displayFormat="MMM DD, YYYY h:mm A" formControlName="netcastTime"></ion-datetime>
+                        </ion-item>
+                        <ion-item *ngIf="!formGroup.controls.netcastTime.valid && formGroup.controls.netcastTime.dirty">
+                            <show-form-errors [control]="formGroup.get('netcastTime')"></show-form-errors>
+                        </ion-item>
+                      
+
+
+
+                        <ion-item text-wrap>
+                            <ion-label stacked>Password: </ion-label>
+                            <ion-input type="text" formControlName="password"></ion-input>
+                            <button ion-button clear icon-only style="padding-top: 8px;" color="primary" type="button" item-right
+                                    (click)="popup('Optional Password', 'Create a password if you would like your viewers to enter the password before viewing your netcast.')">
+                                <ion-icon name="information-circle"> </ion-icon>
+                            </button>
+
+                        </ion-item>
+                        <ion-item *ngIf="!formGroup.controls.password.valid && formGroup.controls.password.dirty">
+                            <show-form-errors [control]="formGroup.get('password')"></show-form-errors>
+                        </ion-item>
+
+
+                        <ion-row class="bg-white">
+                            <ion-col col-12>
+                                <ion-label>Preview Image: </ion-label>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row class="bg-white">
+                            <ion-col col-3>
+                                <pic-preview (onAvatarChanged)="onAvatarChanged($event)"></pic-preview>
+                            </ion-col>
+                            <ion-col col-9 class="text-right">
+                                <button *ngIf="showRemoveImage" ion-button clear icon-only style="position:relative; top:8px; right:-10px;" color="primary" type="button"
+                                        (click)="removeAvatar()">
+                                    <ion-icon name="trash"> </ion-icon>
+                                </button>
+                                <button ion-button clear icon-only style="position:relative; top:8px; right:-10px;" color="primary" type="button"
+                                        (click)="popup('Preview Image', 'Add an image so viewers can get a preview of your Netcast.')">
+                                    <ion-icon name="information-circle"> </ion-icon>
+                                </button>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row class="bg-white">
+                            <ion-col>
+                                <hr />
+                            </ion-col>
+                        </ion-row>
+                        
+
+                        <ion-row class="bg-white">
+                            <ion-col class="text-center">
+
+                                
+                                <button (click)="cancel()" ion-button color="danger">Cancel</button>
+                            </ion-col>
+                            <ion-col class="text-center">
+                                <button (click)="submit()" ion-button color="brand-orange">Create</button>
+                            </ion-col>
+                        </ion-row>
+                       
+
+                    </ion-list>
+
+                </ion-col>
+            </ion-row>
+
+
+
+          
+
+          
+        </ion-grid>
+
+		
+	</form>
+	
+</ion-content>
+<phone-ringer #phoneRinger></phone-ringer>

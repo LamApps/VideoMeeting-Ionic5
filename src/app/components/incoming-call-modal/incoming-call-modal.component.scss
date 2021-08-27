@@ -1,0 +1,67 @@
+@import '../../../assets/_variables.scss';
+@import '../../../assets/_mixins.scss';
+
+.container {
+	background: #5582b3;
+	height: 100vh;
+	width: auto;
+	display: flex;
+	flex-direction: column;
+	.call-animation {
+		margin-top: auto;
+		align-self: center;
+		background: #FFFFFF;
+		position: relative;
+		border-radius: 100%;
+		border: solid 3px #fff;
+		animation: shrink 2s ease-out infinite;
+		-webkit-backface-visibility: hidden;
+		-moz-backface-visibility: hidden;
+		-ms-backface-visibility: hidden;
+		backface-visibility: hidden;
+		img {
+			width: 135px;
+			height: 135px;
+			border-radius: 100%;
+		}
+	}
+	.buttons {
+		display: flex;
+		justify-content: space-around;
+		margin-bottom: 20px;
+		margin-top: auto;
+		.btn {
+			width: 45px;
+			height: 45px;
+			#hangup {
+				transform: rotate(-45deg);
+			}
+		}
+	}
+	.label {
+		margin-top: 2em;
+		font-weight: bold;
+		color: white;
+		text-align: center;
+		margin-bottom: 0;
+	}
+	.name {
+		font-weight: bold;
+		color: white;
+		text-align: center;
+	}
+	@keyframes shrink {
+		0% {
+			transform: scale(1);
+		}
+		15% {
+			box-shadow: 0 0 0 30px rgba(255, 255, 255, 0), 0 0 0 40px rgba(255, 255, 255, 0), 0 0 0 50px rgba(255, 255, 255, 0), 0 0 0 60px rgba(255, 255, 255, 0.4);
+		}
+		25% {
+			transform: scale(0.8);
+		}
+		45% {
+			transform: scale(1);
+		}
+	}
+}

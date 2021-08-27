@@ -1,0 +1,14 @@
+@import '../../../assets/_variables.scss';
+@import '../../../assets/_mixins.scss';
+
+ion-list {
+    @include borderRadius($radiusLg);
+    border: 1px solid $primary;
+    overflow: hidden;
+}
+
+.bg-white {
+    padding:0 10px;
+    background-color: $white;
+}
+

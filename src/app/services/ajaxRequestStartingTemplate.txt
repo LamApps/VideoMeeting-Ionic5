@@ -1,0 +1,82 @@
+// use this template to copy and paste to start a method for ajax requests to webApi
+blockEmail(email: string, options?: any, accessToken?: string): Promise<boolean> {
+	let methodName = "unblockedEmail";
+	return new Promise<boolean>((resolve, reject) => {
+		//TODO: implement
+		let url: string = "https://nofb.org/LNVApi/PhoneContact/BlockEmail";
+		let method = "POST";
+		accessToken = this.jsHelperService.isEmpty(accessToken) ? this.signalrService.jwtToken.access_token : accessToken;
+		let payload: any = {
+		}
+
+        //let optionsArray = new Array();
+		//let queryString = "";
+		//if (this.jsHelperService.isEmpty(options) === false && typeof options === "object") {
+		//	if (options.hasOwnProperty("skip")) {
+		//		optionsArray.push(options.skip);
+		//	}
+		//	else {
+		//		optionsArray.push("0");
+		//	}
+
+		//	if (options.hasOwnProperty("take")) {
+		//		optionsArray.push(options.take);
+		//	}
+		//	else {
+		//		optionsArray.push("100");
+		//	}
+
+		//	if (options.hasOwnProperty("orderField")) {
+		//		optionsArray.push(options.orderField);
+		//	}
+		//	else {
+		//		optionsArray.push("Created");
+		//	}
+
+		//	if (options.hasOwnProperty("orderDirection")) {
+		//		optionsArray.push(options.orderDirection);
+		//	}
+		//	else {
+		//		optionsArray.push("DESC");
+		//	}
+
+		//	queryString = encodeURI(optionsArray.join("/"));
+		//}
+		//else {
+		//	queryString = "0/100/Created/DESC";
+		//}
+
+
+		this.jsHelperService.ajaxRequest(method, url, payload, accessToken)
+			.then((response) => {
+				////Option1: if the apiResponse data is a concrete type
+				//let result: Array<BlockedEmailType> = this.jsHelperService.parseWebApiResponse<Array<BlockedEmailType>>(response);
+				//if (this.jsHelperService.isEmpty(result)) {
+				//	return resolve(result);
+				//}
+				//else {
+				//	reject("getBlockedEmails: unable to parse webApiResponseType.");
+				//}
+
+				////Option 2: if the apiResonse.data is a string or boolean value
+				//let apiResponse: WebApiResponseType = this.jsHelperService.jsonToObject<WebApiResponseType>(response, true);
+				//if (this.jsHelperService.isEmpty(apiResponse) === false) {
+                //  if(apiResponse.status === WebApiResponseStatusType.success){
+                //      let result = apiResponse.data === "true" ? true : false;
+                //      return resolve(result);
+                //  }
+				//	else {
+				//      let errors: Array<string> = this.jsHelperService.tryParseJson(apiResponse.data);
+				//		reject(methodName + ": " + this.jsHelperService.implode(" |", errors));
+                //  }
+				//}
+				//else {
+				//	reject(methodName + ": unable to parse webApiResponseType.");
+				//}
+			})
+			.catch((error) => {
+				//console.log(error);
+				return reject(methodName + ": ajax request failed.");
+			});
+	});
+}

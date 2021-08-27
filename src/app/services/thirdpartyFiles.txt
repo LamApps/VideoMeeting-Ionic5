@@ -1,0 +1,45 @@
+﻿import { Injectable } from '@angular/core';
+import { Http } from '@angular/http';
+import 'rxjs/add/operator/map';
+
+import * as $ from 'jquery';
+
+import 'signalr';
+import 'webrtc-adapter';
+
+declare var MultiPlatformChat: any;
+declare var VideoControls: any;
+
+@Injectable()
+export class ThirdPartyFiles {
+    public videoHelper: any;
+    public jsHelper: any;
+    public localStorage: any;
+
+    private connection: any;
+
+    private webRtcHub: any;
+
+    private clientIdHub: any;
+
+    private hubUrl: string;
+
+    public guestTokenName = "MultiPlatformChatAppGuestJwtToken.txt";
+    public memberTokenName = "MultiPlatformChatAppMemberJwtToken.txt";
+
+    constructor(public http: Http) {
+        console.log('Hello thirdpartyFiles Provider');
+
+        this.videoHelper = new VideoControls.VideoHelper();
+        this.jsHelper = new MultiPlatformChat.JsHelper();
+        this.localStorage = new MultiPlatformChat.LocalStorage(this.jsHelper, 1);
+
+        this.hubUrl = "https://nofb.org/SignalR";
+
+        this.connection = $.hubConnection(this.hubUrl, {});
+
+        this.webRtcHub = this.connection.createHubProxy("webRtcHub");
+
+        this.clientIdHub = this.connection.createHubProxy("clientIdProxyHub");
+    }
+}

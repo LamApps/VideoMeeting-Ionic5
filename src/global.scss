@@ -24,3 +24,31 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+
+$family-heading: 'Roboto', sans-serif;
+
+ion-content {
+    background: #ffffff;
+    /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover, #ffffff 0%, #a8bfd8 80%, #3268a4 120%);
+    /* FF3.6-15 */
+    background: -webkit-radial-gradient(center, ellipse cover, #ffffff 0%, #a8bfd8 80%, #3268a4 120%);
+    /* Chrome10-25,Safari5.1-6 */
+    --background: radial-gradient(ellipse at center, #ffffff 0%, #a8bfd8 80%, #3268a4 120%);
+}
+
+ion-header ion-toolbar {
+    --background: #23315D;
+    --color: white;
+}
+
+.text-center {
+    text-align: center;
+}
+
+ion-item {
+    --highlight-height:2px;
+ }

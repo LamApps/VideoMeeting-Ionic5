@@ -1,0 +1,29 @@
+@import '../../../assets/_variables.scss';
+@import '../../../assets/_mixins.scss';
+
+ion-content {
+    margin-top: 0;
+
+    .grid {
+        @include borderRadius($radiusLg);
+        border: 1px solid $grey;
+        overflow: hidden;
+        background-color: $white;
+        margin-bottom:20px;
+    }
+
+    .item {
+        .icon {
+            position: relative;
+            top: 12px;
+            color: darken($lightGrey, 10%);
+        }
+    }
+
+    .info {
+        padding: 0 10px;
+        margin:0;
+        display:block;
+    }
+}
+

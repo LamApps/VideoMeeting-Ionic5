@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="true" color="primary"></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <ion-icon name="close-circle"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Free Registration</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="padding">
+  <form [formGroup]="formGroup">
+      <ion-grid class="register-form">
+          <ion-row>
+              <ion-col col-6 offset-3>
+                  <app-pic-preview (onAvatarChanged)="onAvatarChanged($event)"></app-pic-preview>
+              </ion-col>
+          </ion-row>
+          <ion-row>
+              <ion-col class="grid">
+                  <ion-list>
+                      <ion-item>
+                          <ion-label position="stacked">First Name</ion-label>
+                          <ion-input type="text" formControlName="firstName"></ion-input>
+                      </ion-item>
+                      <ion-item *ngIf="!formGroup.controls.firstName.valid && formGroup.controls.firstName.dirty">
+                          <app-show-form-errors [control]="formGroup.controls.firstName"></app-show-form-errors>
+                      </ion-item>
+                      <ion-item>
+                          <ion-label position="stacked">Last Name</ion-label>
+                          <ion-input type="text" formControlName="lastName"></ion-input>
+                      </ion-item>
+                      <ion-item *ngIf="!formGroup.controls.lastName.valid && formGroup.controls.lastName.dirty">
+                          <app-show-form-errors [control]="formGroup.controls.lastName"></app-show-form-errors>
+                      </ion-item>
+                      <ion-item>
+                          <ion-label position="stacked">Email</ion-label>
+                          <ion-input type="text" formControlName="email"></ion-input>
+                      </ion-item>
+                      <ion-item *ngIf="!formGroup.controls.email.valid && formGroup.controls.email.dirty">
+                          <app-show-form-errors [control]="formGroup.controls.email"></app-show-form-errors>
+                      </ion-item>
+                      <ion-item>
+                          <ion-label position="stacked">Password</ion-label>
+                          <ion-input *ngIf="!showPasswordText" type="password" formControlName="password"></ion-input>
+                          <ion-input *ngIf="showPasswordText" type="text" formControlName="password"></ion-input>
+                          <ion-button fill="clear" slot="end" style="padding-top: 10px;" color="primary" type="button" (click)="showPasswordText = !showPasswordText">
+                              <ion-icon *ngIf="!showPasswordText" name="eye"> </ion-icon>
+                              <ion-icon *ngIf="showPasswordText" name="eye-off"> </ion-icon>
+                          </ion-button>
+                      </ion-item>
+                      <ion-item *ngIf="!formGroup.controls.password.valid && formGroup.controls.password.dirty">
+                          <app-show-form-errors [control]="formGroup.controls.password"></app-show-form-errors>
+                      </ion-item>
+                  </ion-list>
+              </ion-col>
+          </ion-row>
+          <ion-row>
+              <ion-col class="text-center">
+                  <ion-button expand="block" (click)="cancel()" color="danger">Cancel</ion-button>
+              </ion-col>
+              <ion-col class="text-center">
+                  <ion-button expand="block" (click)="submit()" color="primary">Create</ion-button>
+              </ion-col>
+          </ion-row>
+      </ion-grid>
+  </form>
+</ion-content>

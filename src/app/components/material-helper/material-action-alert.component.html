@@ -1,0 +1,9 @@
+﻿<h1>{{data.title | titlecase }}</h1>
+<div>
+	<div [innerHtml]="htmlContent"></div>
+	<ng-template #viewContainerRef></ng-template>
+</div>
+<div>
+	<button ion-button tabindex="-1" (click)="yes()">{{data.yesButton}}</button>
+	<button ion-button tabindex="-1" (click)="no()">{{data.noButton}}</button>
+</div>

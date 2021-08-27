@@ -1,0 +1,43 @@
+<ion-header>
+	<ion-navbar hideBackButton="false">
+		<ion-title>
+			Contacts
+		</ion-title>
+		<ion-buttons end>
+			<button ion-button icon-only (click)="close()">
+				<ion-icon name="close-circle"></ion-icon>
+			</button>
+		</ion-buttons>
+	</ion-navbar>
+</ion-header>
+<ion-content>
+	<ion-searchbar type="email" placeholder="Search Email" [(ngModel)]="contactEmailInput"
+				   showCancelButton
+				   cancelButtonText="Cancel"
+				   [debounce]="debounce"
+				   (ionCancel)="onCancelSearch($event)"
+				   (ionInput)="onSearchChange($event)">
+	</ion-searchbar>
+	<ion-list>
+		<ion-item>
+			<h2>
+				{{contactEmailInput}}
+			</h2>
+			<button class="btn-circle" color="secondary"
+					*ngIf="contactEmailInput" ion-button item-right (click)="onCallClick(contactEmailInput)">
+				<ion-icon name="call"></ion-icon>
+			</button>
+		</ion-item>
+		<ion-item *ngFor="let contact of filteredList">
+			<ion-avatar item-left>
+				<img *ngIf="contact.avatarFileName" src="{{contactAvatarBaseUrl}}{{contact.avatarFileName}}?{{timestamp}}">
+				<img *ngIf="!contact.avatarFileName" src="assets/images/default-avatar.png?{{timestamp}}" alt="">
+			</ion-avatar>
+			<h2>{{contact.name}}</h2>
+			<p>{{contact.email}}</p>
+			<button class="btn-circle" color="secondary" ion-button item-right *ngIf="contact.isMember" (click)="onCallClick(contact.email)">
+				<ion-icon name="call"></ion-icon>
+			</button>
+		</ion-item>
+	</ion-list>
+</ion-content>

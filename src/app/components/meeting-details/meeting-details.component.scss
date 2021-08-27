@@ -1,0 +1,9 @@
+@import '../../../assets/_variables.scss';
+@import '../../../assets/_mixins.scss';
+
+.grid {
+    @include borderRadius($radiusLg);
+    border: 1px solid $grey;
+    overflow: hidden;
+    background-color: $white;
+}

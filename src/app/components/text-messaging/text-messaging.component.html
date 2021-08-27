@@ -1,0 +1,69 @@
+<div class="container-fluid">
+	<div class="row" *ngIf="!messagingVisible">
+		<div class="col-md-12">
+			<div class="text-message-display-mini-box">
+				<ng-container *ngIf="currentMessage">
+					<text-messaging-message [(message)]="currentMessage" (onOpenPrivateSmsInterface)="openPrivateSmsInterface($event)"></text-messaging-message>
+				</ng-container>
+			</div>
+		</div>
+	</div>
+	<div class="row" *ngIf="messagingVisible">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="text-message-display-box">
+						<ng-container *ngIf="textMessages">
+							<div *ngFor="let message of textMessages">
+								<text-messaging-message [message]="message" (onOpenPrivateSmsInterface)="openPrivateSmsInterface($event)"></text-messaging-message>
+							</div>
+						</ng-container>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<form class="form-inline" [formGroup]="formGroup">
+						<div class="form-group">
+							<textarea class="form-control"
+									  formControlName="message"></textarea>
+							<show-form-errors [control]="formGroup.get('message')"></show-form-errors>
+						</div>
+						<div class="form-group">
+							<!--<mat-spinner *ngIf="showSmsProgress" mode="indeterminate" color="warn"></mat-spinner>-->
+							<button class="btn-primary" (click)="sendGroupMessage()" *ngIf="!showSmsProgress">
+								Send Group
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="row">
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+
+			<button *ngIf="messagingVisible"
+					(click)="closeMessaging()">
+
+				Minimize
+			</button>
+			<button *ngIf="!messagingVisible"
+					(click)="openMessaging()">
+
+				Maximize
+			</button>
+			<button (click)="saveMessages()">
+				Save Messages
+			</button>
+			<button (click)="clearMessages()">
+				Clear Messages
+			</button>
+			<button (click)="openPrivateSmsInterface()" *ngIf="users.length > 1">
+				Private Message
+			</button>
+		</div>
+	</div>
+</div>

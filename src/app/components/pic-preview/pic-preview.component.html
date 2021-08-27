@@ -1,0 +1,9 @@
+<div class="text-center">
+    <img src="../../../assets/images/default-avatar.png" *ngIf="!imageSource">
+    <img [src]="imageSource" *ngIf="imageSource" />
+    <br />
+    <ion-button (click)="changeAvatarClick()" slot="end">
+        <ion-icon name="create"></ion-icon> Image
+    </ion-button>
+</div>
+

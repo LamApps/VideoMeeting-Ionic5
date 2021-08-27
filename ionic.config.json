@@ -1,6 +1,7 @@
 {
   "name": "live-net-video",
   "integrations": {
+    "cordova": {},
     "capacitor": {}
   },
   "type": "angular"

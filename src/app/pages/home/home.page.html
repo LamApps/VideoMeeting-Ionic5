@@ -1,0 +1,70 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-menu-button auto-hide="false" color="orange"></ion-menu-button>
+        </ion-buttons>
+        <ion-title>DASHBOARD</ion-title>
+      </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+    <ion-grid>
+        <ion-row class="dashboard-buttons">
+            <ion-col size="6">
+                <span><img src="assets/dashboardLvc.png" (click)="navigateToPhone()" /></span>
+                <br />
+                <span (click)="navigateToPhone()">LVC</span>
+            </ion-col>
+            <ion-col size="6" *ngIf="isMember">
+                <span><img src="assets/dashboardMeetings.png" (click)="navigateToMeetingsDashboardPage()" /></span>
+                <br />
+                <span (click)="navigateToMeetingsDashboardPage()">MEETINGS</span>
+            </ion-col>
+            <ion-col size="6" *ngIf="isLoggedIn">
+                <span><img src="assets/dashboardNetcast.png" (click)="navigateToNetcast()" /></span>
+                <br />
+                <span (click)="navigateToNetcast()">NETCAST</span>
+            </ion-col>
+            <ion-col size="6" *ngIf="isMember">
+                <span><img src="assets/dashboardContacts.png" (click)="navigateToContacts()" /></span>
+                <br />
+                <span (click)="navigateToContacts()">CONTACTS</span>
+            </ion-col>
+            <ion-col size="6" *ngIf="isMember">
+                <span><img src="assets/dashboardAccount.png" (click)="navigateToAccount()" /></span>
+                <br />
+                <span (click)="navigateToAccount()">ACCOUNT</span>
+            </ion-col>
+            <ion-col size="6" *ngIf="isMember">
+                <span><img src="assets/dashboardBlocklist.png" (click)="navigateToBlockList()" /></span>
+                <br />
+                <span (click)="navigateToBlockList()">BLOCKED LIST</span>
+            </ion-col>
+            <ion-col size="6" *ngIf="!isMember">
+                <span><img src="assets/dashboardRegister.png" (click)="navigateToRegister()" /></span>
+                <br />
+                <span (click)="navigateToRegister()">REGISTER</span>
+            </ion-col>
+            <ion-col size="6">
+                <span><img src="assets/dashboardSettings.png" (click)="navigateToSettings()" /></span>
+                <br />
+                <span (click)="navigateToSettings()">SETTINGS</span>
+            </ion-col>
+            <ion-col size="6">
+                <span><img src="assets/dashboardSearch.png" (click)="navigateToCompanySearch()" /></span>
+                <br />
+                <span (click)="navigateToCompanySearch()">SEARCH</span>
+            </ion-col>
+            <ion-col size="6" *ngIf="isLoggedIn">
+                <span><img src="assets/dashboardLogout.png" (click)="logOut()" /></span>
+                <br />
+                <span (click)="logOut()">LOG OUT</span>
+            </ion-col>
+            <ion-col size="6" *ngIf="!isLoggedIn">
+                <span><img src="assets/dashboardLogin.png" (click)="navigateToLogin()" /></span>
+                <br />
+                <span (click)="navigateToLogin()">LOG IN</span>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>

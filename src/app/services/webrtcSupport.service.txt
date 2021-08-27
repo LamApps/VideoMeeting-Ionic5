@@ -1,0 +1,1274 @@
+﻿import { Injectable, Output, EventEmitter } from '@angular/core';
+import { Http } from '@angular/http';
+import 'rxjs/add/operator/map';
+
+import * as $ from 'jquery';
+
+import 'signalr';
+import 'webrtc-adapter';
+
+declare var MultiPlatformChat: any;
+declare var VideoControls: any;
+
+@Injectable()
+export class WebRTCSupportServices {
+    @Output() LocalMediaAvailable = new EventEmitter<MediaStream>();
+    @Output() IncomingCallRecieved = new EventEmitter();
+    @Output() LoginSuccess = new EventEmitter();
+    @Output() RemoteStreamAvailable = new EventEmitter();
+    @Output() RemoteCallDisconnected = new EventEmitter();
+    @Output() RemoteCallAccepted = new EventEmitter();
+    @Output() RemoteCallDenied = new EventEmitter();
+    @Output() IncomingCallStopped = new EventEmitter();
+    @Output() UserLoggedIn = new EventEmitter();
+    @Output() UserLoggedOut = new EventEmitter();
+
+    private videoHelper: any;
+    private jsHelper: any;
+    private localStorage: any;
+    private webRtcClientServiceSupport: any;
+    private hubUrl: string;
+
+    private ip = "";
+    private callPromptTimeout = null;
+    private makeCallTimeout = null;
+    private localStream: MediaStream = null;
+    private remotStream = null;
+    private peerConnectionFactory = null;
+    private remoteGuid = "";
+    private guestTokenName = "MultiPlatformChatAppGuestJwtToken.txt";
+    private memberTokenName = "MultiPlatformChatAppMemberJwtToken.txt";
+
+    private connection: any;
+
+    private webRtcHub: any;
+
+    public clientIdHub: any;
+
+    constructor(public http: Http) {
+        this.videoHelper = new VideoControls.VideoHelper();
+        this.jsHelper = new MultiPlatformChat.JsHelper();
+        this.localStorage = new MultiPlatformChat.LocalStorage(this.jsHelper, 1);
+        this.hubUrl = "https://nofb.org/SignalR";
+
+        this.connection = $.hubConnection(this.hubUrl, {});
+
+        this.webRtcHub = this.connection.createHubProxy("webRtcHub");
+
+        this.clientIdHub = this.connection.createHubProxy("clientIdProxyHub");
+
+        this.clientIdHub.state.ip = "";
+
+        this.StartApp();
+    }
+
+    async StartApp() {
+        let self: any = this;
+        self.startWebRtcHubListeners()
+            .then(function () { console.log("startWebRtcHubListeners done"); })
+            .then(function () {
+                //self.StartConnection();
+            });
+    }
+
+    async StartConnection() {
+        console.log("Start Connection.");
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            self.connection.start()
+                .then(function () {
+                    console.log("connetion: ", self.connection);
+                    self.initApp()
+                        .then(function () {
+                            console.log("StartConnection initApp.done"); resolve();
+                        })
+                        .catch(function (error) {
+                            console.log("Application Error: ", error); reject(error);
+                        })
+                })
+                .catch(function (error) {
+                    console.log("connection start error:", error);
+                    reject(error);
+                })
+        });
+    }
+
+    async makeCall(email: string, username: string) {
+        let self: any = this;
+
+        await this.startPeerConnectionFactory();
+        return new Promise(function (resolve, reject) {
+            self.webRtcHub.invoke("makeCall", email, username)
+                .done(function (response) {
+                    let httpResponse = self.jsHelper.parseHttpResponseMessage(response);
+                    console.log("makecall Httpresponse:", httpResponse);
+                    if (self.jsHelper.isEmpty(httpResponse) === false && httpResponse.statusCode === 200) {
+                        //everything good, wait for the other user to respond in with in 30 seconds
+                        console.log("Call connection Successfull, Waiting for remote user to accept call.");
+                        self.makeCallTimeout = setTimeout(function () {
+                            self.endCurrentCall();
+                        }, 30000);
+                        self.setRemoteGuid(httpResponse.content);
+                        resolve(httpResponse);
+                    }
+                    else {
+                        self.displayErrorToUser("Unable to locate the user with email: " + email + ". The user is either busy or not online at this time.");
+                        reject();
+                    }
+                })
+                .fail(function (error) {
+                    self.displayErrorToUser("Unable to reach the other user at this time. Please try to connect later.")
+                    reject();
+                });
+        });
+    }
+
+    startPeerConnectionFactory = () => {
+        console.log('starting peer connection factory');
+        console.log("This in StartPeerConnectionfactory:", this);
+        let self: any = this;
+        return new Promise(function (resolve) {
+            let config = {
+                iceServers: [{
+                    urls: ['stun:stun.l.google.com:19302',
+                        "stun:stun1.l.google.com:19302",
+                        "stun:stun2.l.google.com:19302",
+                        "stun:stun3.l.google.com:19302",
+                        "stun:stun4.l.google.com:19302"
+                    ]
+                }]
+            };
+            console.log("This in StartPeerConnectionfactory promise def:", self);
+            self.peerConnectionFactory = new RTCPeerConnection(config);
+
+            //this.peerConnectionFactory = new RTCPeerConnection(config, {
+            //    "optional": [{ "DtlsSrtpKeyAgreement": true }]
+            //});
+
+            self.peerConnectionFactory.oniceconnectionstatechange = function (evt) {
+                console.log("oniceconnectionstatechange evt: ", evt);
+                console.log("oniceconnectionstatechange iceconnectionstate: ", evt.target.iceConnectionState);
+                if (evt.target.iceConnectionState === "closed") {
+                }
+                if (evt.target.iceConnectionState === "failed") {
+                    self.endCurrentCall();
+                }
+            }
+
+            // send any ice candidates to the other peer
+            self.peerConnectionFactory.onicecandidate = function (evt) {
+                console.log("LocalIce: ", evt.candidate);
+
+                self.sendLocalIce(evt.candidate, self.remoteGuid)
+                    .catch(function (error) {
+                        console.log("sendLocalIce error: ", error);
+                    });
+
+                // NOTE: .push('value') to add to end of array, and
+                // .shift() to get value at beginning of array to send ice when ready
+                //localIce.push(evt.candidate);
+            };
+
+            // let the 'negotiationneeded' event trigger offer generation
+            self.peerConnectionFactory.onnegotiationneeded = function (evt) {
+                //note this gets called by webrtc built in code
+                console.log("onnegogiationneeded evt:", evt);
+            };
+
+            // once remote stream arrives, show it in the remote video element
+            self.peerConnectionFactory.onaddstream = function (evt) {
+                //removeVideo.src = URL.createObjectURL(evt.stream);
+
+                console.log("onaddstream: ", evt);
+                self.setStateInCall()
+                    .then(function () {
+                        return self.setRemoteStream(evt.stream);
+                    })
+                    .then(function () {
+                        self.peerConnectionFactory.addStream(self.localStream);
+
+                        console.log("peerConnectionFactory.onaddstream add remotestream: peerConnectionFactory: ", self.peerConnectionFactory);
+                    })
+                    .catch(function (error) {
+                        console.log("peerConnectionFactory.onaddstream setStateInCall error: ", error);
+                        // TODO: maybe just call endCurrentCall();
+                        self.setStateEndCall();
+                    });
+            };
+
+            self.peerConnectionFactory.addStream(self.localStream);
+
+            resolve();
+        });
+    }
+
+    endCurrentCall = () => {
+        console.log("Ending current call");
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            //console.log("peerConnectionFactory.close() after close: ", peerConnectionFactory);
+            self.endPeerConnectionFactory()
+                .then(function () {
+                    console.log("sendDisconnect remoteGuid: ", self.remoteGuid);
+                    self.webRtcHub.invoke("sendDisconnect", self.remoteGuid)
+                        .done(function () {
+                            console.log("remoteDisconnect sent: ", self.remoteGuid);
+                            self.setRemoteGuid("")
+                                .then(self.setStateEndCall)
+                                .then(function () {
+                                    console.log("Call ended");
+                                    self.RemoteCallDisconnected.emit();
+                                    resolve();
+                                })
+                                .catch(function (error) {
+                                    reject(error);
+                                });
+                        })
+                        .fail(function (error) {
+                            //console.log("endCall error:", error);
+                            reject(error);
+                        })
+                })
+                .catch(function (error) {
+                    reject(error);
+                });
+        });
+    }
+
+    displayErrorToUser(error) {
+        console.log("displayErrorToUser: ", error);
+        alert(error);
+    }
+
+    sendLocalIce = (localIce, otherUserGuid) => {
+        console.log("sendLocalIce localIce: ", localIce);
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            self.webRtcHub.invoke("sendICE", otherUserGuid, JSON.stringify(localIce))
+                .done(function () {
+                    resolve();
+                })
+                .fail(function (error) {
+                    reject(error);
+                });
+        });
+    }
+
+    setStateInCall = () => {
+        return new Promise(function (resolve) {
+            return resolve();
+        });
+    }
+
+    setRemoteStream = (stream) => {
+        console.log("setRemoteStream", stream);
+        let self: any = this;
+        return new Promise(function (resolve) {
+            self.remoteStream = stream;
+            self.RemoteStreamAvailable.emit(stream);
+            resolve();
+        });
+    }
+
+    setStateEndCall = () => {
+        return new Promise(function (resolve) {
+            return resolve();
+        });
+    }
+
+    endPeerConnectionFactory = () => {
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            self.peerConnectionFactory && self.peerConnectionFactory.close();
+            self.peerConnectionFactory = null;
+            resolve();
+        });
+    }
+
+    setRemoteGuid = (guid) => {
+        console.log("setting remote guid: ", guid);
+        let self: any = this;
+        return new Promise(function (resolve) {
+            self.remoteGuid = guid;
+            resolve();
+        });
+    }
+
+    getRemoteStream = () => {
+        let self: any = this;
+        return new Promise(function (resolve) {
+            return resolve(self.remoteStream);
+        });
+    }
+
+    callrecieved() {
+        console.log("IncomingCall Recieved.");
+        //this.IncomingCall.emit();
+    }
+
+    startWebRtcHubListeners = () => {
+        console.log("start webrtc hub listeners, webRTCHub:", this.webRtcHub);
+        let self: any = this;
+        return new Promise(function (resolve) {
+            self.webRtcHub.on("receivePing", function (json) {
+                console.log("handling ping json: ", json);
+                //if the user is logged in get their email and connectionId
+            });
+
+            self.webRtcHub.on("receivePingResponse", function (json) {
+                console.log("handling ping json: ", json);
+                //if the user is logged in get their email and connectionId
+            });
+
+            self.webRtcHub.on("receiveHubConnection", function (response) {
+                //TODO: process the hub connection object
+                console.log("handling receiveHubConnection: ", response);
+                let hubConnection = self.jsHelper.tryParse(response);
+                if (self.jsHelper.isEmpty(hubConnection) === false && self.jsHelper.isEmpty(hubConnection.connectionGuid) === false) {
+                    self.webRtcHub.state.connectionGuid = hubConnection.connectionGuid;
+                }
+
+                console.log("received hubConnection object: ", response);
+            });
+
+            self.webRtcHub.on("receiveRemoteGuidUpdate", function (response) {
+                if (self.jsHelper.isEmpty(response) === false) {
+                    self.setRemoteGuid(response)
+                        .then(function () {
+                            console.log("updated remoteGuid");
+                        })
+                        .catch(function (error) {
+                            console.log("receiveRemoteGuid error: ", error);
+                        });
+                }
+
+                console.log("received hubConnection object: ", response);
+            });
+
+            self.webRtcHub.on("receiveDisconnect", function (response) {
+                console.log("receiveDisconnection: ", response);
+                console.log("Current remote GUID:", self.remoteGuid);
+                let currentRemoteGuid = response;
+                if (currentRemoteGuid === self.remoteGuid || !self.jsHelper.isEmpty(self.remoteGuid)) {
+                    self.endCurrentCall()
+                        .then(function () {
+                            self.displayErrorToUser("Your call is disconnected");
+                        })
+                        .catch(function (error) {
+                            console.log("receive end call error: ", error);
+                        });
+                }
+                else {
+                    self.IncomingCallStopped.emit();
+                }
+            });
+
+            self.webRtcHub.on("receiveCall", function (httpResponse) {
+                console.log("received call from remoteGuid httpResponse: ", httpResponse);
+
+                if (self.jsHelper.isEmpty(httpResponse) === false) {
+                    // parse the json response
+                    var response = self.jsHelper.tryParseJson(httpResponse);
+                    if (self.jsHelper.isEmpty(response) === false && self.jsHelper.isEmpty(response.remoteGuid) === false) {
+                        let otherUserGuid = response.remoteGuid;
+                        let profile = response.profile;
+                        self.IncomingCallRecieved.emit(response);
+                        // NOTE: if the user use is currently in another call, the remoteGuid will not be empty
+                        // we only allow one call at a time, in the future we will allow multiple calls
+                        if (self.jsHelper.isEmpty(self.remoteGuid)) {
+                            //NOTE: Show accept call UI and disable calling
+                        }
+                        else {
+                            // send the other user a "Busy Response""
+                            console.log("sending busy response to caller with remoteGuid: ", response);
+                            self.sendBusyResponse(otherUserGuid)
+                                .catch(function (error) {
+                                    console.log("busyCallResponse error:", error);
+                                });
+                        }
+                    }
+                    else {
+                        console.log('received call with empty remoteGuid');
+                    }
+                }
+                else {
+                    // no connectionId to respond to
+                    console.log('received call with empty httpResponse');
+                }
+            });
+
+            self.webRtcHub.on("receiveSDP", function (json) {
+                //console.log("receiveSDP SdpMessage: ", json);
+
+                let sdpMessageDto = self.jsHelper.tryParseJson(json);
+                console.log("Received SDP sdpMessageDto: ", sdpMessageDto);
+                if (self.jsHelper.isEmpty(sdpMessageDto) === false && self.jsHelper.isEmpty(sdpMessageDto.sender) === false) {
+                    self.remoteGuid = sdpMessageDto.sender;
+                    let sdp = self.jsHelper.tryParseJson(sdpMessageDto.sdp);
+                    if (self.jsHelper.isEmpty(sdp) === false) {
+                        //if (sdp.type === "answer") {
+                        //    sdp.sdp.toString().replace('active', 'passive');
+                        //    console.log("Altered SDP: ", sdp.sdp);
+                        //}
+
+                        self.peerConnectionFactory.setRemoteDescription(new RTCSessionDescription(sdp), function () {
+                            console.log("setRemoteDescription SDP: ", sdp);
+                            if (self.peerConnectionFactory.remoteDescription.type === 'offer') {
+                                self.peerConnectionFactory.createAnswer(function (localSdpAnswer) {
+                                    self.sendLocalSdp(localSdpAnswer, self.remoteGuid)
+                                        .then(function () {
+                                            console.log("localSdpAnswer sent: ", localSdpAnswer);
+                                        })
+                                        .catch(function (error) {
+                                            console.log("unable to send localSdpAnswer: ", localSdpAnswer);
+                                        });
+                                }, function (error) { console.log("pc.createAnswer error: ", error); });
+                            }
+                        }, function (error) { console.log("pc.setRemoteDescription error: ", error); });
+                    }
+                }
+            });
+
+            self.webRtcHub.on("receiveICE", function (json) {
+                console.log("receiveICE IceMessage: ", json);
+
+                let iceMessageDto = self.jsHelper.tryParseJson(json);
+                if (self.jsHelper.isEmpty(iceMessageDto) === false && self.jsHelper.isEmpty(iceMessageDto.sender) === false) {
+                    self.remoteGuid = iceMessageDto.sender;
+                    let ice = self.jsHelper.tryParseJson(iceMessageDto.ice);
+
+                    console.log("recieved ICE:", ice);
+                    if (self.jsHelper.isEmpty(ice) === false) {
+                        console.log("recieved ICE:", ice);
+                        self.peerConnectionFactory.addIceCandidate(new RTCIceCandidate(ice));
+                    }
+                    //else {
+                    //    peerConnectionFactory.addIceCandidate(null);
+                    //}
+                    //console.log("received Empty ice:", json);
+                }
+                else {
+                    console.log("iceMessage error: ", json);
+                }
+            });
+
+            self.webRtcHub.on("receiveBusyResponse", function (remoteGuidResponse) {
+                console.log("receivedBusyResponse", remoteGuidResponse);
+                clearTimeout(self.makeCallTimeout);
+                self.endCurrentCall(); //NOTE: Hide calling prompt anf enable calling
+                self.displayErrorToUser("The user is busy with another call. Please try your call later.")
+            });
+
+            self.webRtcHub.on("receiveNotAcceptCall", function (remoteGuidResponse) {
+                console.log("receive Not Accept Call remoteGuid: ", remoteGuidResponse);
+                clearTimeout(self.makeCallTimeout);
+                self.endCurrentCall(); //NOTE: Hide calling prompt anf enable calling
+                self.displayErrorToUser("The user did not accept your call. Please try your call later.")
+                self.RemoteCallDenied.emit();
+            });
+
+            self.webRtcHub.on("receiveAcceptCall", function (remoteGuidResponse) {
+                console.log("receiveAcceptCall: ", remoteGuidResponse);
+                self.setRemoteGuid(remoteGuidResponse)
+                    //NOTE: Hide calling prompt
+                    .then(function () {
+                        // stop the 30 second automatic endCurrentCall();
+                        clearTimeout(self.makeCallTimeout);
+
+                        // send ice to the other user
+                    })
+                    .then(self.startP2PConnection)
+                    .then(function () { self.RemoteCallAccepted.emit(); })
+                    .catch(function (error) {
+                        //"Error: Your call was accepted by the other user, but we were unable to identify the other user."
+                        clearTimeout(self.makeCallTimeout);
+                        self.endCurrentCall(); //NOTE: Hide calling prompt and enable calling
+                    });
+            });
+
+            self.webRtcHub.on("receiveRemoteLogout", function (connectionId) {
+                console.log("received Remote Logout local connectionId, connectionId: ", this.webRtcHub, connectionId);
+                if (this.jsHelper.isEmpty(connectionId) === false && connectionId === this.webRtcHub.connection.id) {
+                    this.doLogout()
+                        .then(function () {
+                            console.log("user logged out");
+                        })
+                        .catch(function (error) {
+                            console.log("logout error: ", error);
+                        });
+                }
+            });
+
+            resolve();
+        });
+    }
+
+    sendBusyResponse = (remoteGuid) => {
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            self.webRtcHub.invoke("sendBusyResponse", remoteGuid)
+                .done(function () {
+                    resolve();
+                })
+                .fail(function (error) {
+                    reject(error);
+                });
+        });
+    }
+
+    sendLocalSdp = (localSdp, otherUserGuid) => {
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            self.peerConnectionFactory.setLocalDescription(localSdp, function () {
+                if (self.jsHelper.isEmpty(otherUserGuid) === false) {
+                    console.log("Send lcal sdp immediately");
+                    self.webRtcHub.invoke("sendSDP", otherUserGuid, JSON.stringify(self.peerConnectionFactory.localDescription))
+                        .done(function () {
+                            //console.log("Send Local Sdp: sdp", remoteGuid, localSdp);
+                            resolve();
+                        })
+                        .fail(function (error) {
+                            reject(error);
+                            //console.log("Send Local Sdp error: ", error);
+                        });
+                }
+                else {
+                    reject("other users guid required to send local sdp information");
+                }
+            }, function (error) { reject(error); });
+        });
+    }
+
+    startP2PConnection = () => {
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            try {
+                console.log("starting p2p connection");
+                //peerConnectionFactory.addStream(localStream);
+
+                self.peerConnectionFactory.createOffer(function (localSdpOffer) {
+                    self.sendLocalSdp(localSdpOffer, self.remoteGuid)
+                        .then(function () {
+                            resolve();
+                        })
+                        .catch(function (error) {
+                            reject(error);
+                        });
+                }, function (error) {
+                    reject(error);
+                });
+                console.log("Completed p2p connection");
+            }
+            catch (e) {
+                reject(e.toString());
+            }
+        });
+    }
+
+    doLogout = () => {
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            self.webRtcHubCheckOut()
+                .then(self.deleteMemberToken)
+                .then(self.endCurrentCall)
+                .then(self.requestGuestToken)
+                .then(self.initGuestSettings)
+                .then(function () {
+                    self.UserLoggedOut.emit();
+                    resolve();
+                })
+                .catch(function (error) {
+                    reject(error);
+                });
+        });
+    }
+
+    webRtcHubCheckOut = () => {
+        console.log("checkingout");
+
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            self.webRtcHub.invoke("checkout")
+                .done(function (response) {
+                    let httpResponseMessage = self.jsHelper.parseHttpResponseMessage(response)
+                    if (self.jsHelper.isEmpty(httpResponseMessage) === false && httpResponseMessage.statusCode === 200) {
+                        resolve();
+                    }
+                    else {
+                        reject("webRtcHub Checkout error:" + response);
+                    }
+                })
+                .fail(function (error) {
+                    reject(error);
+                });
+        });
+    }
+
+    deleteMemberToken = () => {
+        console.log("Deleting Member Token");
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            self.localStorage.delete(self.memberTokenName)
+                .then(function () {
+                    resolve();
+                })
+                .catch(function (error) {
+                    reject(error);
+                })
+        });
+    }
+
+    getNewToken = () => {
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            //console.log("request new guest token");
+            self.clientIdHub.invoke("requestGuestToken")
+                .done(function (httpResponseMessage) {
+                    let response = self.jsHelper.parseHttpResponseMessage(httpResponseMessage)
+                    if (self.jsHelper.isEmpty(response) === false && response.statusCode === 200) {
+                        let jwtToken = self.jsHelper.tryParseJson(response.content);
+                        if (self.jsHelper.isEmpty(jwtToken) === false && self.jsHelper.isEmpty(jwtToken.access_token) === false) {
+                            console.log("Requested new guestToken: ", jwtToken);
+                            resolve(jwtToken);
+                        }
+                        else {
+                            reject("unable to parse guest token");
+                        }
+                    }
+                    else {
+                        reject(response);
+                    }
+                })
+                .fail(function (error) {
+                    reject(error);
+                })
+        });
+    }
+
+    requestGuestToken = () => {
+        console.log("requesting guest token");
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            //use existing guesttoken first
+            let json = self.jsHelper.getCookie(self.guestTokenName);
+
+            let jwtToken = self.jsHelper.tryParseJson(json);
+            console.log("guest cookie: ", jwtToken);
+            if (self.jsHelper.isEmpty(jwtToken) === false && self.jsHelper.isEmpty(jwtToken.access_token) === false) {
+                console.log("Using existing guestToken: ", jwtToken);
+                if (self.jsHelper.isExpiredToken(jwtToken) === true) {
+                    //console.log("expired guest token:", jwtToken);
+                    self.renewToken(jwtToken)
+                        .then(function (jwtToken) {
+                            resolve(jwtToken);
+                        })
+                        .catch(function (error) {
+                            console.log("guestToken renewal failed, getting new guesttoken");
+                            self.getNewToken()
+                                .then(function (jwtToken) { resolve(jwtToken); })
+                                .catch(function (error) { reject(error); })
+                        })
+                }
+                else {
+                    //console.log("resolve guest token: ", jwtToken);
+                    resolve(jwtToken);
+                }
+            }
+            else {
+                self.getNewToken()
+                    .then(function (jwtToken) { resolve(jwtToken); })
+                    .catch(function (error) { reject(error); })
+            }
+        });
+    }
+
+    renewToken = (jwtToken) => {
+        //console.log("renewing token", jwtToken);
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            //console.log("refresh_token: ", jwtToken.refresh_token);
+
+            let refreshToken = jwtToken.refresh_token;
+            //let refreshToken = "313e35eaf7064e2097d441db97a9981b";
+
+            self.clientIdHub.invoke("renewToken", { Id: refreshToken })
+                .done(function (httpResponse) {
+                    //console.log("httpResponse: ", httpResponse);
+                    let response = self.jsHelper.parseHttpResponseMessage(httpResponse)
+                    if (self.jsHelper.isEmpty(response) === false && response.statusCode === 200) {
+                        let jwtToken = self.jsHelper.tryParseJson(response.content);
+                        if (self.jsHelper.isEmpty(jwtToken) === false && self.jsHelper.isEmpty(jwtToken.access_token) === false) {
+                            //console.log("got renewed token: ", jwtToken);
+                            resolve(jwtToken);
+                        }
+                        else {
+                            reject("unable to parse jwtToken")
+                        }
+                    }
+                    else {
+                        reject("unable to parse httpresponse: " + httpResponse);
+                    }
+                })
+                .fail(function (error) {
+                    reject(error);
+                })
+        });
+    }
+
+    initGuestSettings = (jwtToken) => {
+        console.log("Initializing Guest token");
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            self.storeGuestToken(jwtToken)
+                .then(self.setAccessToken)
+                .then(self.webRtcHubCheckIn)
+                .then(self.setLocalGuid)
+                .then(function () {
+                    resolve();
+                })
+                .catch(function (error) {
+                    reject(error);
+                });
+        });
+    }
+
+    storeGuestToken = (jwtToken) => {
+        //console.log("setting guestToken: ", jwtToken);
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            self.localStorage.set(self.guestTokenName, jwtToken)
+                .then(function () {
+                    //webRtcHub.state.guestJwtToken = jwtToken.access_token;
+                    //console.log("guestToken set: ", jwtToken);
+                    resolve(jwtToken);
+                })
+                .catch(function (error) { reject(error); });
+        });
+    }
+
+    setAccessToken = (jwtToken) => {
+        console.log("setting access_token: ", jwtToken.access_token);
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            if (self.jsHelper.isEmpty(jwtToken) === false && self.jsHelper.isEmpty(jwtToken.access_token) === false) {
+                //console.log("set jwtToken access token", jwtToken.access_token);
+                self.webRtcHub.state.accessToken = jwtToken.access_token;
+                resolve();
+            }
+            else {
+                reject("invalid member token");
+            }
+        });
+    }
+
+    webRtcHubCheckIn = () => {
+        console.log("checking in");
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            // TODO: invoke the checking
+            self.webRtcHub.invoke("checkIn")
+                .done(function (response) {
+                    console.log("checked in: ", response);
+                    let httpResponseMessage = self.jsHelper.parseHttpResponseMessage(response)
+                    if (self.jsHelper.isEmpty(httpResponseMessage) === false && httpResponseMessage.statusCode === 200) {
+                        let hubConnection = self.jsHelper.tryParseJson(httpResponseMessage.content);
+                        if (self.jsHelper.isEmpty(hubConnection) === false && self.jsHelper.isEmpty(hubConnection.connectionGuid) === false) {
+                            resolve(hubConnection.connectionGuid);
+                        }
+                        else {
+                            reject("Unable to parse response");
+                        }
+                    }
+                    else {
+                        reject("webRtcHub CheckIn error:" + self.jsHelper.stringify(httpResponseMessage));
+                    }
+                })
+                .fail(function (error) {
+                    reject(error);
+                });
+        });
+    }
+
+    setLocalGuid = (guid) => {
+        console.log("setting local guid: ", guid);
+        let self: any = this;
+        return new Promise(function (resolve) {
+            self.webRtcHub.state.connectionGuid = guid;
+            console.log("done setting local guid");
+            resolve();
+        });
+    }
+
+    initApp = () => {
+        let self: any = this;
+        console.log("value of this in initApp:", this);
+        return new Promise(function (resolve, reject) {
+            console.log("value of self in initApp promise def:", self);
+            self.requestIp()
+                .then(self.setIp)
+                .then(self.requestProxySecret)
+                .then(self.setProxySecret)
+                .then(function () {
+                    let memberPromise = self.localStorage.get(self.memberTokenName);
+                    let guestPromise = self.localStorage.get(self.guestTokenName);
+                    console.log("InitApp - got member and guest promises:", memberPromise, guestPromise);
+                    Promise.all([memberPromise, guestPromise])
+                        .then(function (results) {
+                            //console.log("Promise.all results: ", results);
+
+                            let memberJwtToken = "";
+                            let guestJwtToken = "";
+
+                            if (self.jsHelper.isEmpty(results) === false && self.jsHelper.isEmpty(results[0]) === false) {
+                                memberJwtToken = self.jsHelper.tryParseJson(results[0]);
+                            }
+
+                            if (self.jsHelper.isEmpty(results) === false && self.jsHelper.isEmpty(results[1]) === false) {
+                                guestJwtToken = self.jsHelper.tryParseJson(results[1]);
+                            }
+                            console.log("memberJwtToken:", memberJwtToken);
+                            console.log("guestJwtToken:", guestJwtToken);
+                            if (self.jsHelper.isEmpty(memberJwtToken) === false) {
+                                // TODO: implement remain logged in check box so the user can decide
+                                // to stay logged in, for now we assume they stay logged in
+
+                                // user was previously logged in
+                                console.log("Init app using existing member token: ", memberJwtToken);
+                                self.UserLoggedIn.emit();
+                                return self.startAsMember(memberJwtToken);
+                            }
+                            else if (self.jsHelper.isEmpty(guestJwtToken) === false) {
+                                console.log("Init app using existing guest token: ", guestJwtToken);
+                                return self.startAsGuest(guestJwtToken);
+                            }
+                            else {
+                                console.log("Init App getting new Guest Token");
+                                self.deleteGuestToken()
+                                    .then(self.requestGuestToken)
+                                    .then(self.startAsGuest)
+                                    .then(function () { resolve(); })
+                                    .catch(function (error) {
+                                        reject(error);
+                                    });
+                            }
+                        })
+                        .then(function () { console.log("Init Done."); resolve(); })
+                        .catch(function (error) {
+                            reject(error);
+                        });
+                })
+                .then(function () { console.log("InitApp Last."); resolve(); })
+                .catch(function (error) {
+                    reject(error)
+                });
+            console.log("InitApp End.");
+        });
+    }
+
+    requestIp = () => {
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            self.clientIdHub.invoke("requestIp")
+                .done(function (response) {
+                    let httpResponseMessage = self.jsHelper.parseHttpResponseMessage(response)
+                    if (self.jsHelper.isEmpty(httpResponseMessage) === false && httpResponseMessage.statusCode === 200) {
+                        //console.log("got the ip: ", httpResponseMessage.content);
+                        resolve(httpResponseMessage.content);
+                    }
+                    else {
+                        reject("requestIp httpResponseMessage error:" + self.jsHelper.stringify(httpResponseMessage));
+                    }
+                })
+                .fail(function (error) {
+                    reject(error);
+                });
+        });
+    }
+
+    setIp = (value) => {
+        let self: any = this;
+        console.log("value of this in setIp:", this);
+        return new Promise(function (resolve, reject) {
+            console.log("value of self in setIp promise def:", self);
+            // TODO: do validation for ip value to make sure its a valid ipv4 or possibley ipv6
+            if (self.jsHelper.isEmpty(value) === false) {
+                self.ip = value;
+                self.clientIdHub.state.ip = self.ip;
+                console.log("Ip is set: ", self.ip);
+
+                resolve();
+            }
+            else {
+                reject("No Ip to set");
+            }
+        });
+    }
+
+    requestProxySecret = () => {
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            let verificationSecret = self.jsHelper.createHash(self.ip);
+
+            console.log("verificationSecret: ", verificationSecret);
+
+            self.clientIdHub.invoke('requestProxySecret', verificationSecret)
+                .done(function (response) {
+                    //console.log("got response: ", response);
+                    let httpResponseMessage = self.jsHelper.parseHttpResponseMessage(response)
+                    if (self.jsHelper.isEmpty(httpResponseMessage) === false && httpResponseMessage.statusCode === 200) {
+                        let proxySecret = httpResponseMessage.content;
+                        //console.log("proxySecret: ", proxySecret);
+
+                        resolve(proxySecret);
+                    }
+                    else {
+                        reject(response.content);
+                    }
+                })
+                .fail(function (error) {
+                    //console.log("request Proxy Secret error", error);
+                    reject(error);
+                });
+        });
+    }
+
+    setProxySecret = (proxySecret) => {
+        let self: any = this;
+        return new Promise(function (resolve) {
+            console.log("set ProxySecret: ", proxySecret);
+            self.clientIdHub.state.proxySecret = proxySecret;
+            resolve();
+        })
+    }
+
+    startAsMember = (jwtToken) => {
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            console.log("starting as member: ", jwtToken);
+
+            //check to see if the token is expired, if is expired then renew it
+            if (self.jsHelper.isExpiredToken(jwtToken) === true) {
+                // before renewing the token, we need to checkout the guest token
+                // renew the token
+
+                console.log("start as member, renewing member token", jwtToken);
+                self.renewToken(jwtToken)
+                    .then(function (jwtToken) {
+                        return self.startAsMember(jwtToken);
+                    })
+                    .then(function () {
+                        resolve();
+                    })
+                    .catch(function (error) {
+                        // the renew of the member token failed. have the user login
+                        console.log("start as member, unable to renew member token, start as guest so user can login", jwtToken);
+                        self.requestGuestToken()
+                            .then(self.startAsGuest)
+                            .then(function () {
+                                resolve();
+                            })
+                            .catch(function (error) {
+                                reject(error);
+                            })
+                    });
+            }
+            else {
+                console.log("start as member, member token not expires: ", jwtToken);
+                self.initMemberSettings(jwtToken)
+                    .then(self.initLocalMediaSources)
+                    .catch(function (error) {
+                        reject(error);
+                    });
+            }
+        });
+    }
+
+    startAsGuest = (jwtToken) => {
+        console.log("starting as guest");
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            if (self.jsHelper.isExpiredToken(jwtToken) === true) {
+                console.log("renewing guest token", jwtToken);
+                self.renewToken(jwtToken)
+                    .then(function (jwtToken) {
+                        return self.startAsGuest(jwtToken);
+                    })
+                    .then(function () {
+                        resolve();
+                    })
+                    .catch(function () {
+                        console.log("unable to renew guest token, getting a new one. old token:", jwtToken);
+                        self.deleteGuestToken()
+                            .then(self.requestGuestToken)
+                            .then(function (jwtToken) {
+                                return self.startAsGuest(jwtToken);
+                            })
+                            .then(function () {
+                                resolve();
+                            })
+                            .catch(function (error) {
+                                reject(error);
+                            })
+                    });
+            }
+            else {
+                console.log("startAsGuest (could be called recursively) token not expired call. jwtToken: ", jwtToken);
+                self.initGuestSettings(jwtToken)
+                    .then(self.initLocalMediaSources)
+                    .then(function () {
+                        resolve();
+                    })
+                    .catch(function (error) {
+                        reject(error);
+                    });
+            }
+        });
+    }
+
+    deleteGuestToken = () => {
+        console.log("Deleting Guest Token");
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            //console.log("deleting guest token");
+            self.localStorage.delete(self.guestTokenName)
+                .then(function () {
+                    console.log("guestToken Deleted");
+                    resolve();
+                })
+                .catch(function (error) {
+                    reject(error);
+                })
+        });
+    }
+
+    initMemberSettings = (jwtToken) => {
+        console.log("initMemberSettings: ", jwtToken);
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            self.storeMemberToken(jwtToken)
+                .then(self.setAccessToken)
+                .then(self.webRtcHubCheckIn)
+                .then(self.setLocalGuid)
+                .then(function () {
+                    // TODO: set the actual member first and last name
+                    console.log("initMemberSettings token:", jwtToken);
+                    resolve();
+                })
+                .catch(function (error) {
+                    reject(error);
+                });
+        });
+    }
+
+    storeMemberToken = (jwtToken) => {
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            self.localStorage.set(self.memberTokenName, jwtToken)
+                .then(function () {
+                    //webRtcHub.state.memberJwtToken = jwtToken.access_token;
+                    resolve(jwtToken);
+                })
+                .catch(function (error) { reject(error); });
+        });
+    }
+
+    initLocalMediaSources = () => {
+        console.log("initLocalMediaSources");
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            self.videoHelper.getDefaultMediaStream()
+                .then(self.setLocalStream)
+                .then(function () { resolve(); })
+                .catch(function (error) {
+                    reject(error);
+                })
+        });
+    }
+
+    setLocalStream = (stream) => {
+        console.log("setLocalStream:", stream);
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            try {
+                self.localStream = stream;
+                resolve();
+                self.LocalMediaAvailable.emit(stream);
+            }
+            catch (e) {
+                reject(e.toString());
+            }
+        });
+    }
+
+    sendAcceptCall = (remoteGuid) => {
+        console.log("sending accept call to remoteGuid: ", remoteGuid);
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            self.webRtcHub.invoke("sendAcceptCall", remoteGuid)
+                .done(function () {
+                    console.log("accept call sent to remoteGuid: ", remoteGuid);
+                    resolve();
+                })
+                .fail(function (error) {
+                    reject(error);
+                });
+        });
+    }
+
+    sendNotAcceptCall = (remoteGuid) => {
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            self.webRtcHub.invoke("sendNotAcceptCall", remoteGuid)
+                .done(function () {
+                    resolve();
+                })
+                .fail(function (error) {
+                    reject(error);
+                });
+        });
+    }
+
+    deleteLocalGuid = () => {
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            try {
+                self.webRtcHub.state.connectionGuid = "";
+                resolve();
+            }
+            catch (e) {
+                reject(e.toString());
+            }
+        });
+    }
+
+    deleteRemoteGuid = () => {
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            try {
+                self.remoteGuid = "";
+                resolve();
+            }
+            catch (e) {
+                reject(e.toString());
+            }
+        });
+    }
+
+    getUserMessage() {
+        //return this.webRtcClientServiceSupport.GetMessage();
+    }
+
+    getLocalstream() {
+        //return this.localStream;
+        return this.videoHelper.getDefaultMediaStream();
+    }
+
+    LoginUser(email: string, password: string) {
+        let self: any = this;
+        console.log("This inside LoginUser method():", this);
+        return new Promise(function (resolve, reject) {
+            self.clientIdHub.invoke("requestMemberToken", { Email: email, Password: password })
+                .done(function (response) {
+                    let httpResponse = self.jsHelper.parseHttpResponseMessage(response);
+
+                    console.log("Login Httpresponse:", httpResponse);
+
+                    let jwtToken = self.jsHelper.tryParseJson(httpResponse.content);
+                    if (self.jsHelper.isEmpty(httpResponse) === false && httpResponse.statusCode === 200) {
+                        console.log("login response content: ", httpResponse.content);
+                        if (self.jsHelper.isEmpty(jwtToken) === false && self.jsHelper.isEmpty(jwtToken.access_token) === false) {
+                            self.webRtcHubCheckOut()
+                                .then(function () {
+                                    return self.initMemberSettings(jwtToken);
+                                })
+                                .then(function () {
+                                    console.log("login success");
+                                    self.UserLoggedIn.emit();
+                                    return resolve(jwtToken);
+                                })
+                                .catch(function (error) {
+                                    self.displayErrorToUser("Network error, Login failed");
+                                    return reject(error);
+                                });
+                        }
+                        else {
+                            self.displayErrorToUser("Login error, received invalid credentials from server.");
+                            return reject(jwtToken);
+                        }
+                    }
+                    else {
+                        //console.log("loginSubmit failed response:", response);
+                        //TODO: parse the errors from the response and display then to the user
+                        // for now display general error message, error messages are located as List<string> in httpRepsonse.content
+                        self.displayErrorToUser("Login failed. Please make sure your email and password are correct.");
+                        return reject(jwtToken);
+                    }
+                })
+                .fail(function (error) {
+                    //console.log("loginSubmit error:", error);
+                    //reject(error);
+                    self.displayErrorToUser("Login request failed. Please try your request later.");
+                    return reject(error);
+                });
+        });
+    }
+
+    AcceptCall(remoteGUID: string) {
+        let self: any = this;
+        return new Promise(function (resolve) {
+            //clear the timeout
+            clearTimeout(self.callPromptTimeout);
+
+            //get the remote guid from the button
+            let currentRemoteGuid = remoteGUID;
+            console.log("accepted call with remoteGuid: ", currentRemoteGuid);
+            if (self.jsHelper.isEmpty(currentRemoteGuid) === false) {
+                if (self.jsHelper.isEmpty(self.webRtcHub.state.connectionGuid) === false) {
+                    // NOTE: the peer that actually initiates the call is the
+                    // user who receives the call request.
+                    // create sdp offer by adding stream to peerConnectionFactory
+                    // this will create the exchange of sdp and ice to start the P2P connection
+                    console.log("sending accept acall to remoteGuid: ", currentRemoteGuid);
+                    console.log("sending accept call local guid", self.webRtcHub.state.connectionGuid);
+
+                    self.setRemoteGuid(currentRemoteGuid)
+                        .then(self.startPeerConnectionFactory)
+                        .then(function () {
+                            // store the remote guid
+                            return self.sendAcceptCall(currentRemoteGuid);
+                        })
+                        .then(self.setStateInCall)
+                        .then(function () { resolve(); })
+                        .catch(function (error) {
+                            console.log("acceptCall error: ", error);
+                            self.displayErrorToUser("An error occured while trying to accept a call.");
+                        })
+                }
+                else {
+                    self.displayErrorToUser("user is missing local connectionGuid.");
+                }
+            }
+            else {
+                self.displayErrorToUser("missing remote connectionGuid.");
+            }
+        });
+    }
+
+    DenyCall(remoteGUID: string) {
+        let self: any = this;
+        return new Promise(function (resolve, reject) {
+            clearTimeout(self.callPromptTimeout);
+            let currentRemoteGuid = remoteGUID;
+            self.webRtcHub.invoke("sendNotAcceptCall", currentRemoteGuid)
+                .then(function (response) {
+                    console.log("DenyCall succesful in service, response:", response);
+                    self.RemoteCallDenied.emit();
+                    resolve(response);
+                })
+                .catch(function (error) {
+                    console.log("DenyCall failed in service, Error:", error);
+                    reject(error);
+                })
+        });
+    }
+}

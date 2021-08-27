@@ -1,0 +1,23 @@
+@import '../../../assets/_variables.scss';
+@import '../../../assets/_mixins.scss';
+
+.dashboard-buttons {
+    ion-col {
+        text-align: center;
+        color: $color-primary;
+        margin: 0 0 30px 0;
+        font-weight: bold;
+        font-size: 1.3em;
+
+        span:first-of-type {
+            display: inline-block;
+            width: 40%;
+            height: auto;
+
+            img {
+                object-fit: contain;
+                background: none;
+            }
+        }
+    }
+}

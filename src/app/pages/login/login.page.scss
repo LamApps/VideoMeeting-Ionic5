@@ -1,0 +1,69 @@
+@import '../../../assets/_variables.scss';
+@import '../../../assets/_mixins.scss';
+
+ion-content {
+    margin-top:0;
+}
+
+.or {
+    font-size:3em;
+    font-weight:bold;
+}
+
+.link {
+    
+    font-weight:bold;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.section-login-intro {
+    
+    text-align:center; 
+    img {
+        
+        background: none;
+        object-fit: contain;
+    }
+}
+
+.error {
+    color: red;
+    background-color: white;
+    margin: 4px 0 8px 0;
+    text-align: center;
+}
+
+h1 {
+    color: $color-secondary;
+    font-weight: bold;
+    font-size: 1.6em;
+    text-align: center;
+
+    &.title {
+        letter-spacing: 0.3em;
+    }
+}
+p.text-center {
+    color: $color-primary;
+}
+
+ion-button[type='submit'] {
+    --background: #f1682d;
+    --color: white;
+    height: 50px;
+    font-size: 1.2em;
+    &:disabled,
+    &[disabled] {
+        --background: whitesmoke !important;
+        --color: #648dba;
+    }
+}
+.controls-box {
+    padding: 0 20px;
+    ion-list {
+        overflow: hidden;
+        background: #fff;
+    }
+}
+

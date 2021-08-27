@@ -1,0 +1,45 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Meeting Details</ion-title>
+        <ion-buttons end>
+            <button (click)="close()" ion-button icon-only>
+                <ion-icon name="close-circle"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
+<ion-content padding>
+    <ion-grid>
+        <ion-row>
+            <ion-col>
+                <h2>
+                    {{title}}
+
+                </h2>
+                <p><strong>Date:</strong> {{meetDateTime}}</p>
+                <p><strong>Type:</strong> {{isPrivate}}</p>
+
+                <p><strong>Duration: </strong> {{duration}}</p>
+                <p><strong>Description: </strong><br />
+                    {{description}}
+                </p>
+
+                <ng-container *ngIf="isPrivate">
+                    <strong>Attendees:</strong>
+                    <ion-list>
+                        <ion-item *ngFor="let attendee of attendees">
+                            <meeting-attendee [meetingAttendee]="attendee"></meeting-attendee>
+                        </ion-item>
+                    </ion-list>
+                </ng-container>
+
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col class="text-center">
+                <button ion-button (click)="close()">Close</button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+	
+</ion-content>

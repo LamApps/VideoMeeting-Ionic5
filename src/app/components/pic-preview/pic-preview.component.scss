@@ -1,0 +1,13 @@
+@import '../../../assets/_variables.scss';
+@import '../../../assets/_mixins.scss';
+
+
+
+div {
+    > img {
+        width: 100%;
+        height: auto;
+        @include round-image();
+        object-fit: contain;
+    }
+}
