@@ -19,6 +19,10 @@ export class MaterialsHelperService {
     
   ) { }
   private isVideoHidden = new Subject<any>();
+
+  getSubject() {
+    return this.isVideoHidden;
+  }
   async openAlert(data: MaterialAlertMessageType) {
     let alert = await this.alertCtrl.create({
       header: data.title,
@@ -26,11 +30,11 @@ export class MaterialsHelperService {
       buttons: ["OK"]
     });
 
-    this.isVideoHidden.next({isVideoHidden: true});
+    this.isVideoHidden.next(true);
     await alert.present();
 
     await alert.onDidDismiss();
-    this.isVideoHidden.next({isVideoHidden: true});
+    this.isVideoHidden.next(false);
   }
 
   openActionAlert(data: MaterialActionAlertMessageType): Promise<boolean> {
@@ -43,7 +47,7 @@ export class MaterialsHelperService {
             text: data.yesButton,
             handler: () => {
               data.doAction = true;
-              this.isVideoHidden.next({isVideoHidden: true});
+              this.isVideoHidden.next(true);
             }
           },
           {
@@ -51,7 +55,7 @@ export class MaterialsHelperService {
             role: 'cancel',
             handler: () => {
               data.doAction = false;
-              this.isVideoHidden.next({isVideoHidden: false});
+              this.isVideoHidden.next(false);
               resolve(data.doAction);
             }
           }

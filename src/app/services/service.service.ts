@@ -2284,6 +2284,9 @@ export class Service {
     // #endregion
 
     // #region MaterialHelperService
+    getMaterialHelperSubject() {
+        return this.materialHelperService.getSubject();
+    }
     openAlert(data: MaterialAlertMessageType): void {
         this.materialHelperService.openAlert(data);
     }

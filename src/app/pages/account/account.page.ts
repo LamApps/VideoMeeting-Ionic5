@@ -169,7 +169,7 @@ ionViewDidEnter() {
 
 }
 
-ngOnDestroy() {
+ionViewWillLeave() {
     if (this.service.isEmpty(this.phoneRinger) === false) {
         this.phoneRinger.endListeners();
     }

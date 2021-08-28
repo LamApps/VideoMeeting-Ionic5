@@ -1,0 +1,117 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="true" color="primary"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+        Company Search
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid>
+      <ion-row>
+          <ion-col>
+            <ion-card style="margin-bottom:0">
+              <ion-card-content>
+              <ion-list>
+                  <ion-item>
+                      <ion-label>Search By Name</ion-label>
+                      <ion-toggle checked="true" [(ngModel)]="showNameSearchForm" (ionChange)="toggleNameSearchForm(showNameSearchForm)"></ion-toggle>
+                  </ion-item>
+                  <ion-item>
+                      <ion-label>Search By Location</ion-label>
+                      <ion-toggle checked="false" [(ngModel)]="showLocationSearchForm" (ionChange)="toggleLocationSearchForm(showLocationSearchForm)"></ion-toggle>
+                  </ion-item>
+              </ion-list>
+            </ion-card-content>
+            </ion-card>
+          </ion-col>
+      </ion-row>
+      <ion-row *ngIf="showNameSearchForm">
+          <ion-col>
+              <ion-card>
+                  <ion-card-header>
+                      Enter Name To Search:
+                  </ion-card-header>
+                  <ion-card-content class="text-center">
+                      <form [formGroup]="nameSearchForm">
+                          <ion-list>
+                              <ion-item>
+                                  <ion-input type="text" formControlName="name"></ion-input>
+                                  <app-show-form-errors [control]="nameSearchForm.get('name')"></app-show-form-errors>
+                              </ion-item>
+                            </ion-list>
+                          </form>
+                          <ion-button slot="end" (click)="searchByName($event)">Find Company</ion-button>
+                  </ion-card-content>
+              </ion-card>
+          </ion-col>
+      </ion-row>
+      <ion-row *ngIf="showLocationSearchForm">
+          <ion-col>
+              <ion-card>
+                  <ion-card-header>
+                      Enter Location Information:
+                  </ion-card-header>
+                  <ion-card-content class="text-center">
+                      <form [formGroup]="locationSearchForm">
+                          <ion-list>
+                              <ion-item>
+                                  <ion-label position="stacked">Address: </ion-label>
+                                  <ion-input type="text" formControlName="address"></ion-input>
+                                  <app-show-form-errors [control]="nameSearchForm.get('address')"></app-show-form-errors>
+                              </ion-item>
+                              <ion-item>
+                                  <ion-label position="stacked">City: </ion-label>
+                                  <ion-input type="text" formControlName="city"></ion-input>
+                                  <app-show-form-errors [control]="nameSearchForm.get('city')"></app-show-form-errors>
+                              </ion-item>
+                              <ion-item>
+                                  <ion-label position="stacked">Region: </ion-label>
+                                  <ion-input type="text" formControlName="region"></ion-input>
+                                  <app-show-form-errors [control]="nameSearchForm.get('region')"></app-show-form-errors>
+                              </ion-item>
+                              <ion-item>
+                                  <ion-label position="stacked">Select Country: </ion-label>
+                                  <ion-select formControlName="countryIsoCode">
+                                      <ion-option value="{{c.countryIsoCode}}" *ngFor="let c of countries">{{c.countryName}}</ion-option>
+                                  </ion-select>
+                              </ion-item>
+                            </ion-list>
+                          </form>
+                          <ion-button (click)="searchByLocation($event)" color="primary">Find Company</ion-button>
+                  </ion-card-content>
+              </ion-card>
+          </ion-col>
+      </ion-row>
+      <ion-row  *ngIf="showResults">
+          <ion-col>
+              <h3>Search Results</h3>
+              <ion-list *ngIf="profiles">
+                  <ion-item *ngFor="let item of profiles" (click)="gotoCompanyProfile(item.id)">
+                      <ion-avatar item-start>
+                          <img src="{{item.imgSrc}}" />
+                      </ion-avatar>
+                      <h3>
+                          {{item.title}}
+                      </h3>
+                      <p>{{item.content}}</p>
+                  </ion-item>
+              </ion-list>
+              <p *ngIf="!profiles">
+                  No results found.
+              </p>
+          </ion-col>
+      </ion-row>
+  </ion-grid>
+
+<!--<ion-spinner name="dots" *ngIf="loading"></ion-spinner>-->
+<!--<div *ngIf="!loading">-->
+
+
+
+</ion-content>
+<app-phone-ringer #phoneRinger></app-phone-ringer>

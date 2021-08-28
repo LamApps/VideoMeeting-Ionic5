@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="true" color="primary"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Settings</ion-title>
+    <ion-buttons slot="end">
+      <ion-button id="cameraToggle" (click)="toggleCamera()">
+        <ion-icon name="camera-reverse"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+
+<video id="mainvideo" [ngClass]="{
+      'visible': !isVideoHidden,
+      'invisible': isVideoHidden
+  }" src="" #localVideoElement muted autoplay playsinline></video>
+ 
+</ion-content>
+<app-phone-ringer #phoneRinger></app-phone-ringer>

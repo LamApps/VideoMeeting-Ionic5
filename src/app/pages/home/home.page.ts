@@ -16,14 +16,20 @@ export class HomePage {
     private router: Router,
     private service: Service
  	) {
-    this.service.isMember().then((isMember:boolean)=>{
-      this.isMember = isMember;
-    });
-    this.service.getIsLoggedIn().then((isLoggedIn:boolean)=>{
-      this.isLoggedIn = isLoggedIn;
-    });
+    this.startSubscriptions();
    }
+   startSubscriptions() {
 
+    this.service.getObservable('isMember').subscribe((isMember) => {
+        console.log("isMember:changed: ", isMember.changed);
+        this.isMember = this.service.isEmpty(isMember.changed) === false ? true : false;
+    });
+
+    this.service.getObservable('isLoggedIn').subscribe((isLoggedIn) => {
+        console.log("isLoggedIn:changed: ", isLoggedIn.changed);
+        this.isMember = this.service.isEmpty(isLoggedIn.changed) === false ? true : false;
+    });
+  }
     navigateToPhone() {
       this.router.navigate(['/home']);
     }

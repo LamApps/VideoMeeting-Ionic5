@@ -1,0 +1,22 @@
+.visible {
+    visibility: visible;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+#mainvideo {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+
+    object-fit: cover;
+}
+
+
+ion-content {
+    margin-top: 0;
+}
+    
+

@@ -23,6 +23,18 @@ const routes: Routes = [
     path: 'account',
     loadChildren: () => import('./pages/account/account.module').then( m => m.AccountPageModule)
   },
+  {
+    path: 'settings',
+    loadChildren: () => import('./pages/settings/settings.module').then( m => m.SettingsPageModule)
+  },
+  {
+    path: 'company-search',
+    loadChildren: () => import('./pages/company-search/company-search.module').then( m => m.CompanySearchPageModule)
+  },
+  {
+    path: 'company-profile',
+    loadChildren: () => import('./pages/company-profile/company-profile.module').then( m => m.CompanyProfilePageModule)
+  },
 ];
 
 @NgModule({

@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="true" color="primary"></ion-menu-button>
+    </ion-buttons>
+      <ion-title>
+          Company Profile
+      </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+
+  <ion-grid>
+      <ion-row>
+          <ion-col col-3>
+              <img src="{{companyImgSrc}}" class="image-circle">
+          </ion-col>
+          <ion-col col-9>
+              <h2>{{companyName}}</h2>
+              <p *ngIf="companyEmail">{{companyEmail}}</p>
+              <p *ngIf="companyDescription">{{companyDescription}}</p>
+          </ion-col>
+      </ion-row>
+     
+      <ion-row>
+          <ion-col>
+              <hr />
+              <h2>Pbx Lines</h2>
+              <ion-list *ngIf="pbxlines">
+                  <ion-item *ngFor="let item of pbxlines">
+                      <ion-avatar item-start>
+                          <img src="{{item.imgSrc}}" />
+                      </ion-avatar>
+                      <p><strong>{{item.title}}</strong></p>
+                      <p>{{item.content}}</p>
+                      <ion-button (click)="gotoCustomerPbxLine(item.id)">Connect</ion-button>
+                  </ion-item>
+              </ion-list>
+              <p *ngIf="!pbxlines">
+                  This company does not have any Pbx Lines
+              </p>
+          </ion-col>
+      </ion-row>
+  </ion-grid>
+
+
+
+</ion-content>
+<app-phone-ringer #phoneRinger></app-phone-ringer>
