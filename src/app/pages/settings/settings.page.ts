@@ -44,6 +44,10 @@ export class SettingsPage implements OnInit {
 
     onAppPause: Subscription;
     onAppResume: Subscription;
+    onVideoHidden: Subscription;
+    onReceivePhoneLineInvitation: Subscription;
+    onReceiveRemoteLogout : Subscription;
+
 
     canToggle: boolean;
     isVideoHidden: boolean;
@@ -91,7 +95,7 @@ export class SettingsPage implements OnInit {
           }
       });
 
-      this.service.getMaterialHelperSubject().subscribe((isVideoHidden)=>{
+      this.onVideoHidden = this.service.getMaterialHelperSubject().subscribe((isVideoHidden)=>{
         if (typeof cordova !== "undefined" && this.platform.is("ios")) {
           this.ngZone.run(() => {
               // iosrtc does the opposite of intended behavior, so we add negate
@@ -105,14 +109,14 @@ export class SettingsPage implements OnInit {
 
       if (this.service.isEmpty(this.phoneRinger) === false) {
           this.phoneRinger.startListeners();
-          this.phoneRinger.getSubjects('receivePhoneLineInvitation').subscribe((call) => {
+          this.onReceivePhoneLineInvitation = this.phoneRinger.getSubjects('receivePhoneLineInvitation').subscribe((call) => {
             if (this.service.isEmpty(call) === false) {
                 this.service.acceptedCall = call;
                 // this.navCtrl.setRoot(Phone);
             }
           });
       
-          this.phoneRinger.getSubjects('receiveRemoteLogout').subscribe((connectionId) => {
+          this.onReceiveRemoteLogout = this.phoneRinger.getSubjects('receiveRemoteLogout').subscribe((connectionId) => {
             this.service.doLogout()
             .catch((error) => {
                 console.log("app-shell.ts logOut error:", error);
@@ -139,6 +143,9 @@ export class SettingsPage implements OnInit {
 
     this.onAppPause && this.onAppPause.unsubscribe();
     this.onAppResume && this.onAppResume.unsubscribe();
+    this.onVideoHidden && this.onVideoHidden.unsubscribe();
+    this.onReceiveRemoteLogout && this.onReceiveRemoteLogout.unsubscribe();
+    this.onReceivePhoneLineInvitation && this.onReceivePhoneLineInvitation.unsubscribe();
   }
   async startLocalVideo(): Promise<void> {
     this.canToggle = false;

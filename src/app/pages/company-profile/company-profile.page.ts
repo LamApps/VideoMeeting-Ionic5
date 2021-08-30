@@ -18,6 +18,7 @@ import {
 	CallType,
 } from "../../models/index";
 import { PhoneRingerComponent } from '../../components/index';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-company-profile',
   templateUrl: './company-profile.page.html',
@@ -39,6 +40,8 @@ export class CompanyProfilePage implements OnInit {
 	companyDescription: string;
 	companyProfileId: number;
 	_pbxlines: Array<ListItemType>;
+	receivePhoneLineInvitation: Subscription;
+	receiveRemoteLogout: Subscription;
   ngOnInit() {
     this.companyProfileId = Number(this.route.params.pipe(pluck('id')));
   }
@@ -55,22 +58,22 @@ export class CompanyProfilePage implements OnInit {
 
 		if (this.service.isEmpty(this.phoneRinger) === false) {
 			this.phoneRinger.startListeners();
-      this.phoneRinger.getSubjects('receivePhoneLineInvitation').subscribe((call) => {
-        if (this.service.isEmpty(call) === false) {
-            this.service.acceptedCall = call;
-            // this.navCtrl.setRoot(Phone);
-        }
-      });
-  
-      this.phoneRinger.getSubjects('receiveRemoteLogout').subscribe((connectionId) => {
-        this.service.doLogout()
-        .catch((error) => {
-            console.log("app-shell.ts logOut error:", error);
-        })
-        .then(() => {
-            // this.router.navigate(['login']);
-        })
-      });
+			this.receivePhoneLineInvitation = this.phoneRinger.getSubjects('receivePhoneLineInvitation').subscribe((call) => {
+				if (this.service.isEmpty(call) === false) {
+					this.service.acceptedCall = call;
+					// this.navCtrl.setRoot(Phone);
+				}
+			});
+		
+			this.receiveRemoteLogout = this.phoneRinger.getSubjects('receiveRemoteLogout').subscribe((connectionId) => {
+				this.service.doLogout()
+				.catch((error) => {
+					console.log("app-shell.ts logOut error:", error);
+				})
+				.then(() => {
+					// this.router.navigate(['login']);
+				})
+			});
 		}
 
 		if (this.service.isEmpty(this.companyProfileId) === false) {
@@ -82,8 +85,8 @@ export class CompanyProfilePage implements OnInit {
 				message: "Unable to load company profile. Missing the companies id.",
 				buttons: ["OK"]
 			}).then((altRes)=>{
-        altRes.present();
-      })
+				altRes.present();
+			})
 		}
 	}
 
@@ -91,6 +94,8 @@ export class CompanyProfilePage implements OnInit {
 		if (this.service.isEmpty(this.phoneRinger) === false) {
 			this.phoneRinger.endListeners();
 		}
+		this.receiveRemoteLogout && this.receiveRemoteLogout.unsubscribe();
+		this.receivePhoneLineInvitation && this.receivePhoneLineInvitation.unsubscribe();
 	}
 
 	// #endregion lifecycle hooks

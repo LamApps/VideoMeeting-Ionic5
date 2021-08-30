@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import {
   AlertController,
   LoadingController,
@@ -55,6 +56,8 @@ export class CompanySearchPage implements OnInit {
   countries: Array<CountryDto>;
 
   profiles: Array<ListItemType>;
+  receivePhoneLineInvitation: Subscription;
+  receiveRemoteLogout: Subscription;
   ngOnInit() {
     let loader: HTMLIonLoadingElement;
     this.loadingCtrl.create({
@@ -96,14 +99,14 @@ export class CompanySearchPage implements OnInit {
     // fires each time loaded
     if (this.service.isEmpty(this.phoneRinger) === false) {
         this.phoneRinger.startListeners();
-        this.phoneRinger.getSubjects('receivePhoneLineInvitation').subscribe((call) => {
+        this.receivePhoneLineInvitation = this.phoneRinger.getSubjects('receivePhoneLineInvitation').subscribe((call) => {
           if (this.service.isEmpty(call) === false) {
               this.service.acceptedCall = call;
               // this.navCtrl.setRoot(Phone);
           }
         });
     
-        this.phoneRinger.getSubjects('receiveRemoteLogout').subscribe((connectionId) => {
+        this.receiveRemoteLogout = this.phoneRinger.getSubjects('receiveRemoteLogout').subscribe((connectionId) => {
           this.service.doLogout()
           .catch((error) => {
               console.log("app-shell.ts logOut error:", error);
@@ -119,6 +122,8 @@ export class CompanySearchPage implements OnInit {
       if (this.service.isEmpty(this.phoneRinger) === false) {
           this.phoneRinger.endListeners();
       }
+      this.receiveRemoteLogout && this.receiveRemoteLogout.unsubscribe();
+      this.receivePhoneLineInvitation && this.receivePhoneLineInvitation.unsubscribe();
   }
 
 
