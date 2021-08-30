@@ -39,6 +39,10 @@ const routes: Routes = [
     path: 'customer-pbx',
     loadChildren: () => import('./pages/customer-pbx/customer-pbx.module').then( m => m.CustomerPbxPageModule)
   },
+  {
+    path: 'block-list',
+    loadChildren: () => import('./pages/block-list/block-list.module').then( m => m.BlockListPageModule)
+  },
 ];
 
 @NgModule({

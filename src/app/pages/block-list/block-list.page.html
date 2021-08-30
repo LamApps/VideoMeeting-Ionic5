@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="true" color="primary"></ion-menu-button>
+    </ion-buttons>
+      <ion-title>
+          Blocked Users
+      </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <ion-grid>
+      <ion-row>
+          <ion-col>
+              <span class="label-info">
+                  The following emails are blocked from calling you. Swipe left to edit.
+              </span>
+          </ion-col>
+      </ion-row>
+      <ion-row>
+          <ion-col>
+              <ion-list>
+                  <ion-item-sliding *ngFor="let blockedEmail of blockedEmails">
+                      <ion-item>
+                          {{blockedEmail.emailBlocked}}
+                      </ion-item>
+                      <ion-item-options side="right">
+                          <ion-button
+                                  color="brand-light"
+                                  (click)="unblock(blockedEmail)">
+                              <ion-icon name="trash"></ion-icon>
+                              Remove Block
+                        </ion-button>
+                      </ion-item-options>
+                  </ion-item-sliding>
+              </ion-list>
+          </ion-col>
+      </ion-row>
+  </ion-grid>
+
+
+
+</ion-content>
+<app-phone-ringer #phoneRinger></app-phone-ringer>
+
