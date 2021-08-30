@@ -1,9 +1,123 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>customer-pbx</ion-title>
+      <ion-buttons slot="start">
+        <ion-menu-button auto-hide="true" color="primary"></ion-menu-button>
+      </ion-buttons>
+      <ion-title>
+          Live Pbx Phone
+      </ion-title>
+      <ion-buttons slot="end">
+          <ion-button (click)="openActionSheet()" fill="clear"><ion-icon name="more"></ion-icon></ion-button>
+      </ion-buttons>
   </ion-toolbar>
 </ion-header>
+<ion-content class="phone-page">
+<!--<ion-fab top right>
 
-<ion-content>
+  <ion-fab #infoFab>
+    <button ion-fab
+        mini
+        [color]="employee ? 'secondary' : 'danger'">
+      <ion-icon name="person"></ion-icon>
+    </button>
+    <ion-fab-list side="bottom">
+      <button ion-fab mini (click)="showRepInformation(infoFab)"><ion-icon name="information-circle"></ion-icon></button>
+      <button ion-fab mini (click)="addAdditionalInformation(infoFab)"><ion-icon name="paper"></ion-icon></button>
+    </ion-fab-list>
+  </ion-fab>
+</ion-fab>
+<ion-fab left middle #chatFab>
+  <button ion-fab
+      mini
+      [color]="employee ? 'secondary' : 'danger'">
+    <ion-icon name="chatbubbles"></ion-icon>
+  </button>
+  <ion-fab-list side="right">
+    <button ion-fab mini *ngIf="!isChatExpanded" (click)="expandChat(chatFab)"><ion-icon name="expand"></ion-icon></button>
+    <button ion-fab mini *ngIf="isChatExpanded" (click)="collapseChat(chatFab)"><ion-icon name="contract"></ion-icon></button>
+    <button ion-fab mini (click)='openGroupSmsInterface(chatFab)'><ion-icon name="chatboxes"></ion-icon></button>
+    <button ion-fab mini (click)='openPrivateSmsInterface(null, chatFab)'><ion-icon name="text"></ion-icon></button>
+    <button ion-fab mini (click)='saveMessages(chatFab)'><ion-icon name="archive"></ion-icon></button>
+  </ion-fab-list>
+</ion-fab>-->
+<!--<ion-fab top right edge>
+  <button ion-fab mini><ion-icon name="add"></ion-icon></button>
+  <ion-fab-list>
+    <button ion-fab><ion-icon name="logo-facebook"></ion-icon></button>
+    <button ion-fab><ion-icon name="logo-twitter"></ion-icon></button>
+    <button ion-fab><ion-icon name="logo-vimeo"></ion-icon></button>
+    <button ion-fab><ion-icon name="logo-googleplus"></ion-icon></button>
+  </ion-fab-list>
+</ion-fab>-->
+<p *ngIf="statusMessage">Status: {{statusMessage}}</p>
 
+<!-- //the inserted component are hidden,
+boxes will show when its not -->
+<div class="phone-call-container">
+  <div class="phone-call-component" (click)="localVideoClicked()">
+    <video #localVideoElement
+           autoplay="autoplay"
+           muted="muted"
+           src=""
+           [ngClass]="{'visible': !isVideoHidden, 'invisible': isVideoHidden, 'video-thumbs':true }"
+           playsinline></video>
+  </div>
+  <ng-template #phoneCallComponentInsert>
+  </ng-template>
+</div>
+<video id="main-video"
+[ngClass]="{'visible': !isVideoHidden, 'invisible': isVideoHidden }"
+src=""
+#mainVideoElement
+autoplay="autoplay"
+muted="muted"
+playsinline></video>
+<!--<div class="btn-bar" [class.expand]="isChatExpanded">
+  <div class="btn-bar btn-bar-content">
+
+    <button *ngIf="isBusy" ion-button color="danger" (click)="hangUp()">
+      <ion-icon id="hangup" name="call"></ion-icon>
+    </button>
+    <button ion-button color="bad-danger" (click)="exitPhone()">
+      <ion-icon name="exit"></ion-icon>
+    </button>
+
+    <button *ngIf="isChatExpanded" ion-button color="primary" (click)="collapseChat()">
+      <ion-icon name="arrow-down"></ion-icon>
+    </button>
+    <button *ngIf="!isChatExpanded" ion-button color="primary" (click)="expandChat()">
+      <ion-icon name="arrow-up"></ion-icon>
+    </button>
+  </div>
+</div>-->
+<div class="chatbox" [class.expand]="isChatExpanded" #chatbox>
+  <div class="chatbox-content">
+    <ion-list *ngIf="textMessages">
+      <ion-item *ngFor="let message of textMessages" (click)="openPrivateSmsInterface(message.id)">
+        <ion-avatar item-start>
+          <img src="{{message.imgSrc}}" />
+        </ion-avatar>
+        <h2>
+          {{message.name}}
+          <ion-icon name="person" *ngIf="message.isPrivate"></ion-icon>
+        </h2>
+        <p text-wrap>{{message.message}}</p>
+      </ion-item>
+    </ion-list>
+  </div>
+</div>
+<div class="btn-sms-container">
+  <ion-button *ngIf="isChatExpanded" class="btn-sms" (click)="collapseChat()">
+    <ion-icon name="arrow-dropdown-circle"></ion-icon>
+  </ion-button>
+  <ion-button *ngIf="isChatExpanded" class="btn-sms" (click)='saveMessages()'>
+    <ion-icon name="mail"></ion-icon>
+  </ion-button>
+  <ion-button *ngIf="isChatExpanded" class="btn-sms" (click)='openGroupSmsInterface()'>
+    <ion-icon name="people"></ion-icon>
+  </ion-button>
+  <ion-button *ngIf="isChatExpanded" class="btn-sms" (click)='openPrivateSmsInterface()'>
+    <ion-icon name="person"></ion-icon>
+  </ion-button>
+</div>
 </ion-content>
