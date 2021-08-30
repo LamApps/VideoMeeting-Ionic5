@@ -1,0 +1,4 @@
+<div class="phone-call-component" (click)="phoneCallClicked($event)">
+  <video #remoteVideoElement [ngClass]="{'visible': !isVideoHidden, 'invisible': isVideoHidden, 'video-thumbs': true }" playsinline></video>
+  <img src="assets/images/default-avatar.png" *ngIf="isVideoHidden">
+</div>

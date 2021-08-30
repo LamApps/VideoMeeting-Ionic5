@@ -35,6 +35,10 @@ const routes: Routes = [
     path: 'company-profile',
     loadChildren: () => import('./pages/company-profile/company-profile.module').then( m => m.CompanyProfilePageModule)
   },
+  {
+    path: 'customer-pbx',
+    loadChildren: () => import('./pages/customer-pbx/customer-pbx.module').then( m => m.CustomerPbxPageModule)
+  },
 ];
 
 @NgModule({

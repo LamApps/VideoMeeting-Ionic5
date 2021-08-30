@@ -1,0 +1,7 @@
+<ion-list>
+  <ion-item button (click)="privateMessage(e)">Private Message</ion-item>
+  <ion-item button (click)="displayMain(e)">Display to Main Video</ion-item>
+  <ion-item button *ngIf="!isOnHold" (click)="hold(e)">Hold Call</ion-item>
+  <ion-item button *ngIf="isOnHold" (click)="resumeCall(e)">Resume Call</ion-item>
+  <!--<button ion-item (click)="sendFile(e)">Send File</button>-->
+</ion-list>
