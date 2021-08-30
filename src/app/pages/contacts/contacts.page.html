@@ -1,0 +1,81 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="true" color="primary"></ion-menu-button>
+    </ion-buttons>
+      <ion-title>
+          Contacts
+      </ion-title>
+
+      <ion-buttons slot="end">
+          <ion-button (click)="openActionSheet()"><ion-icon name="more"></ion-icon></ion-button>
+      </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+<ion-refresher (ionRefresh)="refreshContacts($event)">
+  <ion-refresher-content refreshingSpinner="dots"></ion-refresher-content>
+</ion-refresher>
+<ion-spinner name="dots" *ngIf="pageLoading"></ion-spinner>
+<ion-list *ngIf="!pageLoading">
+  <ion-item-sliding *ngFor="let contact of phoneContacts">
+    <ion-item>
+      <ion-avatar item-start *ngIf="contact.avatarFileName">
+        <img src="{{contactAvatarBaseUrl}}{{contact.avatarFileName}}?{{timestamp}}">
+      </ion-avatar>
+      <ion-avatar item-start *ngIf="!contact.avatarFileName">
+        <img src="assets/images/default-avatar.png?{{timestamp}}">
+      </ion-avatar>
+      <h2>{{contact.name}}</h2>
+      <p>{{contact.email}}</p>
+      <!--<button class="btn-circle" (click)="callContact(contact.email)" color="secondary" ion-button item-right *ngIf="contact.isMember">
+        <ion-icon name="call"></ion-icon>
+      </button>-->
+    </ion-item>
+    <ion-item-options side="right">
+      <button ion-button
+          color="brand-light"
+          (click)="callContact(contact.email)"
+          *ngIf="contact.isMember">
+        <ion-icon name="call"></ion-icon>
+        Call
+      </button>
+      <button ion-button
+          color="brand-light"
+          *ngIf="!contact.isMember"
+          (click)="sendInvite(contact)">
+        <ion-icon name="mail"></ion-icon>
+        Invite
+      </button>
+      <button (click)="editContact(contact)"
+          ion-button
+          color="brand-light">
+        <ion-icon name="create"></ion-icon>
+        Edit
+      </button>
+      <button (click)="blockContact(contact)"
+          ion-button
+          color="brand-light"
+          *ngIf="isMember">
+        <ion-icon name="hand"></ion-icon>
+        Block
+      </button>
+      <button (click)="removeContact(contact)"
+          ion-button
+          color="brand-light">
+        <ion-icon name="trash"></ion-icon>
+        Remove
+      </button>
+    </ion-item-options>
+  </ion-item-sliding>
+</ion-list>
+</ion-content>
+<!--<ion-fab left bottom>
+<button ion-fab color="brand"><ion-icon name="add"></ion-icon></button>
+<ion-fab-list side="right">
+  <button (click)="reloadContacts()" ion-fab><ion-icon name="refresh"></ion-icon></button>
+  <button (click)="addContact()" ion-fab><ion-icon name="person-add"></ion-icon></button>
+  <button (click)="askPhoneContactListImport()" ion-fab><ion-icon name="people"></ion-icon></button>
+</ion-fab-list>
+</ion-fab>-->
+<app-phone-ringer #phoneRinger></app-phone-ringer>

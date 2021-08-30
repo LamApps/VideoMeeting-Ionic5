@@ -43,6 +43,14 @@ const routes: Routes = [
     path: 'block-list',
     loadChildren: () => import('./pages/block-list/block-list.module').then( m => m.BlockListPageModule)
   },
+  {
+    path: 'contacts',
+    loadChildren: () => import('./pages/contacts/contacts.module').then( m => m.ContactsPageModule)
+  },
+  {
+    path: 'add-contacts',
+    loadChildren: () => import('./pages/add-contacts/add-contacts.module').then( m => m.AddContactsPageModule)
+  },
 ];
 
 @NgModule({

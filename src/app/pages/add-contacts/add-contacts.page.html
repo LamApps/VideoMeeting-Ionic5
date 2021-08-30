@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar>
+      <ion-title>
+          Add A Contact
+      </ion-title>
+      <ion-buttons slot="end">
+          <ion-button (click)="viewCtrl.dismiss()">
+              <ion-icon name="close-circle"></ion-icon>
+          </ion-button>
+      </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+
+  <form [formGroup]="contactForm">
+      <ion-grid>
+          <ion-row>
+              <ion-col col-6 offset-3>
+                  <app-pic-preview (onAvatarChanged)="onAvatarChanged($event)"></app-pic-preview>
+              </ion-col>
+          </ion-row>
+          <ion-row>
+              <ion-col>
+                  <ion-list>
+                      <ion-item>
+                          <ion-label position="stacked">Name</ion-label>
+                          <ion-input type="text" formControlName="name"></ion-input>
+                      </ion-item>
+
+                      <ion-item text-wrap *ngIf="!contactForm.controls.name.valid && contactForm.controls.name.dirty">
+                          <app-show-form-errors [control]="contactForm.controls.name"></app-show-form-errors>
+                      </ion-item>
+                      <ion-item>
+                          <ion-label position="stacked">Email</ion-label>
+                          <ion-input type="text" formControlName="email"></ion-input>
+                      </ion-item>
+                      <ion-item text-wrap *ngIf="!contactForm.controls.email.valid && contactForm.controls.email.dirty">
+                          <app-show-form-errors [control]="contactForm.controls.email"></app-show-form-errors>
+                      </ion-item>
+                  </ion-list>
+              </ion-col>
+          </ion-row>
+          <ion-row>
+              <ion-col>
+                  <ion-button [disabled]="!contactForm.valid" (click)="add()">Add</ion-button>
+                  <ion-button (click)="viewCtrl.dismiss()">cancel</ion-button>
+              </ion-col>
+          </ion-row>
+      </ion-grid>
+
+
+
+
+  </form>
+
+</ion-content>
+<app-phone-ringer #phoneRinger></app-phone-ringer>
