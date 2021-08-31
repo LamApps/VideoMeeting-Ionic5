@@ -86,13 +86,9 @@ export class ContactsPage implements OnInit {
   receivePhoneLineInvitation: Subscription;
 
   ngOnInit() {
-  }
-  ionViewWillEnter() {
-    // fires each time user enters page but before the page actually becomes the active page
-    // use ionViewDidEnter to run code when the page actually becomes the active page
-    if (this.service.isSignalrConnected() === false) {
-        this.service.startConnection();
-    }
+      if (this.service.isSignalrConnected() === false) {
+          this.service.startConnection();
+      }
   }
 
   ionViewDidEnter() {
@@ -161,7 +157,7 @@ export class ContactsPage implements OnInit {
       //console.log('pageloading', this.pageLoading)
   }
 
-  ionViewWillLeave() {
+  ngOnDestroy() {
       if (this.service.isEmpty(this.phoneRinger) === false) {
           this.phoneRinger.endListeners();
       }
@@ -240,13 +236,14 @@ export class ContactsPage implements OnInit {
       });
       await contactModal.present()
       let {data} = await contactModal.onDidDismiss();
-      if (data.phoneContact) {
-          let contactEmails = this.phoneContacts.map(contacts => contacts.email)
+      console.log(data);
+      if (data) {
+          let contactEmails = this.phoneContacts && this.phoneContacts.map(contacts => contacts.email)
           console.log('cached emails', contactEmails)
 
-          let index: number = contactEmails.findIndex((value) => {
+          let index: number = contactEmails && contactEmails.findIndex((value) => {
               // NOTE: must use == equality instead of === for this to work, === will always return -1 because === doesn't work
-              return value == data.phoneContact.email;
+              return value == data.email;
           })
           //if it doesnt already exist, addi t
           if (index === -1) {
@@ -254,7 +251,7 @@ export class ContactsPage implements OnInit {
 
               this.service.getAccessToken()
                   .then((accessToken: string) => {
-                      return this.service.addContact(data.phoneContact, accessToken);
+                      return this.service.addContact(data, accessToken);
                   })
                   .then((contact) => {
                       this.phoneContacts.push(contact)

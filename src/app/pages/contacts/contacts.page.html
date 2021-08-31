@@ -8,7 +8,7 @@
       </ion-title>
 
       <ion-buttons slot="end">
-          <ion-button (click)="openActionSheet()"><ion-icon name="more"></ion-icon></ion-button>
+          <ion-button (click)="openActionSheet()"><ion-icon name="ellipsis-vertical"></ion-icon></ion-button>
       </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -33,39 +33,36 @@
       </button>-->
     </ion-item>
     <ion-item-options side="right">
-      <button ion-button
+      <ion-button
           color="brand-light"
           (click)="callContact(contact.email)"
           *ngIf="contact.isMember">
         <ion-icon name="call"></ion-icon>
         Call
-      </button>
-      <button ion-button
+      </ion-button>
+      <ion-button
           color="brand-light"
           *ngIf="!contact.isMember"
           (click)="sendInvite(contact)">
         <ion-icon name="mail"></ion-icon>
         Invite
-      </button>
-      <button (click)="editContact(contact)"
-          ion-button
+      </ion-button>
+      <ion-button (click)="editContact(contact)"
           color="brand-light">
         <ion-icon name="create"></ion-icon>
         Edit
-      </button>
-      <button (click)="blockContact(contact)"
-          ion-button
+      </ion-button>
+      <ion-button (click)="blockContact(contact)"
           color="brand-light"
           *ngIf="isMember">
         <ion-icon name="hand"></ion-icon>
         Block
-      </button>
-      <button (click)="removeContact(contact)"
-          ion-button
+      </ion-button>
+      <ion-button (click)="removeContact(contact)"
           color="brand-light">
         <ion-icon name="trash"></ion-icon>
         Remove
-      </button>
+      </ion-button>
     </ion-item-options>
   </ion-item-sliding>
 </ion-list>
