@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-menu-button auto-hide="true" color="primary"></ion-menu-button>
+      </ion-buttons>
+      <ion-title>
+          Meeting Dashboard
+      </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-grid>
+      <ion-row>
+          <ion-col size="6" class="text-center">
+              <span><img src="assets/dashboardMeetings.png" (click)="gotoMeetingsPage()" /></span>
+              <br />
+              <span (click)="gotoMeetingsPage()">
+                  Meetings
+              </span>
+          </ion-col>
+          <ion-col size="6" class="text-center">
+              <span><img src="assets/dashboardInvites.png" (click)="gotoMeetingInvitesPage()" /></span>
+              <br />
+              <span (click)="gotoMeetingInvitesPage()">
+                  Invites
+              </span>
+          </ion-col>
+          <ion-col size="6" *ngIf="isMember" class="text-center">
+              <span><img src="assets/dashboardArchived.png" (click)="gotoPastMeetingsPage()" /></span>
+              <br />
+              <span (click)="gotoPastMeetingsPage()">
+                  Archived
+              </span>
+          </ion-col>
+          <ion-col size="6" *ngIf="isMember" class="text-center">
+              <span><img src="assets/dashboardRegister.png" (click)="openCreateMeetingModal()" /></span>
+              <br />
+              <span (click)="openCreateMeetingModal()">
+                  Create a Meeting
+              </span>
+          </ion-col>
+      </ion-row>
+  </ion-grid>
+
+  
+</ion-content>
+<app-phone-ringer #phoneRinger></app-phone-ringer>

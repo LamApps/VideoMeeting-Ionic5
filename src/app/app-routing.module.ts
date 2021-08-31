@@ -71,6 +71,14 @@ const routes: Routes = [
     path: 'netcaster',
     loadChildren: () => import('./pages/netcaster/netcaster.module').then( m => m.NetcasterPageModule)
   },
+  {
+    path: 'meeting-dashboard',
+    loadChildren: () => import('./pages/meeting-dashboard/meeting-dashboard.module').then( m => m.MeetingDashboardPageModule)
+  },
+  {
+    path: 'meetings',
+    loadChildren: () => import('./pages/meetings/meetings.module').then( m => m.MeetingsPageModule)
+  },
 ];
 
 @NgModule({

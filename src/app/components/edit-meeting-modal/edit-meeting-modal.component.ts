@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild} from '@angular/core';
+import { Component, Input, OnInit, ViewChild} from '@angular/core';
 import * as moment from 'moment';
 import { NavController, AlertController, NavParams } from '@ionic/angular';
 import { PhoneContactType, CallType, KeyValueType, FormsErrorMessageType, FormErrorTypeEnum, NetcastDto, SqlSearchPredicateDto, NetcastGenreDto, MemberType, NetcastViewModel, MeetingDto } from '../../models/index'
@@ -20,7 +20,7 @@ import {
   styleUrls: ['./edit-meeting-modal.component.scss'],
 })
 export class EditMeetingModalComponent implements OnInit {
-
+    @Input() value:any;
   constructor(
 	private navCtrl: NavController,
 	// private events: Events,
@@ -31,11 +31,13 @@ export class EditMeetingModalComponent implements OnInit {
 	private alertCtrl: AlertController,
 	// private datePicker: DatePicker,
   ) {
-    this.model = this.navParams.data as MeetingDto;
-    this.createForm();
+
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.model = this.value as MeetingDto;
+    this.createForm();
+  }
     lengths: Array<KeyValueType> = [
         { 'key': '15 Minutes', 'value': 15 },
         { 'key': '30 Minutes', 'value': 30 },
