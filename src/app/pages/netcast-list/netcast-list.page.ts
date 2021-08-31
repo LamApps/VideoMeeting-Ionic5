@@ -96,7 +96,7 @@ export class NetcastListPage implements OnInit {
   ionViewDidEnter() {
       if (this.service.isEmpty(this.phoneRinger) === false) {
           this.phoneRinger.startListeners();
-          this.phoneRinger.getSubjects('receivePhoneLineInvitation').subscribe((call: CallType) => {
+          this.receivePhoneLineInvitation = this.phoneRinger.getSubjects('receivePhoneLineInvitation').subscribe((call: CallType) => {
               if (this.service.isEmpty(call) === false) {
                   this.service.acceptedCall = call;
                   // this.navCtrl.setRoot(Phone);
@@ -104,7 +104,7 @@ export class NetcastListPage implements OnInit {
               }
           });
     
-          this.phoneRinger.getSubjects('receiveRemoteLogout').subscribe((connectionId: string) => {
+          this.receiveRemoteLogout = this.phoneRinger.getSubjects('receiveRemoteLogout').subscribe((connectionId: string) => {
               //let alert = this.alertCtrl.create({
               //    title: "Debugging",
               //    message: "received remote logout: " + connectionId,
@@ -304,8 +304,8 @@ export class NetcastListPage implements OnInit {
   }
 
   gotoNetcastDetails(netcastId: number) {
-      // this.navCtrl.push(NetcastDetailsPage, { netcastId: netcastId });
-
+    //   this.navCtrl.push(NetcastDetailsPage, { netcastId: netcastId });
+    this.router.navigate(['netcast-details', {id: netcastId}]);
   }
 
   startNetcast(netcastId: number) {

@@ -36,6 +36,9 @@ export class LoginPage implements OnInit {
    }
 
   ngOnInit() {
+    if (this.service.isSignalrConnected() === false) {
+        this.service.startConnection();
+    }
   }
   keysGetter = Object.keys;
 
@@ -45,9 +48,6 @@ export class LoginPage implements OnInit {
   private guestForm: FormGroup;
 
   invalidCredentials: boolean = false;
-
-  ionicViewWillEnter() {
-  }
 
   ionViewDidEnter() {
       //console.log("login.ts ionViewDidEntere");
