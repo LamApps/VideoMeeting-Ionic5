@@ -1,0 +1,95 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="true" color="primary"></ion-menu-button>
+    </ion-buttons>
+      <ion-title>
+          Netcast Search
+      </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-grid>
+      <ion-row>
+          <ion-col>
+              <ion-list>
+                  <ion-item>
+                      <ion-label>Show Search Form: </ion-label>
+                      <ion-toggle checked="true" [(ngModel)]="showSearchForm" (ionChange)="toggleSearchForm(showSearchForm)"></ion-toggle>
+                  </ion-item>
+              </ion-list>
+          </ion-col>
+      </ion-row>
+      <ion-row *ngIf="showSearchForm">
+          <ion-col>
+              <ion-card>
+                  <ion-card-header>
+                      Search Netcasts
+                  </ion-card-header>
+                  <ion-card-content>
+                      <form [formGroup]="searchForm">
+                          <ion-list>
+                              <ion-item *ngIf="!showGenres">
+                                  <ion-label position="stacked">Enter Keywords: </ion-label>
+                                  <ion-input type="text"
+                                             formControlName="keyword"></ion-input>
+                              </ion-item>
+                              <ion-item *ngIf="!searchForm.controls.keyword.valid && searchForm.controls.keyword.dirty && !showGenres">
+                                  <app-show-form-errors [control]="searchForm.get('keyword')"></app-show-form-errors>
+                              </ion-item>
+                              <ion-item *ngIf="showGenres">
+                                  <ion-label position="stacked">Select a Genre: </ion-label>
+                                  <ion-select formControlName="netcastGenreId">
+                                      <ion-select-option *ngFor="let genre of genres" value="{{genre.value}}">{{genre.key}}</ion-select-option>
+                                  </ion-select>
+                              </ion-item>
+                              <ion-item *ngIf="!searchForm.controls.netcastGenreId.valid && searchForm.controls.netcastGenreId.dirty && showGenres">
+                                  <app-show-form-errors [control]="searchForm.get('netcastGenreId')"></app-show-form-errors>
+                              </ion-item>
+                              <ion-item>
+                                  <ion-label position="stacked">Search By: </ion-label>
+                                  <ion-select formControlName="searchType" (ionChange)="onSearchTypeChanged($event)">
+                                      <ion-select-option value="title">Title</ion-select-option>
+                                      <ion-select-option value="tags">Tags</ion-select-option>
+                                      <ion-select-option value="genre">Genre</ion-select-option>
+                                      <ion-select-option value="description">Description</ion-select-option>
+                                  </ion-select>
+                              </ion-item>
+                              <ion-item *ngIf="!searchForm.controls.searchType.valid && searchForm.controls.searchType.dirty">
+                                  <app-show-form-errors [control]="searchForm.get('searchType')"></app-show-form-errors>
+                              </ion-item>
+                              <ion-item>
+                                  <ion-button (click)="searchByKeyword($event)">Find Netcasts</ion-button>
+                              </ion-item>
+                          </ion-list>
+                      </form>
+                  </ion-card-content>
+              </ion-card>
+          </ion-col>
+      </ion-row>
+      <ion-row *ngIf="showResults">
+          <ion-col>
+              <h3>Search Results</h3>
+              <ion-list *ngIf="items">
+                  <ion-item *ngFor="let item of items" (click)="gotoNetcastDetails(item.id)">
+                      <ion-avatar slot="start">
+                          <img src="{{item.imgSrc}}" />
+                      </ion-avatar>
+                      <ion-label>
+                      <h3>
+                          {{item.title}}
+                      </h3>
+                      <p>{{item.content}}</p>
+                      </ion-label>
+                  </ion-item>
+              </ion-list>
+              <p *ngIf="!items">No Results Found</p>
+          </ion-col>
+      </ion-row>
+  </ion-grid>
+
+
+</ion-content>
+<app-phone-ringer #phoneRinger></app-phone-ringer>

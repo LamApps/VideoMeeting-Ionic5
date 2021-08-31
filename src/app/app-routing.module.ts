@@ -59,6 +59,10 @@ const routes: Routes = [
     path: 'netcast-details',
     loadChildren: () => import('./pages/netcast-details/netcast-details.module').then( m => m.NetcastDetailsPageModule)
   },
+  {
+    path: 'netcast-search',
+    loadChildren: () => import('./pages/netcast-search/netcast-search.module').then( m => m.NetcastSearchPageModule)
+  },
 ];
 
 @NgModule({
