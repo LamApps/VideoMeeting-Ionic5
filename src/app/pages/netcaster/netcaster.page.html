@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="true" color="primary"></ion-menu-button>
+    </ion-buttons>
+      <ion-title>
+          Netcaster
+      </ion-title>
+
+      <ion-buttons slot="end">
+          <ion-button (click)="openActionSheet()"><ion-icon name="ellipsis-vertical"></ion-icon></ion-button>
+      </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen="true" class="netcaster-page">
+<ion-grid>
+  <!--<ion-row>
+      <ion-col>
+          <p>Local ID: {{localGuid}}</p>
+      </ion-col>
+  </ion-row>-->
+  <ion-row>
+      <ion-col>
+          <video id="main-video"
+          [ngClass]="{'visible': !isVideoHidden, 'invisible': isVideoHidden, 'video-thumbs': true }"
+          src=""
+          #mainVideoElement
+          autoplay="autoplay"
+          muted
+          playsinline></video>
+      </ion-col>
+  </ion-row>
+ 
+</ion-grid>
+
+</ion-content>
