@@ -6,6 +6,7 @@
       <ion-title>
           Upcoming Meetings
       </ion-title>
+
       <ion-buttons slot="end">
           <ion-button (click)="gotoMeetingsDashboardPage()">
               <ion-icon name="people"></ion-icon>
@@ -24,24 +25,24 @@
     <ion-item>
       <meeting-item [meeting]="meeting"></meeting-item>
     </ion-item>
-    <ion-item-options side="right">
-        <ion-item-option *ngIf="service.canEnterMeetingTime(meeting)"
-                color="primary"
-                (click)="gotoMeeting(meeting)">
-            <ion-icon name="log-in"></ion-icon>
-            Attend
-        </ion-item-option>
-        <ion-item-option (click)="meetingDetails(meeting)"
-                color="secondary">
-            <ion-icon name="paper"></ion-icon>
-            Details
-        </ion-item-option>
-        <ion-item-option (click)="editMeeting(meeting)"
-                color="danger">
-            <ion-icon name="create"></ion-icon>
-            Edit
-        </ion-item-option>
-    </ion-item-options>
+          <ion-item-options side="right">
+              <ion-item-option *ngIf="service.canEnterMeetingTime(meeting)"
+                      color="primary"
+                      (click)="gotoMeeting(meeting)">
+                  <ion-icon name="log-in"></ion-icon>
+                  Attend
+              </ion-item-option>
+              <ion-item-option (click)="meetingDetails(meeting)"
+                      color="secondary">
+                  <ion-icon name="paper"></ion-icon>
+                  Details
+              </ion-item-option>
+              <ion-item-option (click)="editMeeting(meeting)"
+                      color="danger">
+                  <ion-icon name="create"></ion-icon>
+                  Edit
+              </ion-item-option>
+          </ion-item-options>
   </ion-item-sliding>
 </ion-list>
 </ion-content>

@@ -1,0 +1,68 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="true" color="primary"></ion-menu-button>
+    </ion-buttons>
+      <ion-title>
+          Live Video Meeting
+      </ion-title>
+
+      <ion-buttons slot="end">
+          <ion-button (click)="openActionSheet()">
+              <ion-icon name="ellipsis-vertical"></ion-icon>
+          </ion-button>
+      </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen="true" class="meeting-page">
+
+<!-- //the inserted component are hidden,
+  boxes will show when its not -->
+<video id="main-video" [ngClass]="{'visible': !isVideoHidden, 'invisible': isVideoHidden }" src="" #mainVideoElement autoplay="autoplay"
+muted="muted" playsinline></video>  
+<div class="phone-call-container">
+  <div class="phone-call-component" (click)="localVideoClicked()">
+    <video #localVideoElement autoplay="autoplay" muted="muted" src="" 
+    [ngClass]="{'visible': !isVideoHidden, 'invisible': isVideoHidden, 'video-thumbs': true }"
+      playsinline></video>
+  </div>
+  <ng-template #phoneCallComponentInsert>
+  </ng-template>
+</div>
+
+
+
+<div class="chatbox" [class.expand]="isChatExpanded" #chatbox>
+  <div class="chatbox-content">
+    <ion-list *ngIf="textMessages">
+      <ion-item *ngFor="let message of textMessages" (click)="openPrivateSmsInterface(message.id)">
+        <ion-avatar item-start>
+          <img src="{{message.imgSrc}}" />
+        </ion-avatar>
+        <ion-label>
+          <h2>
+            {{message.name}}
+            <ion-icon name="person" *ngIf="message.isPrivate"></ion-icon>
+          </h2>
+          <p text-wrap>{{message.message}}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+</div>
+<div class="btn-sms-container">
+  <ion-button *ngIf="isChatExpanded" class="btn-sms" (click)="collapseChat()">
+    <ion-icon name="contract"></ion-icon>
+  </ion-button>
+  <ion-button *ngIf="isChatExpanded" class="btn-sms" (click)='saveMessages()'>
+    <ion-icon name="mail"></ion-icon>
+  </ion-button>
+  <ion-button *ngIf="isChatExpanded" class="btn-sms" (click)='openGroupSmsInterface()'>
+    <ion-icon name="chatbubbles"></ion-icon>
+  </ion-button>
+  <ion-button *ngIf="isChatExpanded" class="btn-sms" (click)='openPrivateSmsInterface()'>
+    <ion-icon name="text"></ion-icon>
+  </ion-button>
+</div>
+</ion-content>
