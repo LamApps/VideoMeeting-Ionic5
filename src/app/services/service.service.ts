@@ -2701,14 +2701,14 @@ export class Service {
             await this.setIsLoggedIn(true);
 
             // notify other components that user is loggedin
-            this.isMemberChanged.next({changed: true});
-            this.isLoggedInChanged.next({changed: true});
-            this.memberEmailChanged.next({changed: email});
-            this.userNameChanged.next({changed: member.firstName + " " + member.lastName});
+            this.isMemberChanged.next(true);
+            this.isLoggedInChanged.next(true);
+            this.memberEmailChanged.next(email);
+            this.userNameChanged.next(member.firstName + " " + member.lastName);
 
             let imgSrc: string = this.jsHelperService.isEmpty(member.avatarFileName) ? this.defaultAvatar
                 : this.avatarBaseUrl + member.avatarFileName + "?" + Date.now().toString();
-            this.memberImgSrcChanged.next({changed: imgSrc});
+            this.memberImgSrcChanged.next(imgSrc);
             return warnings;
         }
         catch (e) {
@@ -2804,14 +2804,14 @@ export class Service {
             }
 
             await this.setIsLoggedIn(true);
-            this.isMemberChanged.next({changed: true});
-            this.isLoggedInChanged.next({changed: true});
-            this.memberEmailChanged.next({changed: member.email});
-            this.userNameChanged.next({changed: member.firstName + " " + member.lastName});
+            this.isMemberChanged.next(true);
+            this.isLoggedInChanged.next(true);
+            this.memberEmailChanged.next(member.email);
+            this.userNameChanged.next(member.firstName + " " + member.lastName);
 
             let imgSrc: string = this.jsHelperService.isEmpty(member.avatarFileName) ? this.defaultAvatar
                 : this.avatarBaseUrl + member.avatarFileName + "?" + Date.now().toString();
-            this.memberImgSrcChanged.next({changed: imgSrc});
+            this.memberImgSrcChanged.next(imgSrc);
 
             return warnings;
         }
@@ -2888,14 +2888,14 @@ export class Service {
             }
 
             await this.setIsLoggedIn(true);
-            this.isMemberChanged.next({changed: false});
-            this.isLoggedInChanged.next({changed: true});
-            this.memberEmailChanged.next({changed: guestProfile.email});
-            this.userNameChanged.next({changed: name});
+            this.isMemberChanged.next(false);
+            this.isLoggedInChanged.next(true);
+            this.memberEmailChanged.next(guestProfile.email);
+            this.userNameChanged.next(name);
 
             let imgSrc: string = this.jsHelperService.isEmpty(guestProfile.avatarDataUri) ? this.defaultAvatar
                 : guestProfile.avatarDataUri;
-            this.memberImgSrcChanged.next({changed: imgSrc});
+            this.memberImgSrcChanged.next(imgSrc);
 
             return warnings;
         }
@@ -2966,14 +2966,14 @@ export class Service {
 
             await this.setIsLoggedIn(true);
 
-            this.isMemberChanged.next({changed: false});
-            this.isLoggedInChanged.next({changed: true});
-            this.memberEmailChanged.next({changed: guestProfile.email});
-            this.userNameChanged.next({changed: name});
+            this.isMemberChanged.next(false);
+            this.isLoggedInChanged.next(true);
+            this.memberEmailChanged.next(guestProfile.email);
+            this.userNameChanged.next(name);
 
             let imgSrc: string = this.jsHelperService.isEmpty(guestProfile.avatarDataUri) ? this.defaultAvatar
                 : guestProfile.avatarDataUri;
-            this.memberImgSrcChanged.next({changed: imgSrc});
+            this.memberImgSrcChanged.next(imgSrc);
             return;
         }
         catch (e) {
@@ -3039,14 +3039,14 @@ export class Service {
             }
             await this.setIsLoggedIn(true);
 
-            this.isMemberChanged.next({changed: false});
-            this.isLoggedInChanged.next({changed: true});
-            this.memberEmailChanged.next({changed: guestProfile.email});
-            this.userNameChanged.next({changed: name});
+            this.isMemberChanged.next(false);
+            this.isLoggedInChanged.next(true);
+            this.memberEmailChanged.next(guestProfile.email);
+            this.userNameChanged.next(name);
 
             let imgSrc: string = this.jsHelperService.isEmpty(guestProfile.avatarDataUri) ? this.defaultAvatar
                 : guestProfile.avatarDataUri;
-            this.memberImgSrcChanged.next({changed: imgSrc});
+            this.memberImgSrcChanged.next(imgSrc);
             return warnings;
         }
         catch (e) {
@@ -3145,13 +3145,13 @@ export class Service {
                     throw (e);
                 }
 
-                this.isMemberChanged.next({changed: false});
-                this.isLoggedInChanged.next({changed: false});
-                this.memberEmailChanged.next({changed: ""});
-                this.userNameChanged.next({changed: ""});
+                this.isMemberChanged.next(false);
+                this.isLoggedInChanged.next(false);
+                this.memberEmailChanged.next("");
+                this.userNameChanged.next("");
     
                 let imgSrc: string = this.defaultAvatar;
-                this.memberImgSrcChanged.next({changed: imgSrc});
+                this.memberImgSrcChanged.next(imgSrc);
                 //console.log("logMemberOut finally complete");
                 return;
             }
@@ -3187,13 +3187,13 @@ export class Service {
             await this.signalrService.setAccessToken(jwtToken);
             await this.setIsLoggedIn(false);
 
-            this.isMemberChanged.next({changed: false});
-            this.isLoggedInChanged.next({changed: false});
-            this.memberEmailChanged.next({changed: ""});
-            this.userNameChanged.next({changed: ""});
+            this.isMemberChanged.next(false);
+            this.isLoggedInChanged.next(false);
+            this.memberEmailChanged.next("");
+            this.userNameChanged.next("");
 
             let imgSrc: string = this.defaultAvatar;
-            this.memberImgSrcChanged.next({changed: imgSrc});
+            this.memberImgSrcChanged.next(imgSrc);
             //console.log("guestProfile: ", this.guestProfile);
             return;
         }

@@ -1,0 +1,97 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="true" color="primary"></ion-menu-button>
+    </ion-buttons>
+      <ion-title>
+          Netcast Viewer
+      </ion-title>
+
+      <ion-buttons slot="end">
+          <ion-button (click)="openActionSheet()"><ion-icon name="ellipsis-vertical"></ion-icon></ion-button>
+      </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen class="netcastee-page">
+  <ion-grid>
+      <!--<ion-row>
+      <ion-col>
+          <p>Local ID: {{localGuid}}</p>
+      </ion-col>
+  </ion-row>
+  <ion-row>
+      <ion-col>
+
+          <form [formGroup]="getRemoteGuidForm">
+              <ion-row>
+                  <ion-col>
+                      <ion-item>
+                          <ion-input type="text" formControlName="remoteGuid"></ion-input>
+                      </ion-item>
+                  </ion-col>
+              </ion-row>
+              <ion-row *ngIf="getRemoteGuidForm.get('remoteGuid').errors">
+                  <ion-col>
+                      should be hidden
+                  <show-form-errors [control]="getRemoteGuidForm.get('remoteGuid')"></show-form-errors>
+                  </ion-col>
+              </ion-row>
+              <ion-row>
+                  <ion-col>
+                      <button ion-button icon-start (click)="getNetcast()" *ngIf="!showProgress">
+                          <ion-icon name="videocam"></ion-icon>
+                          Get Netcast
+                      </button>
+                  </ion-col>
+                  <ion-col>
+                      <button ion-button icon-start (click)="disconnect()" *ngIf="!showProgress">
+                          <ion-icon name="close-circle"></ion-icon>
+                          Disconnect
+                      </button>
+                  </ion-col>
+                  <ion-col>
+                      <button ion-button icon-start (click)="showPeers()" *ngIf="!showProgress">
+                          <ion-icon name="people"></ion-icon>
+                          Peers
+                      </button>
+                  </ion-col>
+                  <ion-col>
+                      <button ion-button icon-start (click)="deleteAllConnections()" *ngIf="!showProgress">
+                          <ion-icon name="close-circle"></ion-icon>
+                          Disconnect All
+                      </button>
+                  </ion-col>
+              </ion-row>
+          </form>
+      </ion-col>
+  </ion-row>
+  -->
+
+
+      <ion-row>
+          <ion-col>
+              <!--<p>First Incoming ID: {{mainRemoteGuid}}</p>-->
+              <video id="main-video"
+                     [ngClass]="{'visible': !isVideoHidden, 'invisible': isVideoHidden }"
+                     src=""
+                     #mainVideoElement
+                     autoplay="autoplay"
+                     muted
+                     playsinline></video>
+          </ion-col>
+      </ion-row>
+      <!--<ion-row>
+          <ion-col>
+              <p>2nd Incoming ID: {{secondRemoteGuid}}</p>
+              <video id="second-video"
+                     [ngClass]="{'visible': !isVideoHidden, 'invisible': isVideoHidden, 'video-thumb': true }"
+                     src=""
+                     #secondVideoElement
+                     autoplay="autoplay"
+                     muted
+                     playsinline></video>
+          </ion-col>
+      </ion-row>-->
+  </ion-grid>
+
+</ion-content>
