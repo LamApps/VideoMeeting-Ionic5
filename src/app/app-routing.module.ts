@@ -47,6 +47,10 @@ const routes: Routes = [
     path: 'contacts',
     loadChildren: () => import('./pages/contacts/contacts.module').then( m => m.ContactsPageModule)
   },
+  {
+    path: 'netcast-dashboard',
+    loadChildren: () => import('./pages/netcast-dashboard/netcast-dashboard.module').then( m => m.NetcastDashboardPageModule)
+  },
 ];
 
 @NgModule({

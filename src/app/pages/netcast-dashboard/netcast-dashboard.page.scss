@@ -1,0 +1,12 @@
+@import '../../../assets/_variables.scss';
+@import '../../../assets/_mixins.scss';
+
+ion-col{
+    span{
+        font-size: 1.3em;
+        img{
+            width: 70%;
+        }
+    }
+}
+

@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="true" color="primary"></ion-menu-button>
+    </ion-buttons>
+      <ion-title>
+          Netcast Dashboard
+      </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-grid>
+      <ion-row class="dashboard-buttons">
+          <ion-col size="6" *ngIf="isMember" class="text-center">
+              <span><img src="assets/dashboardSettings.png" (click)="gotoNetcastListPage()" /></span>
+              <br />
+              <span (click)="gotoNetcastListPage()">
+                  Manage<br>Netcasts
+              </span>
+          </ion-col>
+          <ion-col size="6" class="text-center">
+              <span><img src="assets/dashboardSearch.png" (click)="gotoNetcastSearchPage()" /></span>
+              <br />
+              <span (click)="gotoNetcastSearchPage()">
+                  Find<br>Netcasts
+              </span>
+          </ion-col>
+          <ion-col size="6" *ngIf="isMember" class="text-center">
+              <span><img src="assets/dashboardRegister.png" (click)="openCreateNetcastModal()" /></span>
+              <br />
+              <span (click)="openCreateNetcastModal()">
+                  Create<br>Netcast
+              </span>
+          </ion-col>
+      </ion-row>
+  </ion-grid>
+</ion-content>
+<app-phone-ringer #phoneRinger></app-phone-ringer>

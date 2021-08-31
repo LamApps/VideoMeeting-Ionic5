@@ -21,6 +21,7 @@ export class CreateNetcastModalComponent implements OnInit {
     private fb: FormBuilder,
     private service: Service,
     private alertCtrl: AlertController,
+    private viewCtrl: ModalController,
   ) {
     this.model = new NetcastDto();
     this.service.getAccessToken()
@@ -268,12 +269,12 @@ export class CreateNetcastModalComponent implements OnInit {
                         (<Element>event.target).innerHTML = originalContent;
                         //(<Element>event.target).removeAttribute("disabled");
                     }
-                    // this.viewCtrl.dismiss(nc);
+                    this.viewCtrl.dismiss(nc);
                 }
                 else {
                     console.log("this.image: ", this.image);
                     console.log("this.newBase64Image: ", this.newBase64Image);
-                    // this.viewCtrl.dismiss();
+                    this.viewCtrl.dismiss();
                 }
               
             }
@@ -307,6 +308,6 @@ export class CreateNetcastModalComponent implements OnInit {
     }
 
     cancel(): void {
-        // this.viewCtrl.dismiss();
+        this.viewCtrl.dismiss();
     }
 }

@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import * as moment from 'moment';
-import { NavController, AlertController, NavParams } from '@ionic/angular';
+import { NavController, AlertController, ModalController } from '@ionic/angular';
 import { PhoneContactType, CallType, KeyValueType, FormsErrorMessageType, FormErrorTypeEnum, NetcastDto, SqlSearchPredicateDto, NetcastGenreDto, MemberType, NetcastViewModel } from '../../models/index'
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 // import { EmailValidator } from '../../validators/index'
@@ -20,22 +20,16 @@ import {
   styleUrls: ['./edit-netcast-modal.component.scss'],
 })
 export class EditNetcastModalComponent implements OnInit {
-
+  @Input() castValue: any;
   constructor(
 	private navCtrl: NavController,
 	// private events: Events,
-	private navParams: NavParams,
 	private fb: FormBuilder,
-	// private viewCtrl: ViewController,
+	private viewCtrl: ModalController,
 	private service: Service,
 	private alertCtrl: AlertController,
 	// private datePicker: DatePicker,
   ) {
-	this.model = this.navParams.data as NetcastDto;
-	this.viewModel = this.service.mapToNetcastViewModel(this.model);
-	this.image = this.viewModel.imageSrc;
-
-	this.isPrivate = this.viewModel.isPrivate;
 	//this.netcastHourErrorMessage = new FormsErrorMessageType();
 	//this.netcastMinuteErrorMessage = new FormsErrorMessageType();
 	//this.netcastHourErrorMessage.errorTypeName = FormErrorTypeEnum.pattern;
@@ -65,10 +59,16 @@ export class EditNetcastModalComponent implements OnInit {
 	        console.log("EditNetcastModalComponent constructor error: ", e);
 	    })
 
-	this.createForm();
   }
 
-	ngOnInit() {}
+	ngOnInit() {
+        this.model = this.castValue;
+        this.viewModel = this.service.mapToNetcastViewModel(this.model);
+        this.image = this.viewModel.imageSrc;
+    
+        this.isPrivate = this.viewModel.isPrivate; 
+        this.createForm();
+    }
 	@ViewChild(PicPreviewComponent) picPreview: PicPreviewComponent;
 
 	newBase64Image: string;
@@ -344,7 +344,7 @@ export class EditNetcastModalComponent implements OnInit {
                 if (isDebugging) {
                     console.log("this.image: ", this.image);
                     console.log("this.newBase64Image: ", this.newBase64Image);
-                    // this.viewCtrl.dismiss();
+                    this.viewCtrl.dismiss();
                 }
                 else {
                     let nc: NetcastDto = await this.service.updateNetcast(this.model, accessToken);
@@ -361,7 +361,7 @@ export class EditNetcastModalComponent implements OnInit {
                         (<Element>event.target).innerHTML = originalContent;
                         //(<Element>event.target).removeAttribute("disabled");
                     }
-                    // this.viewCtrl.dismiss(nc);
+                    this.viewCtrl.dismiss(nc);
                    
                 }
                 
@@ -403,6 +403,6 @@ export class EditNetcastModalComponent implements OnInit {
     }
 
     cancel(): void {
-        // this.viewCtrl.dismiss();
+        this.viewCtrl.dismiss();
     }
 }
