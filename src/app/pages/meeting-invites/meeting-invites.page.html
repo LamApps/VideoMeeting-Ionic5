@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="true" color="primary"></ion-menu-button>
+    </ion-buttons>
+      <ion-title>
+          Meeting Invites
+      </ion-title>
+      <ion-buttons slot="end">
+          <ion-button (click)="gotoMeetingsDashboardPage()">
+              <ion-icon name="people"></ion-icon>
+          </ion-button>
+      </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+<ion-refresher (ionRefresh)="refreshInvites($event)">
+  <ion-refresher-content refreshingSpinner="dots"></ion-refresher-content>
+</ion-refresher>
+
+<ion-list>
+  <ion-item-sliding *ngFor="let meeting of meetings">
+    <ion-item>
+      <meeting-invite [meeting]="meeting" [email]="email"></meeting-invite>
+    </ion-item>
+    <ion-item-options side="end">
+      <ion-item-option
+          color="primary"
+          (click)="acceptRsvp(meeting)">
+        <ion-icon name="add-circle"></ion-icon>
+        Accept
+      </ion-item-option>
+      <ion-item-option
+          color="secondary"
+          (click)="denyRsvp(meeting)">
+        <ion-icon name="remove-circle"></ion-icon>
+        Deny
+      </ion-item-option>
+      <ion-item-option (click)="meetingDetails(meeting)"
+          color="danger">
+        <ion-icon name="paper"></ion-icon>
+        Details
+      </ion-item-option>
+    </ion-item-options>
+  </ion-item-sliding>
+</ion-list>
+</ion-content>
+<app-phone-ringer #phoneRinger></app-phone-ringer>
