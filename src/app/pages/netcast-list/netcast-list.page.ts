@@ -141,8 +141,8 @@ export class NetcastListPage implements OnInit {
       }
      
 
-      this.receivePhoneLineInvitation.unsubscribe();
-      this.receiveRemoteLogout.unsubscribe();
+      this.receivePhoneLineInvitation && this.receivePhoneLineInvitation.unsubscribe();
+      this.receiveRemoteLogout && this.receiveRemoteLogout.unsubscribe();
   }
 
 
@@ -236,12 +236,13 @@ export class NetcastListPage implements OnInit {
   }
 
   async openEditNetcastModal(netcastId: number): Promise<void> {
+      console.log(netcastId);
       try {
           let accessToken: string = await this.service.getAccessToken();
           let netcast: NetcastDto = await this.service.getNetcastById(netcastId, accessToken);
           let modal = await this.modalCtrl.create({
             component:EditNetcastModalComponent, 
-            componentProps: { value: netcast }
+            componentProps: { castValue: netcast }
           });
           await modal.present()
           let {data} = await modal.onDidDismiss();

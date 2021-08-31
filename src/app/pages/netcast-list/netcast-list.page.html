@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar hideBackButton="true">
+  <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button auto-hide="true" color="primary"></ion-menu-button>
     </ion-buttons>
@@ -9,61 +9,38 @@
       <ion-buttons slot="end">
           <ion-button (click)="openActionSheet()"><ion-icon name="ellipsis-vertical"></ion-icon></ion-button>
       </ion-buttons>
-  </ion-navbar>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-grid>
-      <ion-row>
-          <ion-col>
-              <ion-list *ngIf="netcastVMs">
-                  <ion-item-sliding *ngFor="let vm of netcastVMs">
-                      <ion-item>
-                          <ion-avatar slot="start">
-                              <img src="{{vm.imageSrc}}?{{timestamp}}">
-                          </ion-avatar>
-                          <h2>{{vm.title}}</h2>
-                          <p>{{vm.startDateTime}} | {{vm.isPrivate ? "Private" : "Public"}}</p>
-                          <p *ngIf="vm.shortDescription">{{vm.shortDescription}}</p>
-                          <p><code>{{vm.netcasteeLink}}</code></p>
-
-                      </ion-item>
-                      <ion-item-options side="end">
-                          <ion-button
-                                  color="secondary"
-                                  (click)="startNetcast(vm.netcastId)">
-                              <ion-icon name="call"></ion-icon>
-                              Start
-                          </ion-button>
-                          <ion-button (click)="gotoNetcastDetails(vm.netcastId)"
-                                 
-                                  color="secondary">
-                              <ion-icon name="create"></ion-icon>
-                              Details
-                          </ion-button>
-                          <ion-button (click)="openEditNetcastModal(vm.netcastId)"
-                                 
-                                  color="secondary">
-                              <ion-icon name="create"></ion-icon>
-                              Edit
-                          </ion-button>
-
-                          <ion-button (click)="confirmDelete(vm.netcastId)"
-                                 
-                                  color="secondary">
-                              <ion-icon name="trash"></ion-icon>
-                              Delete
-                          </ion-button>
-                      </ion-item-options>
-                  </ion-item-sliding>
-              </ion-list>
-              <div *ngIf="netcastVMs && netcastVMs.length < 1">
-                  <h2>No Netcasts Found</h2>
-                  <p><ion-button (click)="openCreateNetcastModal()">Create a Netcast</ion-button></p>
-              </div>
-          </ion-col>
-      </ion-row>
-  </ion-grid>
-
+    <ion-list *ngIf="netcastVMs">
+        <ion-item-sliding *ngFor="let vm of netcastVMs">
+            <ion-item>
+                <ion-avatar slot="start">
+                    <img src="{{vm.imageSrc}}?{{timestamp}}">
+                </ion-avatar>
+                <ion-label>
+                <h2>{{vm.title}}</h2>
+                <p>{{vm.startDateTime}} | {{vm.isPrivate ? "Private" : "Public"}}</p>
+                <p *ngIf="vm.shortDescription">{{vm.shortDescription}}</p>
+                <p><code>{{vm.netcasteeLink}}</code></p>
+            </ion-label>
+            </ion-item>
+            <ion-item-options side="end">
+                <ion-item-option color="primary" (click)="startNetcast(vm.netcastId)"><ion-icon name="call"></ion-icon>
+                    Start</ion-item-option>
+                <ion-item-option color="secondary" (click)="gotoNetcastDetails(vm.netcastId)"><ion-icon name="list-circle"></ion-icon>
+                    Details</ion-item-option>
+                <ion-item-option color="tertiary" (click)="openEditNetcastModal(vm.netcastId)"><ion-icon name="create"></ion-icon>
+                    Edit</ion-item-option>
+                <ion-item-option color="danger" (click)="confirmDelete(vm.netcastId)"><ion-icon name="trash"></ion-icon>
+                    Delete</ion-item-option>
+            </ion-item-options>
+        </ion-item-sliding>
+    </ion-list>
+    <div *ngIf="netcastVMs && netcastVMs.length < 1">
+        <h2>No Netcasts Found</h2>
+        <p><ion-button (click)="openCreateNetcastModal()">Create a Netcast</ion-button></p>
+    </div>
 </ion-content>
 <app-phone-ringer #phoneRinger></app-phone-ringer>
