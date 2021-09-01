@@ -87,6 +87,10 @@ const routes: Routes = [
     path: 'meeting-invites',
     loadChildren: () => import('./pages/meeting-invites/meeting-invites.module').then( m => m.MeetingInvitesPageModule)
   },
+  {
+    path: 'past-meetings',
+    loadChildren: () => import('./pages/past-meetings/past-meetings.module').then( m => m.PastMeetingsPageModule)
+  },
 ];
 
 @NgModule({

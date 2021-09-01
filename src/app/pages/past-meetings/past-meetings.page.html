@@ -1,0 +1,93 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button auto-hide="true" color="primary"></ion-menu-button>
+    </ion-buttons>
+      <ion-title>
+          Past Meetings
+      </ion-title>
+      <ion-buttons slot="end">
+          <ion-button (click)="gotoMeetingsDashboardPage()">
+              <ion-icon name="people"></ion-icon>
+          </ion-button>
+      </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+<ion-refresher (ionRefresh)="refreshMeetings($event)">
+  <ion-refresher-content refreshingSpinner="dots"></ion-refresher-content>
+</ion-refresher>
+
+<ion-list>
+  <ion-item-sliding *ngFor="let meeting of meetings">
+    <ion-item>
+      <meeting-item [meeting]="meeting"></meeting-item>
+    </ion-item>
+          <ion-item-options side="right">
+              <ion-item-option *ngIf="service.canEnterMeetingTime(meeting)"
+                      color="primary"
+                      (click)="gotoMeeting(meeting)">
+                  <ion-icon name="log-in"></ion-icon>
+                  Attend
+              </ion-item-option>
+              <ion-item-option (click)="meetingDetails(meeting)"
+                     
+                      color="secondary">
+                  <ion-icon name="paper"></ion-icon>
+                  Details
+              </ion-item-option>
+              <ion-item-option (click)="editMeeting(meeting)"
+                      color="danger">
+                  <ion-icon name="create"></ion-icon>
+                  Edit
+              </ion-item-option>
+          </ion-item-options>
+  </ion-item-sliding>
+</ion-list>
+</ion-content>
+<app-phone-ringer #phoneRinger></app-phone-ringer>
+
+<!--<mat-sidenav-container #matSidenavContainer>
+<mat-sidenav #sidenav mode="side" opened="false" mobileCollapse>
+  <navmenu-component></navmenu-component>
+</mat-sidenav>
+
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>
+      <sidenav-toggle [sideNav]="sidenav"></sidenav-toggle>
+    </span>
+    <span class="fill-row">
+      Past Meetings
+    </span>
+    <span>
+      <i class="fa fa-users" (click)="gotoMeetingsDashboardPage()"></i>
+    </span>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<div class="mat-sidenav-content">
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <p *ngIf="loading" class="text-center">
+          <mat-spinner mode="indeterminate"></mat-spinner>
+        </p>
+
+        <ul class="list list-unstyled" *ngIf="meetings && !loading">
+          <li *ngFor="let meeting of meetings">
+            <meeting-item [meeting]="meeting" (onMeetingDeleted)="deleteMeeting($event)"></meeting-item>
+          </li>
+        </ul>
+
+        <div class="jumbotron" *ngIf="!meetings && !loading">
+          <h2>No meetings found</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</mat-sidenav-container>
+<phone-ringer #phoneRinger></phone-ringer>-->
