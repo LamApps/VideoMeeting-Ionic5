@@ -46,28 +46,28 @@ export class AppComponent {
     console.log("starting app.component.ts subscriptions");
 
     this.service.getObservable('isMember').subscribe((isMember) => {
-        console.log("isMember:changed: ", isMember.changed);
-        this.isMember = this.service.isEmpty(isMember.changed) === false ? true : false;
+        console.log("isMember:changed: ", isMember);
+        this.isMember = this.service.isEmpty(isMember) === false ? true : false;
     });
 
     this.service.getObservable('isLoggedIn').subscribe((isLoggedIn) => {
-        console.log("isLoggedIn:changed: ", isLoggedIn.changed);
-        this.isMember = this.service.isEmpty(isLoggedIn.changed) === false ? true : false;
+        console.log("isLoggedIn:changed: ", isLoggedIn);
+        this.isMember = this.service.isEmpty(isLoggedIn) === false ? true : false;
     });
 
     this.service.getObservable('memberEmail').subscribe((email) => {
-        console.log("email:changed: ", email.changed);
-        this.email = email.changed;
+        console.log("email:changed: ", email);
+        this.email = email;
     });
 
     this.service.getObservable('userName').subscribe((userName) => {
-        console.log("userName:changed: ", userName.changed);
-        this.userName = userName.changed;
+        console.log("userName:changed: ", userName);
+        this.userName = userName;
     });
 
     this.service.getObservable('memberImgSrc').subscribe((imgSrc) => {
-        console.log("imgSrc:changed: ", imgSrc.changed);
-        this.imgSrc = imgSrc.changed;
+        console.log("imgSrc:changed: ", imgSrc);
+        this.imgSrc = imgSrc;
     });
   }
 
@@ -225,6 +225,6 @@ export class AppComponent {
       }
       catch (e) {
       }
-      this.splashScreen && this.splashScreen.hide();
+    //   this.splashScreen && this.splashScreen.hide();
   }
 }

@@ -95,6 +95,14 @@ const routes: Routes = [
     path: 'phone',
     loadChildren: () => import('./pages/phone/phone.module').then( m => m.PhonePageModule)
   },
+  {
+    path: 'forgot-password',
+    loadChildren: () => import('./pages/forgot-password/forgot-password.module').then( m => m.ForgotPasswordPageModule)
+  },
+  {
+    path: 'error',
+    loadChildren: () => import('./pages/error/error.module').then( m => m.ErrorPageModule)
+  },
 ];
 
 @NgModule({

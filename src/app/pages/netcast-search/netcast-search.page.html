@@ -9,12 +9,12 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content>
 
   <ion-grid>
       <ion-row>
           <ion-col>
-              <ion-list>
+              <ion-list style="margin:10px 15px 0 15px">
                   <ion-item>
                       <ion-label>Show Search Form: </ion-label>
                       <ion-toggle checked="true" [(ngModel)]="showSearchForm" (ionChange)="toggleSearchForm(showSearchForm)"></ion-toggle>
@@ -28,7 +28,7 @@
                   <ion-card-header>
                       Search Netcasts
                   </ion-card-header>
-                  <ion-card-content>
+                  <ion-card-content class="text-center">
                       <form [formGroup]="searchForm">
                           <ion-list>
                               <ion-item *ngIf="!showGenres">
@@ -60,10 +60,8 @@
                               <ion-item *ngIf="!searchForm.controls.searchType.valid && searchForm.controls.searchType.dirty">
                                   <app-show-form-errors [control]="searchForm.get('searchType')"></app-show-form-errors>
                               </ion-item>
-                              <ion-item>
-                                  <ion-button (click)="searchByKeyword($event)">Find Netcasts</ion-button>
-                              </ion-item>
-                          </ion-list>
+                            </ion-list>
+                            <ion-button (click)="searchByKeyword($event)">Find Netcasts</ion-button>
                       </form>
                   </ion-card-content>
               </ion-card>

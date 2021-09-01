@@ -8,6 +8,11 @@ import { PhonePageRoutingModule } from './phone-routing.module';
 
 import { PhonePage } from './phone.page';
 
+import { ContactSearchModalComponent } from '../../components/contact-search-modal/contact-search-modal.component'
+import { PhoneCallComponent } from 'src/app/components/phone-call/phone-call.component';
+import { PhoneLineInvitationModalComponent } from '../../components/phone-line-invitation-modal/phone-line-invitation-modal.component'
+import { FormGetInfoComponent, PrivateMessagingComponent, IncomingCallModalComponent, } from '../../components/index';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -15,6 +20,13 @@ import { PhonePage } from './phone.page';
     IonicModule,
     PhonePageRoutingModule
   ],
-  declarations: [PhonePage]
+  declarations: [PhonePage,
+    ContactSearchModalComponent,
+    PhoneCallComponent,
+    PhoneLineInvitationModalComponent,
+    FormGetInfoComponent,
+    PrivateMessagingComponent,
+    IncomingCallModalComponent,
+  ]
 })
 export class PhonePageModule {}

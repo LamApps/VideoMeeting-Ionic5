@@ -220,14 +220,11 @@ export class LoginPage implements OnInit {
   }
 
   createAccount() {
-    this.router.navigate(['home']);
+    this.router.navigate(['register']);
   }
 
   forgotPassword() {
-      //TODO: Need to create forgot password page and implement password recovery
-      // console.log("Need to create forgot password page and implement password recovery");
-
-      // this.navCtrl.push(ForgotPasswordPage);
+      this.router.navigate(['forgot-password']);
   }
 
 

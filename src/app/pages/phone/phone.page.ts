@@ -75,13 +75,9 @@ export class PhonePage implements OnInit {
   constructor(
       //private viewContainerRef: ViewContainerRef,
       private componentFactoryResolver: ComponentFactoryResolver,
-      private navCtrl: NavController,
-
       private modalCtrl: ModalController,
       private actionSheetCtrl: ActionSheetController,
       private platform: Platform,
-
-      private statusBar: StatusBar,
       private ngZone: NgZone,
       private service: Service,
       private router: Router,
