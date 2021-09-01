@@ -91,6 +91,10 @@ const routes: Routes = [
     path: 'past-meetings',
     loadChildren: () => import('./pages/past-meetings/past-meetings.module').then( m => m.PastMeetingsPageModule)
   },
+  {
+    path: 'phone',
+    loadChildren: () => import('./pages/phone/phone.module').then( m => m.PhonePageModule)
+  },
 ];
 
 @NgModule({
