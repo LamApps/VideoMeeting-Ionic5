@@ -2585,6 +2585,8 @@ export class Service {
     private memberEmailChanged = new Subject<any>();
     private userNameChanged = new Subject<any>();
     private memberImgSrcChanged = new Subject<any>();
+    private receiveRemoteLogoutSubject = new Subject<any>();
+    private receivePhoneLineInvitationSubject = new Subject<any>();
 
     getObservable(type:string):Subject<any>{
         switch(type){
@@ -2598,6 +2600,10 @@ export class Service {
                 return this.userNameChanged;
             case 'memberImgSrc':
                 return this.memberImgSrcChanged;
+            case 'receiveRemoteLogout':
+                return this.receiveRemoteLogoutSubject;
+            case 'receivePhoneLineInvitation':
+                return this.receivePhoneLineInvitationSubject;
         }
     }
     unsubscribeObservable(){
@@ -2606,6 +2612,8 @@ export class Service {
         this.memberEmailChanged.unsubscribe();
         this.userNameChanged.unsubscribe();
         this.memberImgSrcChanged.unsubscribe();
+        this.receivePhoneLineInvitationSubject.unsubscribe();
+        this.receiveRemoteLogoutSubject.unsubscribe();
     }
     async memberLogIn(email: string, password: string, rememberMe: boolean): Promise<Array<string>> {
         //console.log("memberLogin: ", email, password);

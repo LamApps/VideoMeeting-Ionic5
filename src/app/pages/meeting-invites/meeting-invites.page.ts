@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, NgZone } from '@angular/core';
 import {
-	NavController,
 	AlertController,
 	LoadingController,
 	ModalController,
@@ -20,7 +19,6 @@ import { Router } from '@angular/router';
 export class MeetingInvitesPage implements OnInit {
 	constructor(
 		private alertCtrl: AlertController,
-		public navCtrl: NavController,
 		private loadingCtrl: LoadingController,
 		private modalCtrl: ModalController,
 		private service: Service,
@@ -67,27 +65,26 @@ export class MeetingInvitesPage implements OnInit {
 
 	ionViewDidEnter() {
 		if (this.service.isEmpty(this.phoneRinger) === false) {
-			this.phoneRinger.startListeners();
-      this.receivePhoneLineInvitation = this.phoneRinger.getSubjects('receivePhoneLineInvitation').subscribe((call: CallType) => {
-        if (this.service.isEmpty(call) === false) {
-          this.service.acceptedCall = call;
-          // this.navCtrl.setRoot(Phone);
-          this.router.navigate(['phone']);
-        }
-      });
-  
-      this.receiveRemoteLogout = this.phoneRinger.getSubjects('receiveRemoteLogout').subscribe((connectionId: string) => {
-        this.service.doLogout()
-          .catch((error) => {
-            console.log("app-shell.ts logOut error:", error);
-          })
-          .then(() => {
-            // this.navCtrl.setRoot(LoginPage);
-            this.router.navigate(['login']);
-          })
-      });
-
+			this.phoneRinger.startListeners();	
 		}
+		this.receivePhoneLineInvitation = this.service.getObservable('receivePhoneLineInvitation').subscribe((call: CallType) => {
+			if (this.service.isEmpty(call) === false) {
+			this.service.acceptedCall = call;
+			// this.navCtrl.setRoot(Phone);
+			this.router.navigate(['phone']);
+			}
+		});
+	
+		this.receiveRemoteLogout = this.service.getObservable('receiveRemoteLogout').subscribe((connectionId: string) => {
+			this.service.doLogout()
+			.catch((error) => {
+				console.log("app-shell.ts logOut error:", error);
+			})
+			.then(() => {
+				// this.navCtrl.setRoot(LoginPage);
+				this.router.navigate(['login']);
+			})
+		});
 
     this.service.getEmail()
         .then((email: string) => {

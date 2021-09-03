@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { PastMeetingsPageRoutingModule } from './past-meetings-routing.module';
 
 import { PastMeetingsPage } from './past-meetings.page';
-
+import { PhoneRingerComponent } from 'src/app/components';
 @NgModule({
   imports: [
     CommonModule,
@@ -15,6 +15,6 @@ import { PastMeetingsPage } from './past-meetings.page';
     IonicModule,
     PastMeetingsPageRoutingModule
   ],
-  declarations: [PastMeetingsPage]
+  declarations: [PastMeetingsPage, PhoneRingerComponent]
 })
 export class PastMeetingsPageModule {}

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -9,6 +9,7 @@ import { MeetingDashboardPageRoutingModule } from './meeting-dashboard-routing.m
 import { MeetingDashboardPage } from './meeting-dashboard.page';
 import { PhoneRingerComponent,
   CreateMeetingModalComponent,
+  EditMeetingModalComponent,
   PicPreviewComponent,
   ShowFormErrorsComponent
  } from '../../components/index';
@@ -17,6 +18,7 @@ import { PhoneRingerComponent,
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     IonicModule,
     MeetingDashboardPageRoutingModule
   ],
@@ -25,6 +27,7 @@ import { PhoneRingerComponent,
     PicPreviewComponent, 
     ShowFormErrorsComponent,
     CreateMeetingModalComponent,
+    EditMeetingModalComponent,
   ]
 })
 export class MeetingDashboardPageModule {}

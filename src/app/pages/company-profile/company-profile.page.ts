@@ -1,9 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { pluck } from 'rxjs/operators';
 import {
-	NavController,
-	NavParams,
 	AlertController,
 	LoadingController,
 } from '@ionic/angular';
@@ -27,12 +25,11 @@ import { Subscription } from 'rxjs';
 export class CompanyProfilePage implements OnInit {
 
   constructor(
-    private alertCtrl: AlertController,
-		public navCtrl: NavController,
-		public navParams: NavParams,
+		private alertCtrl: AlertController,
 		private service: Service,
 		private loadingCtrl: LoadingController,
-    private route: ActivatedRoute
+		private route: ActivatedRoute,
+		private router: Router,
   ) {}
 	@ViewChild('phoneRinger') phoneRinger: PhoneRingerComponent;
 	companyImgSrc: string;
@@ -58,23 +55,23 @@ export class CompanyProfilePage implements OnInit {
 
 		if (this.service.isEmpty(this.phoneRinger) === false) {
 			this.phoneRinger.startListeners();
-			this.receivePhoneLineInvitation = this.phoneRinger.getSubjects('receivePhoneLineInvitation').subscribe((call) => {
-				if (this.service.isEmpty(call) === false) {
-					this.service.acceptedCall = call;
-					// this.navCtrl.setRoot(Phone);
-				}
-			});
-		
-			this.receiveRemoteLogout = this.phoneRinger.getSubjects('receiveRemoteLogout').subscribe((connectionId) => {
-				this.service.doLogout()
-				.catch((error) => {
-					console.log("app-shell.ts logOut error:", error);
-				})
-				.then(() => {
-					// this.router.navigate(['login']);
-				})
-			});
 		}
+		this.receivePhoneLineInvitation = this.service.getObservable('receivePhoneLineInvitation').subscribe((call) => {
+			if (this.service.isEmpty(call) === false) {
+				this.service.acceptedCall = call;
+				this.router.navigate(['phone']);
+			}
+		});
+	
+		this.receiveRemoteLogout = this.service.getObservable('receiveRemoteLogout').subscribe((connectionId) => {
+			this.service.doLogout()
+			.catch((error) => {
+				console.log("app-shell.ts logOut error:", error);
+			})
+			.then(() => {
+				this.router.navigate(['login']);
+			})
+		});
 
 		if (this.service.isEmpty(this.companyProfileId) === false) {
 			this.init(this.companyProfileId);
@@ -90,7 +87,7 @@ export class CompanyProfilePage implements OnInit {
 		}
 	}
 
-	ngOnDestroy() {
+	ionViewWillLeave() {
 		if (this.service.isEmpty(this.phoneRinger) === false) {
 			this.phoneRinger.endListeners();
 		}

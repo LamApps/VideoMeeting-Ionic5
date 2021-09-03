@@ -1,7 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
-  NavController,
-  NavParams,
   AlertController,
   LoadingController,
   ModalController,
@@ -24,8 +22,6 @@ export class MeetingsPage implements OnInit {
   constructor(
     private service: Service,
     private alertCtrl: AlertController,
-    public navCtrl: NavController,
-    public navParams: NavParams,
     private loadingCtrl: LoadingController,
     private modalCtrl: ModalController,
     private router: Router,
@@ -71,25 +67,25 @@ export class MeetingsPage implements OnInit {
   ionViewDidEnter() {
       if (this.service.isEmpty(this.phoneRinger) === false) {
           this.phoneRinger.startListeners();
-          this.receivePhoneLineInvitation = this.phoneRinger.getSubjects('receivePhoneLineInvitation').subscribe((call: CallType) => {
-            if (this.service.isEmpty(call) === false) {
-              this.service.acceptedCall = call;
-              // this.navCtrl.setRoot(Phone);
-              this.router.navigate(['phone']);
-            }
-          });
-      
-          this.receiveRemoteLogout = this.phoneRinger.getSubjects('receiveRemoteLogout').subscribe((connectionId: string) => {
-            this.service.doLogout()
-              .catch((error) => {
-                console.log("app-shell.ts logOut error:", error);
-              })
-              .then(() => {
-                // this.navCtrl.setRoot(LoginPage);
-                this.router.navigate(['login']);
-              })
-          });      
-      }
+        }
+        this.receivePhoneLineInvitation = this.service.getObservable('receivePhoneLineInvitation').subscribe((call: CallType) => {
+          if (this.service.isEmpty(call) === false) {
+            this.service.acceptedCall = call;
+            // this.navCtrl.setRoot(Phone);
+            this.router.navigate(['phone']);
+          }
+        });
+    
+        this.receiveRemoteLogout = this.service.getObservable('receiveRemoteLogout').subscribe((connectionId: string) => {
+          this.service.doLogout()
+            .catch((error) => {
+              console.log("app-shell.ts logOut error:", error);
+            })
+            .then(() => {
+              // this.navCtrl.setRoot(LoginPage);
+              this.router.navigate(['login']);
+            })
+        });      
 
 
       let accessToken: string;
@@ -122,7 +118,7 @@ export class MeetingsPage implements OnInit {
       if (this.service.isEmpty(this.phoneRinger) === false) {
           this.phoneRinger.endListeners();
       }
-
+      
       this.receivePhoneLineInvitation && this.receivePhoneLineInvitation.unsubscribe();
       this.receiveRemoteLogout && this.receiveRemoteLogout.unsubscribe();
     }

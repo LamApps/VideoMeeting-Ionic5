@@ -6,7 +6,7 @@ import {
     MaterialAlertMessageType,
 } from '../../models/index';
 import { Service } from '../../services/index';
-import { Subject } from "rxjs";
+import { Subscription } from "rxjs";
 import { filter, distinctUntilKeyChanged } from 'rxjs/operators';
 import { IncomingCallModalComponent } from "../../components/index";
 import { AlertController, ModalController } from '@ionic/angular';
@@ -17,18 +17,19 @@ import { AlertController, ModalController } from '@ionic/angular';
   styleUrls: ['./phone-ringer.component.scss'],
 })
 export class PhoneRingerComponent implements OnInit {
-    private receiveRemoteLogoutSubject = new Subject<any>();
-    private receivePhoneLineInvitationSubject = new Subject<any>();
-
+	
 	constructor(
 		private modalCtrl: ModalController,
 		private alertCtrl: AlertController,
 		private service: Service,
-	) {
-        this.hasIncoming = false;
-        this.debugId = Date.now().toString();
-	}
-	
+		) {
+			this.hasIncoming = false;
+			this.debugId = Date.now().toString();
+		}
+		
+	receiveRemoteLogout: Subscription;
+	receivePhoneLineInvitation : Subscription;
+	receiveCancelInvitation: Subscription;
 	ngOnInit() {}
 
     debugId: string;
@@ -46,23 +47,13 @@ export class PhoneRingerComponent implements OnInit {
 	// example in parent use @ViewChild to get reference to component
 	// then use the reference to call references' public methods
 	// call during ionViewDidEnter
-	getSubjects(subjectType:string) {
-		switch(subjectType){
-			case 'receiveRemoteLogout':
-				return this.receiveRemoteLogoutSubject;
-			case 'receivePhoneLineInvitation':
-				return this.receivePhoneLineInvitationSubject;
-			default:
-				return null;
-		}
-	}
 
 	startListeners(): void {
 		//this.endListeners();
 
 		//console.log("phone.ts listeners started");
 
-		this.service.receivePhoneLineInvitation.asObservable()
+		this.receivePhoneLineInvitation = this.service.receivePhoneLineInvitation.asObservable()
 			.pipe(filter<ObservableMessageType>((o) => { return this.service.isEmpty(o.message) === false; }))
 			.pipe(distinctUntilKeyChanged<ObservableMessageType>("timestamp"))
 			.subscribe((message: ObservableMessageType) => {
@@ -106,7 +97,7 @@ export class PhoneRingerComponent implements OnInit {
 				}
 			});
 
-		this.service.receiveCancelInvitation.asObservable()
+		this.receiveCancelInvitation = this.service.receiveCancelInvitation.asObservable()
 			.pipe(filter<ObservableMessageType>((o) => { return this.service.isEmpty(o.message) === false; }))
 			.pipe(distinctUntilKeyChanged<ObservableMessageType>("timestamp"))
 			.subscribe((message: ObservableMessageType) => {
@@ -130,7 +121,7 @@ export class PhoneRingerComponent implements OnInit {
 				}
 			});
 
-		this.service.receiveRemoteLogout.asObservable()
+		this.receiveRemoteLogout = this.service.receiveRemoteLogout.asObservable()
 			.pipe(filter<ObservableMessageType>((o) => { return this.service.isEmpty(o.message) === false; }))
 			.pipe(distinctUntilKeyChanged<ObservableMessageType>("timestamp"))
 			.subscribe((message: ObservableMessageType) => {
@@ -146,7 +137,7 @@ export class PhoneRingerComponent implements OnInit {
                         //alert.title = "Debugging";
                         //alert.message = "phone-ringer.component.ts receiveRemoteLogout: " + this.debugId;
                         //this.service.openAlert(alert);
-						this.receiveRemoteLogoutSubject.next(connectionId);
+						this.service.getObservable('receiveRemoteLogout').next(connectionId);
                         // this.events.publish('phoneRinger:receiveRemoteLogout', connectionId);
 					}
 				}
@@ -161,9 +152,9 @@ export class PhoneRingerComponent implements OnInit {
 	endListeners(): void {
 		//console.log("phone.ts listeners ended");
 
-		this.receiveRemoteLogoutSubject && this.receiveRemoteLogoutSubject.unsubscribe();
-
-		this.receivePhoneLineInvitationSubject && this.receivePhoneLineInvitationSubject.unsubscribe();
+		this.receiveRemoteLogout && this.receiveRemoteLogout.unsubscribe();
+		this.receivePhoneLineInvitation && this.receivePhoneLineInvitation.unsubscribe();
+		this.receiveCancelInvitation && this.receiveCancelInvitation.unsubscribe();
 	}
 
 	async displayIncomingCall(call: CallType): Promise<void> {
@@ -195,7 +186,7 @@ export class PhoneRingerComponent implements OnInit {
 			// notify the parent component that we've accepted a phone call
 			// the parent component will set this.service.acceptedCall = call
 			// this.events.publish('phoneRinger:receivePhoneLineInvitation:accepted', call);
-			this.receivePhoneLineInvitationSubject.next(call);
+			this.service.getObservable('receivePhoneLineInvitation').next(call);
 		}
 		else if (data === IncomingCallResponseEnum.deny) {
 			this.hasIncoming = false;

@@ -54,25 +54,25 @@ export class PastMeetingsPage implements OnInit {
   ionViewDidEnter() {
   if (this.service.isEmpty(this.phoneRinger) === false) {
     this.phoneRinger.startListeners();
-    this.receivePhoneLineInvitation = this.phoneRinger.getSubjects('receivePhoneLineInvitation').subscribe((call: CallType) => {
-      if (this.service.isEmpty(call) === false) {
-        this.service.acceptedCall = call;
-        // this.navCtrl.setRoot(Phone);
-        this.router.navigate(['phone']);
-      }
-    });
-
-    this.receiveRemoteLogout = this.phoneRinger.getSubjects('receiveRemoteLogout').subscribe((connectionId: string) => {
-      this.service.doLogout()
-        .catch((error) => {
-          console.log("app-shell.ts logOut error:", error);
-        })
-        .then(() => {
-          // this.navCtrl.setRoot(LoginPage);
-          this.router.navigate(['login']);
-        })
-    });
   }
+  this.receivePhoneLineInvitation = this.service.getObservable('receivePhoneLineInvitation').subscribe((call: CallType) => {
+    if (this.service.isEmpty(call) === false) {
+      this.service.acceptedCall = call;
+      // this.navCtrl.setRoot(Phone);
+      this.router.navigate(['phone']);
+    }
+  });
+
+  this.receiveRemoteLogout = this.service.getObservable('receiveRemoteLogout').subscribe((connectionId: string) => {
+    this.service.doLogout()
+      .catch((error) => {
+        console.log("app-shell.ts logOut error:", error);
+      })
+      .then(() => {
+        // this.navCtrl.setRoot(LoginPage);
+        this.router.navigate(['login']);
+      })
+  });
 
   let accessToken: string;
 

@@ -16,7 +16,7 @@ import { optionalEmail } from "../../validators/optionalEmail.validator";
 //     Phone,
 //     LoginPage,
 // } from '../index'
-// import { Subscription } from "rxjs/Subscription";
+import { Subscription } from "rxjs";
 import {
     MemberType,
     AvatarEditType,
@@ -63,8 +63,8 @@ export class AccountPage implements OnInit {
   defaultAvatar = this.service.defaultAvatar;
   image: string = this.defaultAvatar;
 
-  // receivePhoneLineInvitation: Subscription;
-  // receiveRemoteLogout: Subscription;
+  receivePhoneLineInvitation: Subscription;
+  receiveRemoteLogout: Subscription;
 
   // ionViewCanEnter(): Promise<boolean> {
   //     return new Promise<boolean>(async (resolve) => {
@@ -149,23 +149,23 @@ export class AccountPage implements OnInit {
 ionViewDidEnter() {
     if (this.service.isEmpty(this.phoneRinger) === false) {
         this.phoneRinger.startListeners();
-        this.phoneRinger.getSubjects('receivePhoneLineInvitation').subscribe((call) => {
-          if (this.service.isEmpty(call) === false) {
-              this.service.acceptedCall = call;
-              // this.navCtrl.setRoot(Phone);
-          }
-        });
-    
-        this.phoneRinger.getSubjects('receiveRemoteLogout').subscribe((connectionId) => {
-          this.service.doLogout()
-          .catch((error) => {
-              console.log("app-shell.ts logOut error:", error);
-          })
-          .then(() => {
-              this.router.navigate(['login']);
-          })
-        });
     }
+    this.receivePhoneLineInvitation = this.service.getObservable('receivePhoneLineInvitation').subscribe((call) => {
+      if (this.service.isEmpty(call) === false) {
+          this.service.acceptedCall = call;
+          // this.navCtrl.setRoot(Phone);
+      }
+    });
+
+    this.receiveRemoteLogout = this.service.getObservable('receiveRemoteLogout').subscribe((connectionId) => {
+      this.service.doLogout()
+      .catch((error) => {
+          console.log("app-shell.ts logOut error:", error);
+      })
+      .then(() => {
+          this.router.navigate(['login']);
+      })
+    });
 
 }
 
@@ -173,6 +173,8 @@ ionViewWillLeave() {
     if (this.service.isEmpty(this.phoneRinger) === false) {
         this.phoneRinger.endListeners();
     }
+    this.receiveRemoteLogout && this.receiveRemoteLogout.unsubscribe();
+    this.receivePhoneLineInvitation && this.receivePhoneLineInvitation.unsubscribe();
 }
 
 

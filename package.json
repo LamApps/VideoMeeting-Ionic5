@@ -41,6 +41,7 @@
     "@types/signalr": "^2.2.35",
     "@types/webrtc": "0.0.23",
     "cordova-ios": "^6.2.0",
+    "cordova-plugin-iosrtc": "^6.0.21",
     "cordova-plugin-camera": "^5.0.3",
     "cordova-plugin-contacts": "^3.0.1",
     "cordova-plugin-datepicker": "^0.9.3",
@@ -103,7 +104,8 @@
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-ionic-keyboard": {},
-      "cordova-plugin-nativestorage": {}
+      "cordova-plugin-nativestorage": {},
+      "cordova-plugin-iosrtc": {}
     },
     "platforms": [
       "ios"

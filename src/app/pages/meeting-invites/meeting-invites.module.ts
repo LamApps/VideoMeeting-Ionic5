@@ -8,6 +8,8 @@ import { MeetingInvitesPageRoutingModule } from './meeting-invites-routing.modul
 
 import { MeetingInvitesPage } from './meeting-invites.page';
 
+import { PhoneRingerComponent } from 'src/app/components';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -15,6 +17,6 @@ import { MeetingInvitesPage } from './meeting-invites.page';
     IonicModule,
     MeetingInvitesPageRoutingModule
   ],
-  declarations: [MeetingInvitesPage]
+  declarations: [MeetingInvitesPage, PhoneRingerComponent]
 })
 export class MeetingInvitesPageModule {}

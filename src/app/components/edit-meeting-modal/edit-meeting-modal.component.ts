@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild} from '@angular/core';
 import * as moment from 'moment';
-import { NavController, AlertController, NavParams } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { PhoneContactType, CallType, KeyValueType, FormsErrorMessageType, FormErrorTypeEnum, NetcastDto, SqlSearchPredicateDto, NetcastGenreDto, MemberType, NetcastViewModel, MeetingDto } from '../../models/index'
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 // import { EmailValidator } from '../../validators/index'
@@ -20,13 +20,11 @@ import {
   styleUrls: ['./edit-meeting-modal.component.scss'],
 })
 export class EditMeetingModalComponent implements OnInit {
-    @Input() value:any;
+  @Input() value:any;
   constructor(
-	private navCtrl: NavController,
 	// private events: Events,
-	private navParams: NavParams,
 	private fb: FormBuilder,
-	// private viewCtrl: ViewController,
+	private viewCtrl: ModalController,
 	private service: Service,
 	private alertCtrl: AlertController,
 	// private datePicker: DatePicker,
@@ -35,7 +33,8 @@ export class EditMeetingModalComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.model = this.value as MeetingDto;
+    this.model = this.value;
+    console.log(this.model);
     this.createForm();
   }
     lengths: Array<KeyValueType> = [
@@ -61,7 +60,6 @@ export class EditMeetingModalComponent implements OnInit {
 
     createForm() {
 
-     
         this.formGroup = this.fb.group({
             title: new FormControl(this.model.title, [
                 Validators.maxLength(200),
@@ -149,7 +147,7 @@ export class EditMeetingModalComponent implements OnInit {
 
                 if (isDebugging) {
                   
-                    // this.viewCtrl.dismiss();
+                    this.viewCtrl.dismiss();
                 }
                 else {
                     let meetingDto: MeetingDto = await this.service.updateMeeting(this.model, accessToken);
@@ -158,7 +156,7 @@ export class EditMeetingModalComponent implements OnInit {
                         (<Element>event.target).innerHTML = originalContent;
                         //(<Element>event.target).removeAttribute("disabled");
                     }
-                    // this.viewCtrl.dismiss(meetingDto);
+                    this.viewCtrl.dismiss(meetingDto);
                    
                 }
                 
@@ -200,6 +198,6 @@ export class EditMeetingModalComponent implements OnInit {
     }
 
     cancel(): void {
-        // this.viewCtrl.dismiss();
+        this.viewCtrl.dismiss();
     }
 }

@@ -1,16 +1,16 @@
 <ion-header>
-	<ion-navbar hideBackButton="true">
+	<ion-toolbar>
 		<ion-title>
             Create A Meeting
         </ion-title>
-		<ion-buttons end>
-            <button (click)="cancel()" ion-button icon-only>
+		<ion-buttons slot="end">
+            <ion-button (click)="cancel()">
                 <ion-icon name="close-circle"></ion-icon>
-            </button>
+            </ion-button>
 		</ion-buttons>
-	</ion-navbar>
+	</ion-toolbar>
 </ion-header>
-<ion-content padding>
+<ion-content class="ion-padding">
 	
 	<form [formGroup]="formGroup">
         <ion-grid>
@@ -19,46 +19,45 @@
                     <ion-list>
 
                         <ion-item>
-                            <ion-label stacked>Meeting Title</ion-label>
+                            <ion-label position="stacked">Meeting Title</ion-label>
                             <ion-input type="text" formControlName="title"></ion-input>
                         </ion-item>
                         <ion-item text-wrap *ngIf="!formGroup.controls.title.valid && formGroup.controls.title.dirty">
-                            <show-form-errors [control]="formGroup.controls.title"></show-form-errors>
+                            <app-show-form-errors [control]="formGroup.controls.title"></app-show-form-errors>
                         </ion-item>
                         <ion-item>
-                            <ion-label stacked>Description</ion-label>
+                            <ion-label position="stacked">Description</ion-label>
                             <ion-textarea formControlName="description" rows="3"></ion-textarea>
                         </ion-item>
                         <ion-item *ngIf="!formGroup.controls.description.valid && formGroup.controls.description.dirty">
-                            <show-form-errors [control]="formGroup.get('description')"></show-form-errors>
+                            <app-show-form-errors [control]="formGroup.get('description')"></app-show-form-errors>
                         </ion-item>
 
 
                         <ion-item>
-                            <ion-label stacked>Scheduled Date &amp; Time</ion-label>
+                            <ion-label position="stacked">Scheduled Date &amp; Time</ion-label>
                             <ion-datetime displayFormat="MMM DD, YYYY h:mm A" formControlName="meetingTime"></ion-datetime>
                         </ion-item>
                         <ion-item *ngIf="!formGroup.controls.meetingTime.valid && formGroup.controls.meetingTime.dirty">
-                            <show-form-errors [control]="formGroup.get('meetingTime')"></show-form-errors>
+                            <app-show-form-errors [control]="formGroup.get('meetingTime')"></app-show-form-errors>
                         </ion-item>
                         <ion-item>
-                            <ion-label stacked>Meeting Length: </ion-label>
+                            <ion-label position="stacked">Meeting Length: </ion-label>
                             <ion-select formControlName="meetingLength">
-                                <ion-option *ngFor="let length of lengths" value="{{length.value}}">{{length.key}}</ion-option>
+                                <ion-select-option *ngFor="let length of lengths" value="{{length.value}}">{{length.key}}</ion-select-option>
                             </ion-select>
                         </ion-item>
                         <ion-item *ngIf="!formGroup.controls.meetingLength.valid && formGroup.controls.meetingLength.dirty">
-                            <show-form-errors [control]="formGroup.get('meetingLength')"></show-form-errors>
+                            <app-show-form-errors [control]="formGroup.get('meetingLength')"></app-show-form-errors>
                         </ion-item>
 
                         <ion-row class="bg-white">
                             <ion-col class="text-center">
 
-
-                                <button (click)="cancel()" ion-button color="danger">Cancel</button>
+                                <ion-button expand="block" (click)="cancel()" color="danger">Cancel</ion-button>
                             </ion-col>
                             <ion-col class="text-center">
-                                <button (click)="submit()" ion-button color="brand-orange">Create</button>
+                                <ion-button expand="block" (click)="submit()" color="primary">Create</ion-button>
                             </ion-col>
                         </ion-row>
 
@@ -79,4 +78,4 @@
 	</form>
 	
 </ion-content>
-<phone-ringer #phoneRinger></phone-ringer>
+<app-phone-ringer #phoneRinger></app-phone-ringer>

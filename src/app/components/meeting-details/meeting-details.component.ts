@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import * as moment from 'moment';
 import {
-	NavParams,
+	ModalController,
 } from '@ionic/angular';
 import {
 	MeetingDto,
@@ -16,19 +16,20 @@ import { Service } from "../../services/index";
   styleUrls: ['./meeting-details.component.scss'],
 })
 export class MeetingDetailsComponent implements OnInit {
-
+	
 	constructor(
-		private navParams: NavParams,
 		private service: Service,
-		// private viewCtrl: ViewController,
+		private viewCtrl: ModalController,
 	) {
 		this.allowAttend = false;
 		// this.meeting = this.navParams.data;
 	}
 
-	@Input('meeting') inputMeeting: MeetingDto;
+	@Input() value: MeetingDto;
 
-	ngOnInit() {}
+	ngOnInit() {
+		this.meeting = this.value;
+	}
 	
 	_meeting: MeetingDto;
 	get meeting(): MeetingDto {
@@ -70,6 +71,6 @@ export class MeetingDetailsComponent implements OnInit {
 	attendees: Array<MeetingAttendeeDto>;
 
 	close() {
-		// this.viewCtrl.dismiss();
+		this.viewCtrl.dismiss();
 	}
 }

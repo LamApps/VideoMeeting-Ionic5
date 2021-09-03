@@ -109,23 +109,23 @@ export class SettingsPage implements OnInit {
 
       if (this.service.isEmpty(this.phoneRinger) === false) {
           this.phoneRinger.startListeners();
-          this.onReceivePhoneLineInvitation = this.phoneRinger.getSubjects('receivePhoneLineInvitation').subscribe((call) => {
-            if (this.service.isEmpty(call) === false) {
-                this.service.acceptedCall = call;
-                // this.navCtrl.setRoot(Phone);
-            }
-          });
-      
-          this.onReceiveRemoteLogout = this.phoneRinger.getSubjects('receiveRemoteLogout').subscribe((connectionId) => {
-            this.service.doLogout()
-            .catch((error) => {
-                console.log("app-shell.ts logOut error:", error);
-            })
-            .then(() => {
-                // this.router.navigate(['login']);
-            })
-          });
-      }
+        }
+        this.onReceivePhoneLineInvitation = this.service.getObservable('receivePhoneLineInvitation').subscribe((call) => {
+          if (this.service.isEmpty(call) === false) {
+              this.service.acceptedCall = call;
+              // this.navCtrl.setRoot(Phone);
+          }
+        });
+    
+        this.onReceiveRemoteLogout = this.service.getObservable('receiveRemoteLogout').subscribe((connectionId) => {
+          this.service.doLogout()
+          .catch((error) => {
+              console.log("app-shell.ts logOut error:", error);
+          })
+          .then(() => {
+              // this.router.navigate(['login']);
+          })
+        });
 
       this.startLocalVideo();
 

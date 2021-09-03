@@ -99,26 +99,26 @@ export class CompanySearchPage implements OnInit {
     // fires each time loaded
     if (this.service.isEmpty(this.phoneRinger) === false) {
         this.phoneRinger.startListeners();
-        this.receivePhoneLineInvitation = this.phoneRinger.getSubjects('receivePhoneLineInvitation').subscribe((call) => {
-          if (this.service.isEmpty(call) === false) {
-              this.service.acceptedCall = call;
-              // this.navCtrl.setRoot(Phone);
-          }
-        });
-    
-        this.receiveRemoteLogout = this.phoneRinger.getSubjects('receiveRemoteLogout').subscribe((connectionId) => {
-          this.service.doLogout()
-          .catch((error) => {
-              console.log("app-shell.ts logOut error:", error);
-          })
-          .then(() => {
-              // this.router.navigate(['login']);
-          })
-        });
     }
+    this.receivePhoneLineInvitation = this.service.getObservable('receivePhoneLineInvitation').subscribe((call) => {
+      if (this.service.isEmpty(call) === false) {
+          this.service.acceptedCall = call;
+          // this.navCtrl.setRoot(Phone);
+      }
+    });
+
+    this.receiveRemoteLogout = this.service.getObservable('receiveRemoteLogout').subscribe((connectionId) => {
+      this.service.doLogout()
+      .catch((error) => {
+          console.log("app-shell.ts logOut error:", error);
+      })
+      .then(() => {
+          // this.router.navigate(['login']);
+      })
+    });
   }
 
-  ngOnDestroy() {
+  ionViewWillLeave() {
       if (this.service.isEmpty(this.phoneRinger) === false) {
           this.phoneRinger.endListeners();
       }

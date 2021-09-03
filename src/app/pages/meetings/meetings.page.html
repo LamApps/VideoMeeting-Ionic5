@@ -23,9 +23,9 @@
 <ion-list>
   <ion-item-sliding *ngFor="let meeting of meetings">
     <ion-item>
-      <meeting-item [meeting]="meeting"></meeting-item>
+      <app-meeting-item [meeting]="meeting"></app-meeting-item>
     </ion-item>
-          <ion-item-options side="right">
+          <ion-item-options side="end">
               <ion-item-option *ngIf="service.canEnterMeetingTime(meeting)"
                       color="primary"
                       (click)="gotoMeeting(meeting)">
@@ -34,7 +34,7 @@
               </ion-item-option>
               <ion-item-option (click)="meetingDetails(meeting)"
                       color="secondary">
-                  <ion-icon name="paper"></ion-icon>
+                  <ion-icon name="eye"></ion-icon>
                   Details
               </ion-item-option>
               <ion-item-option (click)="editMeeting(meeting)"

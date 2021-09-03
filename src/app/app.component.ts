@@ -9,6 +9,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { Service } from './services/index';
 
 import { MemberType, GuestProfileType } from './models';
+declare var cordova: any;
 
 @Component({
   selector: 'app-root',
@@ -106,10 +107,10 @@ export class AppComponent {
 
       // for browser testing, we need to check to see if cordova is
       // loaded. if not we skip using this plugin for browser testing
-      // if (typeof cordova !== "undefined" && this.platform.is("ios")) {
-      //     console.log("is IOS");
-      //     cordova.plugins.iosrtc.registerGlobals();
-      // }
+      if (typeof cordova !== "undefined" && this.platform.is("ios")) {
+          console.log("is IOS");
+          cordova.plugins.iosrtc.registerGlobals();
+      }
 
       //window.plugins.iosrtc.registerGlobals();
 
@@ -171,6 +172,7 @@ export class AppComponent {
               // TODO: need to set error page that has error message for user and allows
               // the user to perform some action.
               console.log('Empty');
+              this.router.navigate(['error']);
           }
           else {
               // is the user loggedin
@@ -211,19 +213,18 @@ export class AppComponent {
                   let isEmailReady: boolean = await this.service.isEmailReady();
                   if (isEmailReady === false) {
                       if (this.service.isEmpty(this.email)) {
-
+                        this.router.navigate(['login'])
                       }
                       else {
                           await this.service.setEmail(this.email);
                       }
-                  }
-                  else {
                   }
 
               }
           }
       }
       catch (e) {
+          this.router.navigate(['error']);
       }
     //   this.splashScreen && this.splashScreen.hide();
   }

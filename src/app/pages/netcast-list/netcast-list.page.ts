@@ -96,32 +96,32 @@ export class NetcastListPage implements OnInit {
   ionViewDidEnter() {
       if (this.service.isEmpty(this.phoneRinger) === false) {
           this.phoneRinger.startListeners();
-          this.receivePhoneLineInvitation = this.phoneRinger.getSubjects('receivePhoneLineInvitation').subscribe((call: CallType) => {
-              if (this.service.isEmpty(call) === false) {
-                  this.service.acceptedCall = call;
-                  // this.navCtrl.setRoot(Phone);
-                  this.router.navigate(['phone']);
-              }
-          });
-    
-          this.receiveRemoteLogout = this.phoneRinger.getSubjects('receiveRemoteLogout').subscribe((connectionId: string) => {
-              //let alert = this.alertCtrl.create({
-              //    title: "Debugging",
-              //    message: "received remote logout: " + connectionId,
-              //    buttons: ['OK']
-              //})
-              //alert.present();
-    
-              this.service.doLogout()
-                  .catch((error) => {
-                      console.log("app-shell.ts logOut error:", error);
-                  })
-                  .then(() => {
-                     this.router.navigate(['login']);
-                      // this.navCtrl.setRoot(LoginPage);
-                  })
-          });
-      }
+        }
+        this.receivePhoneLineInvitation = this.service.getObservable('receivePhoneLineInvitation').subscribe((call: CallType) => {
+            if (this.service.isEmpty(call) === false) {
+                this.service.acceptedCall = call;
+                // this.navCtrl.setRoot(Phone);
+                this.router.navigate(['phone']);
+            }
+        });
+  
+        this.receiveRemoteLogout = this.service.getObservable('receiveRemoteLogout').subscribe((connectionId: string) => {
+            //let alert = this.alertCtrl.create({
+            //    title: "Debugging",
+            //    message: "received remote logout: " + connectionId,
+            //    buttons: ['OK']
+            //})
+            //alert.present();
+  
+            this.service.doLogout()
+                .catch((error) => {
+                    console.log("app-shell.ts logOut error:", error);
+                })
+                .then(() => {
+                   this.router.navigate(['login']);
+                    // this.navCtrl.setRoot(LoginPage);
+                })
+        });
   }
 
   ionViewWillLeave() {
