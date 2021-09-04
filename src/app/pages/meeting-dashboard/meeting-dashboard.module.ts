@@ -11,7 +11,8 @@ import { PhoneRingerComponent,
   CreateMeetingModalComponent,
   EditMeetingModalComponent,
   PicPreviewComponent,
-  ShowFormErrorsComponent
+  ShowFormErrorsComponent,
+  MeetingDetailsComponent
  } from '../../components/index';
 
 @NgModule({
@@ -28,6 +29,7 @@ import { PhoneRingerComponent,
     ShowFormErrorsComponent,
     CreateMeetingModalComponent,
     EditMeetingModalComponent,
+    MeetingDetailsComponent,
   ]
 })
 export class MeetingDashboardPageModule {}

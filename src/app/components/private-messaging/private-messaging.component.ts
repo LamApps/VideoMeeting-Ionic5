@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { NavParams } from '@ionic/angular';
 import {
 	FormBuilder,
 	FormGroup,
@@ -12,6 +11,7 @@ import {
 	GenericUserType,
 	MaterialAlertMessageType,
 } from "../../models/index";
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-private-messaging',
@@ -23,8 +23,7 @@ export class PrivateMessagingComponent implements OnInit {
 	constructor(
 		private service: Service,
 		private fb: FormBuilder,
-		// public viewCtrl: ViewController,
-		public navParams: NavParams,
+		public viewCtrl: ModalController,
 
 	) {
 		this.showProgress = false;
@@ -44,8 +43,8 @@ export class PrivateMessagingComponent implements OnInit {
 	formGroup: FormGroup
 
 	ngOnInit() {
-		let currentUser = this.navParams.get('currentUser');
-		let users = this.navParams.get('users');
+		let currentUser = this.currentUser;
+		let users = this.users;
 
 		if (this.service.isEmpty(users) === false) {
 			this.users = users;
@@ -80,7 +79,7 @@ export class PrivateMessagingComponent implements OnInit {
 	}
 
 	close(): void {
-		// this.viewCtrl.dismiss();
+		this.viewCtrl.dismiss();
 	}
 
 	async submit(): Promise<void> {
@@ -112,7 +111,7 @@ export class PrivateMessagingComponent implements OnInit {
 
 				this.showProgress = false;
 				//this.onDone.emit(message);
-				// this.viewCtrl.dismiss(message);
+				this.viewCtrl.dismiss(message);
 			}
 			else {
 				let alert = new MaterialAlertMessageType();

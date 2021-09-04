@@ -1,8 +1,17 @@
+<ion-header>
+	<ion-toolbar>
+		<ion-title>
+            {{title}}
+        </ion-title>
+		<ion-buttons slot="end">
+            <ion-button (click)="cancel()">
+                <ion-icon name="close-circle"></ion-icon>
+            </ion-button>
+		</ion-buttons>
+	</ion-toolbar>
+</ion-header>
 <ion-content>
     <ion-card>
-        <ion-card-header *ngIf="title">
-            {{title}}
-        </ion-card-header>
         <ion-card-content>
             <ng-container *ngIf="instructions">
                 <div [innerHtml]="instructions"></div>
@@ -11,24 +20,26 @@
                 <ion-list *ngIf="formItems">
                     <ng-container *ngFor="let item of formItems">
                         <ion-item>
-                            <ion-label floating>{{item.label}}</ion-label>
+                            <ion-label position="floating">{{item.label}}</ion-label>
                             <ion-input type="text"
                                        formControlName="{{item.key}}"></ion-input>
                         </ion-item>
                         <ion-item *ngIf="formGroup.get(item.key).errors">
-                            <show-form-errors [control]="formGroup.get(item.key)"></show-form-errors>
+                            <app-show-form-errors [control]="formGroup.get(item.key)"></app-show-form-errors>
                         </ion-item>
                     </ng-container>
                 </ion-list>
                 <ion-grid>
                     <ion-row>
-                        <ion-col col-12>
-                            <button ion-button (click)="submit()" *ngIf="!showProgress" item-left>
+                        <ion-col>
+                            <ion-button expand="block" (click)="submit()" *ngIf="!showProgress">
                                 Submit
-                            </button>
-                            <button ion-button color="danger" (click)="cancel()" *ngIf="!showProgress" item-right>
+                            </ion-button>
+                        </ion-col>
+                        <ion-col>
+                            <ion-button expand="block" (click)="cancel()" color="light" *ngIf="!showProgress">
                                 Cancel
-                            </button>
+                            </ion-button>
                         </ion-col>
                     </ion-row>
                 </ion-grid>

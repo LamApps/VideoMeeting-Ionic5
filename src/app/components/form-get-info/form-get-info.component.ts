@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { NavParams, AlertController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 
 import {
@@ -29,8 +29,7 @@ export class FormGetInfoComponent implements OnInit {
 		private domSanitizer: DomSanitizer,
 		private service: Service,
 		private fb: FormBuilder,
-		// public viewCtrl: ViewController,
-		public navParams: NavParams,
+		public viewCtrl: ModalController,
 		private alertCtrl: AlertController,
 
 	) {
@@ -39,16 +38,17 @@ export class FormGetInfoComponent implements OnInit {
 
 	@Input('showProgress') showProgress: boolean;
 	@Input('title') title: string;
-	@Input('instructions') instructions: SafeHtml;
+	@Input('instructions') instructions: string;
+	instructionHTML: SafeHtml;
 	@Input('formItems') formItems: Array<FormItemType>;
 	@Output() onSubmit: EventEmitter<Array<FormItemType>> = new EventEmitter<Array<FormItemType>>();
 
 	ngOnInit() {
-		let instructions = this.navParams.get('instructions');
-		this.instructions = this.domSanitizer.bypassSecurityTrustHtml(instructions);
-		this.showProgress = this.navParams.get('showProgress');
-		this.title = this.navParams.get('title');
-		this.formItems = this.navParams.get('formItems');
+		let instructions = this.instructions;
+		this.instructionHTML = this.domSanitizer.bypassSecurityTrustHtml(instructions);
+		this.showProgress = this.showProgress;
+		this.title = this.title;
+		this.formItems = this.formItems;
 		this.createForm();
 	}
 
@@ -91,7 +91,7 @@ export class FormGetInfoComponent implements OnInit {
 				}
 			});
 			//this.onSubmit.emit(this.formItems);
-			// this.viewCtrl.dismiss(this.formItems);
+			this.viewCtrl.dismiss(this.formItems);
 		}
 		else {
 			const alert = await this.alertCtrl.create({
@@ -104,6 +104,6 @@ export class FormGetInfoComponent implements OnInit {
 	}
 
 	cancel(): void {
-		// this.viewCtrl.dismiss();
+		this.viewCtrl.dismiss();
 	}
 }

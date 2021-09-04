@@ -301,14 +301,14 @@ export class MeetingInvitesPage implements OnInit {
 
 	async meetingDetails(meeting: MeetingDto) {
 		let meetingDetailsModal = await this.modalCtrl.create({
-      component: MeetingDetailsComponent, 
-      componentProps: {meeting}
-    });
+			component: MeetingDetailsComponent, 
+			componentProps: {meeting}
+		});
 		await meetingDetailsModal.present();
 	}
 
 	gotoMeetingsDashboardPage() {
 		// this.navCtr÷l.setRoot(MeetingsDashboardPage);
-    this.router.navigate(['meeting-dashboard']);
+		this.router.navigate(['meeting-dashboard']);
 	}
 }

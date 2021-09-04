@@ -14,10 +14,10 @@
 						<ion-select [(ngModel)]="existingUsers"
 									formControlName="selectedUsers"
 									multiple="true">
-							<ion-option *ngFor="let user of users"
+							<ion-select-option *ngFor="let user of users"
 										[value]="user">
 								<img src="{{user.imgSrc}}" />{{user.name}}
-							</ion-option>
+							</ion-select-option>
 						</ion-select>
 					</ion-item>
 					<ion-item *ngIf="!users">
@@ -32,20 +32,20 @@
 									  placeholder="Enter your message"></ion-textarea>
 					</ion-item>
 					<ion-item *ngIf="formGroup.get('message').errors">
-						<show-form-errors [control]="formGroup.get('message')"></show-form-errors>
+						<app-show-form-errors [control]="formGroup.get('message')"></app-show-form-errors>
 					</ion-item>
 				</ion-list>
 				<ion-grid>
 					<ion-row>
-						<ion-col col-12>
-							<button ion-button icon-start (click)="submit()" *ngIf="!showProgress">
+						<ion-col>
+							<ion-button slot="start" (click)="submit()" color="primary" *ngIf="!showProgress">
 								<ion-icon name="paper-plane"></ion-icon>
 								Send
-							</button>
-							<button ion-button icon-start color="danger" (click)="close()" *ngIf="!showProgress">
+							</ion-button>
+							<ion-button slot="end" color="danger" (click)="close()" *ngIf="!showProgress">
 								<ion-icon name="close-circle"></ion-icon>
 								Cancel
-							</button>
+							</ion-button>
 						</ion-col>
 					</ion-row>
 				</ion-grid>

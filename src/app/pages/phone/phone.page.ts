@@ -12,9 +12,7 @@ import {
 import { StatusBar } from '@ionic-native/status-bar';
 import { Subscription } from 'rxjs';
 import {
-  NavController,
   ModalController,
-
   ActionSheetController,
   Platform,
 } from '@ionic/angular';

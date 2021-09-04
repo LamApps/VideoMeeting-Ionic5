@@ -109,7 +109,7 @@ export class AppComponent {
       // loaded. if not we skip using this plugin for browser testing
       if (typeof cordova !== "undefined" && this.platform.is("ios")) {
           console.log("is IOS");
-          cordova.plugins.iosrtc.registerGlobals();
+          cordova.plugins && cordova.plugins.iosrtc.registerGlobals();
       }
 
       //window.plugins.iosrtc.registerGlobals();

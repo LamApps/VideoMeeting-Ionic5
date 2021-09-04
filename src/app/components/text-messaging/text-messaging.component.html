@@ -3,7 +3,7 @@
 		<div class="col-md-12">
 			<div class="text-message-display-mini-box">
 				<ng-container *ngIf="currentMessage">
-					<text-messaging-message [(message)]="currentMessage" (onOpenPrivateSmsInterface)="openPrivateSmsInterface($event)"></text-messaging-message>
+					<app-text-messaging-message [(message)]="currentMessage" (onOpenPrivateSmsInterface)="openPrivateSmsInterface($event)"></app-text-messaging-message>
 				</ng-container>
 			</div>
 		</div>
@@ -15,7 +15,7 @@
 					<div class="text-message-display-box">
 						<ng-container *ngIf="textMessages">
 							<div *ngFor="let message of textMessages">
-								<text-messaging-message [message]="message" (onOpenPrivateSmsInterface)="openPrivateSmsInterface($event)"></text-messaging-message>
+								<app-text-messaging-message [message]="message" (onOpenPrivateSmsInterface)="openPrivateSmsInterface($event)"></app-text-messaging-message>
 							</div>
 						</ng-container>
 					</div>
@@ -27,7 +27,7 @@
 						<div class="form-group">
 							<textarea class="form-control"
 									  formControlName="message"></textarea>
-							<show-form-errors [control]="formGroup.get('message')"></show-form-errors>
+							<app-show-form-errors [control]="formGroup.get('message')"></app-show-form-errors>
 						</div>
 						<div class="form-group">
 							<!--<mat-spinner *ngIf="showSmsProgress" mode="indeterminate" color="warn"></mat-spinner>-->
@@ -45,25 +45,24 @@
 	<div class="row">
 		<div class="col-md-12">
 
-			<button *ngIf="messagingVisible"
+			<ion-button *ngIf="messagingVisible"
 					(click)="closeMessaging()">
-
 				Minimize
-			</button>
-			<button *ngIf="!messagingVisible"
+			</ion-button>
+			<ion-button *ngIf="!messagingVisible"
 					(click)="openMessaging()">
 
 				Maximize
-			</button>
-			<button (click)="saveMessages()">
+			</ion-button>
+			<ion-button (click)="saveMessages()">
 				Save Messages
-			</button>
-			<button (click)="clearMessages()">
+			</ion-button>
+			<ion-button (click)="clearMessages()">
 				Clear Messages
-			</button>
-			<button (click)="openPrivateSmsInterface()" *ngIf="users.length > 1">
+			</ion-button>
+			<ion-button (click)="openPrivateSmsInterface()" *ngIf="users.length > 1">
 				Private Message
-			</button>
+			</ion-button>
 		</div>
 	</div>
 </div>

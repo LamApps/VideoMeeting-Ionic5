@@ -1,18 +1,18 @@
 <ion-header>
-	<ion-navbar hideBackButton="false">
+	<ion-toolbar>
 		<ion-title>
 			Contacts
 		</ion-title>
-		<ion-buttons end>
-			<button ion-button icon-only (click)="close()">
+		<ion-buttons slot="end">
+			<ion-button (click)="close()">
 				<ion-icon name="close-circle"></ion-icon>
-			</button>
+			</ion-button>
 		</ion-buttons>
-	</ion-navbar>
+	</ion-toolbar>
 </ion-header>
 <ion-content>
 	<ion-searchbar type="email" placeholder="Search Email" [(ngModel)]="contactEmailInput"
-				   showCancelButton
+				   showCancelButton="focus"
 				   cancelButtonText="Cancel"
 				   [debounce]="debounce"
 				   (ionCancel)="onCancelSearch($event)"
@@ -23,21 +23,22 @@
 			<h2>
 				{{contactEmailInput}}
 			</h2>
-			<button class="btn-circle" color="secondary"
-					*ngIf="contactEmailInput" ion-button item-right (click)="onCallClick(contactEmailInput)">
-				<ion-icon name="call"></ion-icon>
-			</button>
+			<ion-button *ngIf="contactEmailInput" (click)="onCallClick(contactEmailInput)">
+				<ion-icon slot="icon-only" name="call"></ion-icon>
+			</ion-button>
 		</ion-item>
 		<ion-item *ngFor="let contact of filteredList">
-			<ion-avatar item-left>
+			<ion-avatar slot="start">
 				<img *ngIf="contact.avatarFileName" src="{{contactAvatarBaseUrl}}{{contact.avatarFileName}}?{{timestamp}}">
 				<img *ngIf="!contact.avatarFileName" src="assets/images/default-avatar.png?{{timestamp}}" alt="">
 			</ion-avatar>
-			<h2>{{contact.name}}</h2>
-			<p>{{contact.email}}</p>
-			<button class="btn-circle" color="secondary" ion-button item-right *ngIf="contact.isMember" (click)="onCallClick(contact.email)">
-				<ion-icon name="call"></ion-icon>
-			</button>
+			<ion-label>
+				<h2>{{contact.name}}</h2>
+				<p>{{contact.email}}</p>
+				<ion-button *ngIf="contact.isMember" (click)="onCallClick(contact.email)">
+					<ion-icon slot="icon-only" name="call"></ion-icon>
+				</ion-button>
+			</ion-label>
 		</ion-item>
 	</ion-list>
 </ion-content>
