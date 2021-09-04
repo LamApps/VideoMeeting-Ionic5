@@ -143,7 +143,7 @@ export class PhoneCallComponent implements OnInit {
       };
 
       // NOTE: when we receive a remote media stream
-      this.pc.onaddstream = (event: MediaStreamEvent) => {
+      this.pc.onaddstream = (event: any) => {
         this.remoteStream = event.stream;
         // render the dom
         //this.isActive = true;

@@ -21,13 +21,14 @@ import { ShowFormErrorsComponent } from 'src/app/components/show-form-errors/sho
     IonicModule,
     PhonePageRoutingModule
   ],
-  declarations: [PhonePage,
-    ContactSearchModalComponent,
-    PhoneCallComponent,
-    PhoneLineInvitationModalComponent,
+  declarations: [
+    PhonePage,
     FormGetInfoComponent,
     PrivateMessagingComponent,
     IncomingCallModalComponent,
+    ContactSearchModalComponent,
+    PhoneCallComponent,
+    PhoneLineInvitationModalComponent,
     ShowFormErrorsComponent
   ]
 })

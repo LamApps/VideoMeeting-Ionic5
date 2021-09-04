@@ -1,170 +1,168 @@
 @import '../../../assets/_variables.scss';
 @import '../../../assets/_mixins.scss';
-meeting-page {
-    .visible {
-      visibility: visible;
-    }
-  
-    .invisible {
-      visibility: hidden;
-    }
-  
-    .meeting-page {
-      margin: 0px;
-      padding: 0px;
-      position: relative;
-      height: 100%;
-      /*video {
-        &#main-video {
-          z-index: 100;
-          height: 100%;
-          width: auto;
-          position: absolute;
-        }
-      }*/
-      #main-video {
-       
+  .visible {
+    visibility: visible;
+  }
+
+  .invisible {
+    visibility: hidden;
+  }
+
+  .meeting-page {
+    margin: 0px;
+    padding: 0px;
+    position: relative;
+    height: 100%;
+    /*video {
+      &#main-video {
+        z-index: 100;
         height: 100%;
-        width: 100%;
+        width: auto;
         position: absolute;
-        object-fit: cover;
-        //bottom:20px;
-       
-        //object-fit: cover;
-        //border: 2px solid blue;
-        //-webkit-transform: scaleX(-1);
-        //transform: scaleX(-1);
       }
-  
-      .video-thumbs {
-        height: 100%;
-        width: 100%;
-        
-        //object-fit: cover;
-        background-color: blue;
-        //border: 2px solid red;
-        margin: 0;
-        padding: 0;
-        -webkit-transform: scaleX(-1);
-        transform: scaleX(-1);
-      }
-  
-      .phone-call-container {
-        z-index: 200;
-        position: absolute; // bottom: 0;
-        width: 100%;
-        height: 49%;
+    }*/
+    #main-video {
+      
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      object-fit: cover;
+      //bottom:20px;
+      
+      //object-fit: cover;
+      //border: 2px solid blue;
+      //-webkit-transform: scaleX(-1);
+      //transform: scaleX(-1);
+    }
+
+    .video-thumbs {
+      height: 100%;
+      width: 100%;
+      
+      //object-fit: cover;
+      background-color: blue;
+      //border: 2px solid red;
+      margin: 0;
+      padding: 0;
+      -webkit-transform: scaleX(-1);
+      transform: scaleX(-1);
+    }
+
+    .phone-call-container {
+      z-index: 200;
+      position: absolute; // bottom: 0;
+      width: 100%;
+      height: 49%;
+      margin: 0;
+      padding: 0;
+      border: none;
+
+      .phone-call-component {
+        display: inline-block;
+        width: 32.69%;
+        height: 50%;
         margin: 0;
         padding: 0;
         border: none;
-  
-        .phone-call-component {
-          display: inline-block;
-          width: 32.69%;
-          height: 50%;
+        /*video {
+          width: 100%;
+          height: 100%;
+          background-color: #003780;
+          border: none;
           margin: 0;
           padding: 0;
-          border: none;
-          /*video {
-            width: 100%;
-            height: 100%;
-            background-color: #003780;
-            border: none;
-            margin: 0;
-            padding: 0;
-          }*/
-        }
+        }*/
       }
-  
-      $expand-height: 40;
-      $collapse-height: 8;
-  
-      .btn-sms-container {
-        position: absolute;
-        bottom: 5px;
-        right: 5px;
-        z-index: 400;
+    }
+
+    $expand-height: 40;
+    $collapse-height: 8;
+
+    .btn-sms-container {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      z-index: 400;
+    }
+
+    .btn-sms {
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
+      background-color: rgba(56, 129, 245, 0.71)
+    }
+
+    .chatbox {
+      font-family: 'Open Sans', sans-serif;
+      overflow: auto;
+      z-index: 300;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.55);
+      max-height: $collapse-height * 1%;
+      min-height: $collapse-height * 1%;
+
+      &.expand {
+        max-height: $expand-height * 1%;
+        min-height: $expand-height * 1%;
       }
-  
-      .btn-sms {
-        height: 40px;
-        width: 40px;
-        border-radius: 50%;
-        background-color: rgba(56, 129, 245, 0.71)
-      }
-  
-      .chatbox {
-        font-family: 'Open Sans', sans-serif;
-        overflow: auto;
-        z-index: 300;
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        background-color: rgba(0, 0, 0, 0.55);
-        max-height: $collapse-height * 1%;
-        min-height: $collapse-height * 1%;
-  
-        &.expand {
-          max-height: $expand-height * 1%;
-          min-height: $expand-height * 1%;
-        }
-  
-        .chatbox-content {
-          color: white;
-          position: relative;
-  
-          .message {
-            font-size: medium;
-            word-wrap: break-word;
-            padding: 0;
-            margin: 5px;
-  
-            .message-detail {
-              white-space: nowrap;
-              font-size: 14px;
-              color: #FCFF47;
-  
-              &.is-private {
-                color: #4efff8;
-              }
-  
-              ion-icon {
-                transform: rotate(0deg);
-  
-                &.is-receiver {
-                  transform: rotate(180deg);
-                }
+
+      .chatbox-content {
+        color: white;
+        position: relative;
+
+        .message {
+          font-size: medium;
+          word-wrap: break-word;
+          padding: 0;
+          margin: 5px;
+
+          .message-detail {
+            white-space: nowrap;
+            font-size: 14px;
+            color: #FCFF47;
+
+            &.is-private {
+              color: #4efff8;
+            }
+
+            ion-icon {
+              transform: rotate(0deg);
+
+              &.is-receiver {
+                transform: rotate(180deg);
               }
             }
           }
         }
       }
-  
-      .btn-bar {
-        z-index: 300;
-        position: absolute;
-        bottom: $collapse-height * 1%;
-  
-        &.expand {
-          bottom: $expand-height * 1%;
-        }
-  
-        left: 50%;
-  
-        &-content {
-          width: 120%;
-          position: relative;
-          left: -50%;
-  
-          button {
-            display: inline-block;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-  
-            #hangup {
-              transform: rotate(-45deg);
-            }
+    }
+
+    .btn-bar {
+      z-index: 300;
+      position: absolute;
+      bottom: $collapse-height * 1%;
+
+      &.expand {
+        bottom: $expand-height * 1%;
+      }
+
+      left: 50%;
+
+      &-content {
+        width: 120%;
+        position: relative;
+        left: -50%;
+
+        button {
+          display: inline-block;
+          border-radius: 50%;
+          width: 40px;
+          height: 40px;
+
+          #hangup {
+            transform: rotate(-45deg);
           }
         }
       }

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { NavParams } from '@ionic/angular';
+import { Component, OnInit, Input } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 import {
 	//PhoneService,
 	//Service
@@ -10,20 +10,20 @@ import {
   styleUrls: ['./phone-line-invitation-modal.component.scss'],
 })
 export class PhoneLineInvitationModalComponent implements OnInit {
-
+	@Input () value : any;
 	email: string;
 	image: string;
 	constructor(
-		private navParams: NavParams,
-		// private viewCtrl: ViewController,
+		private viewCtrl: ModalController,
 		//private phoneService: PhoneService,
 		//private service: Service,
 	) {
-		this.email = this.navParams.data.email;
-		this.image = this.navParams.data.image;
 	}
 
-	ngOnInit() {}
+	ngOnInit() {
+		this.email = this.value;
+		// this.image = this.navParams.data.image;
+	}
 	//timerRef: number;
 
 	ionViewDidEnter() {
@@ -35,7 +35,7 @@ export class PhoneLineInvitationModalComponent implements OnInit {
 	}
 
 	stopCalling() {
-		// this.viewCtrl.dismiss(this.email);
+		this.viewCtrl.dismiss(this.email);
 
 		//this.service.cancelCall(this.email)
 		//	.catch(error => {

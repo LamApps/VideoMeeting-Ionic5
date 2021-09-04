@@ -9,12 +9,11 @@ import {
   ElementRef,
   NgZone,
 } from '@angular/core';
-import { StatusBar } from '@ionic-native/status-bar';
+// import { StatusBar } from '@ionic-native/status-bar';
 import { Subscription } from 'rxjs';
 import { filter, distinctUntilKeyChanged } from 'rxjs/operators';
 
 import {
-  NavController,
   ModalController,
   ActionSheetController, Platform,
 } from '@ionic/angular';
@@ -25,13 +24,6 @@ import {
 //   LoginPage,
 // } from '../index'
 
-import {
-  ContactSearchModalComponent
-} from '../../components/contact-search-modal/contact-search-modal.component'
-import { PhoneCallComponent } from 'src/app/components/phone-call/phone-call.component';
-import {
-  PhoneLineInvitationModalComponent
-} from '../../components/phone-line-invitation-modal/phone-line-invitation-modal.component'
 
 import {
   CallType,
@@ -53,13 +45,15 @@ import {
   MeetingAttendeeDto,
   MeetingDto,
   PhoneLineType,
-
   MaterialAlertMessageType
 } from '../../models/index';
 
-import {
-  Service,
-} from '../../services/index';
+import { Service } from '../../services/index';
+
+import { ContactSearchModalComponent } from '../../components/contact-search-modal/contact-search-modal.component'
+import { PhoneCallComponent } from 'src/app/components/phone-call/phone-call.component';
+import { PhoneLineInvitationModalComponent } from '../../components/phone-line-invitation-modal/phone-line-invitation-modal.component'
+
 import { FormGetInfoComponent, PrivateMessagingComponent, IncomingCallModalComponent, } from '../../components/index';
 import * as moment from 'moment';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
@@ -73,7 +67,7 @@ declare var cordova: any;
   styleUrls: ['./meeting.page.scss'],
 })
 export class MeetingPage implements OnInit {
-  _pageName: string = "meeing.page.ts";
+  _pageName: string = "meeting.page.ts";
   get pageName(): string {
       return this._pageName;
   }
@@ -84,12 +78,11 @@ export class MeetingPage implements OnInit {
   constructor(
       //private viewContainerRef: ViewContainerRef,
       private componentFactoryResolver: ComponentFactoryResolver,
-      private navCtrl: NavController,
       private modalCtrl: ModalController,
       private actionSheetCtrl: ActionSheetController,
       private platform: Platform,
 
-      private statusBar: StatusBar,
+    //   private statusBar: StatusBar,
       private ngZone: NgZone,
       private service: Service,
       private router: Router,
@@ -231,23 +224,9 @@ export class MeetingPage implements OnInit {
       this.textMessages = new Array<TextMessageType>();
     }
     this.route.queryParams.subscribe(params => {
-      this.meetingId = params['id'];
+      this.meetingId = Number(params['id']);
     });
   }
-//   ionViewCanEnter() {
-//     this.statusBar.hide();
-//     // guest
-//     return new Promise<boolean>(async (resolve) => {
-//         let canActivatePage: boolean = await this.service.canActivatePage();
-//         if (canActivatePage) {
-//             let isLoggedIn: boolean = await this.service.getIsLoggedIn();
-//             resolve(isLoggedIn);
-//         }
-//         else {
-//             resolve(false);
-//         }
-//     });
-// }
 
 // fires each time view goes to foreground
 ionViewDidEnter() {
@@ -708,7 +687,7 @@ async displayIncomingCall(call: CallType): Promise<void> {
     this.hasIncoming = true;
     this.incomingCallModal = await this.modalCtrl.create({
       component:IncomingCallModalComponent, 
-      componentProps: { call: call }
+      componentProps: { value: call }
     });
     let { data } = await this.incomingCallModal.onDidDismiss();
     if (this.service.isIos()) { this.showAllVideos(); }
@@ -1619,7 +1598,7 @@ async trySendPhoneLineInvitation(email: string): Promise<void> {
     if (!this.service.isEmpty(email)) {
         this.phonelineInvitationModal = await this.modalCtrl.create({
           component: PhoneLineInvitationModalComponent, 
-          componentProps:{ email }
+          componentProps:{ value: email }
         });
         if (this.service.isIos()) { this.hideAllVideos(); }
         await this.phonelineInvitationModal.present();

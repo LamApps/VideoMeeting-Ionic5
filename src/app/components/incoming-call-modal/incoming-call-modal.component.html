@@ -1,14 +1,14 @@
 <div class="container">
     <div class="buttons">
-        <button ion-button class="btn" color="secondary" (click)="accept()" icon-only>
+        <ion-button class="btn" color="primary" (click)="accept()">
             <ion-icon name="call"></ion-icon>
-        </button>
-        <button ion-button class="btn" color="danger" (click)="deny()" icon-only>
+        </ion-button>
+        <ion-button class="btn" color="secondary" (click)="deny()">
             <ion-icon name="call" id="hangup"></ion-icon>
-        </button>
-        <button ion-button class="btn" color="bad-danger" (click)="block()" icon-only>
+        </ion-button>
+        <ion-button class="btn" color="danger" (click)="block()">
             <ion-icon name="hand"></ion-icon>
-        </button>
+        </ion-button>
     </div>
     <div class="call-animation">
         <img class="img-circle" src="assets/images/default-avatar.png" alt="" />
@@ -20,15 +20,15 @@
         {{call.profile.email}}
     </p>
     <div class="buttons">
-        <button ion-button class="btn" color="secondary" (click)="accept()" icon-only>
+        <ion-button class="btn" color="secondary" (click)="accept()">
             <ion-icon name="call"></ion-icon>
-        </button>
-        <button ion-button class="btn" color="danger" (click)="deny()" icon-only>
+        </ion-button>
+        <ion-button class="btn" color="danger" (click)="deny()">
             <ion-icon name="call" id="hangup"></ion-icon>
-        </button>
-        <button ion-button class="btn" color="bad-danger" (click)="block()" icon-only>
+        </ion-button>
+        <ion-button class="btn" color="bad-danger" (click)="block()">
             <ion-icon name="hand"></ion-icon>
-        </button>
+        </ion-button>
     </div>
 </div>
 

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { NavParams } from '@ionic/angular';
+import { Component, OnInit, Input } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 import { CallType, IncomingCallResponseEnum } from "../../models/index";
 
 @Component({
@@ -8,16 +8,16 @@ import { CallType, IncomingCallResponseEnum } from "../../models/index";
   styleUrls: ['./incoming-call-modal.component.scss'],
 })
 export class IncomingCallModalComponent implements OnInit {
-
+	@Input() value:any;
 	constructor(
-		private navParams: NavParams,
-		// private viewCtrl: ViewController
+		private viewCtrl: ModalController
 	) {
-		this.call = this.navParams.get("call");
 
 		console.log("incoming-call-modal.ts constructor got navParams call:", this.call);
 	}
-	ngOnInit() {}
+	ngOnInit() {
+		this.call = this.value;
+	}
 	call: CallType;
 
 	ionViewDidLoad() {
@@ -25,14 +25,14 @@ export class IncomingCallModalComponent implements OnInit {
 	}
 
 	accept(): void {
-		// this.viewCtrl.dismiss(IncomingCallResponseEnum.accept);
+		this.viewCtrl.dismiss(IncomingCallResponseEnum.accept);
 	}
 
 	deny(): void {
-		// this.viewCtrl.dismiss(IncomingCallResponseEnum.deny);
+		this.viewCtrl.dismiss(IncomingCallResponseEnum.deny);
 	}
 
 	block(): void {
-		// this.viewCtrl.dismiss(IncomingCallResponseEnum.block);
+		this.viewCtrl.dismiss(IncomingCallResponseEnum.block);
 	}
 }

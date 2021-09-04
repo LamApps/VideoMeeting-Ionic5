@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import {
-  NavController,
   AlertController,
   Platform,
 } from '@ionic/angular';
@@ -15,6 +14,7 @@ import {
 import {
     PhoneRingerComponent,
 } from '../../components/index';
+import { Router } from '@angular/router';
 
 declare var cordova: any;
 
@@ -27,10 +27,10 @@ export class SettingsPage implements OnInit {
 
   constructor(
     public alertCtrl: AlertController,
-    public navCtrl: NavController,
     private service: Service,
     private platform: Platform,
     private ngZone: NgZone,
+    private router:Router,
   ) {
     this.isVideoHidden = false;
   }
@@ -114,6 +114,7 @@ export class SettingsPage implements OnInit {
           if (this.service.isEmpty(call) === false) {
               this.service.acceptedCall = call;
               // this.navCtrl.setRoot(Phone);
+              this.router.navigate(['phone']);
           }
         });
     
@@ -124,6 +125,7 @@ export class SettingsPage implements OnInit {
           })
           .then(() => {
               // this.router.navigate(['login']);
+              this.router.navigate(['login']);
           })
         });
 
@@ -152,7 +154,6 @@ export class SettingsPage implements OnInit {
     try {
         //this.localVideoElement.nativeElement.load();
         await this.stopLocalVideo();
-        console.log(10);
         let mediaDeviceInfos: MediaDeviceInfo[] = await navigator.mediaDevices.enumerateDevices();
 
         if (this.service.isEmpty(mediaDeviceInfos)) {

@@ -1,7 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import {
-  NavController,
-  NavParams,
   ActionSheetController,
   Platform,
 } from '@ionic/angular';
@@ -29,8 +27,8 @@ import {
   NetcastDto,
   MaterialAlertMessageType,
 } from '../../models/index';
-import { Router } from '@angular/router';
-
+import { Router, ActivatedRoute } from '@angular/router';
+import { pluck } from 'rxjs/operators';
 
 declare var cordova: any;
 @Component({
@@ -41,12 +39,11 @@ declare var cordova: any;
 export class NetcasterPage implements OnInit {
   constructor(
     private actionSheetCtrl: ActionSheetController,
-    private navCtrl: NavController,
-    private navParams: NavParams,
     private platform: Platform,
     private ngZone: NgZone,
     private service: Service,
     private router: Router,
+    private route: ActivatedRoute,
 
   ) {
       this.isVideoHidden = false;
@@ -96,7 +93,7 @@ export class NetcasterPage implements OnInit {
   ionViewDidEnter() {
     // fires each time view goes to foreground
 
-    this.netcastId = Number(this.navParams.get("netcastId"));
+    this.netcastId = Number(this.route.params.pipe(pluck('id')));
 
     this.netcastConnections = new Array<NetcastType>();
     this.canSwitchVideo = false;
@@ -577,7 +574,7 @@ startDataChannelListeners(dc: RTCDataChannel): void {
         console.log("datachannel.onbufferedamountlow event", event)
     };
 
-    dc.onerror = (event: RTCErrorEvent) => {
+    dc.onerror = (event: any) => {
         console.log("datachannel.onerror event: ", event);
     };
 

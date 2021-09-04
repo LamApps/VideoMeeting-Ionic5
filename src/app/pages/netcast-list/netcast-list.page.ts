@@ -310,6 +310,7 @@ export class NetcastListPage implements OnInit {
 
   startNetcast(netcastId: number) {
       // this.navCtrl.setRoot(NetcasterPage, { netcastId: netcastId });
+      this.router.navigate(['netcaster', {id: netcastId}]);
   }
 
   async openActionSheet(): Promise<void> {

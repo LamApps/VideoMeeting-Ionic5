@@ -302,7 +302,7 @@ export class MeetingInvitesPage implements OnInit {
 	async meetingDetails(meeting: MeetingDto) {
 		let meetingDetailsModal = await this.modalCtrl.create({
 			component: MeetingDetailsComponent, 
-			componentProps: {meeting}
+			componentProps: {value: meeting}
 		});
 		await meetingDetailsModal.present();
 	}
