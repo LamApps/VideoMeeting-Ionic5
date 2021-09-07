@@ -13,7 +13,7 @@ import { IonSearchbar, ModalController, AlertController } from '@ionic/angular'
 export class ContactSearchModalComponent implements OnInit {
 	contactList: PhoneContactType[];
 	filteredList: PhoneContactType[];
-	contactEmailInput: string = '';
+	contactEmailInput: any = '';
 	debounce: number = 100;
 	@ViewChild(IonSearchbar) searchBar: IonSearchbar;
 

@@ -1,11 +1,7 @@
 export * from './show-form-errors/show-form-errors.component';
 export * from './form-get-info/form-get-info.component';
 export * from './outgoing-call-dialog/outgoing-call-dialog.component';
-export * from './text-messaging/text-messaging.component';
-export * from './text-messaging-message/text-messaging-message.component';
 export * from './private-messaging/private-messaging.component';
-export * from './material-helper/material-alert.component';
-export * from './material-helper/material-action-alert.component';
 export * from './customer-pbx-info/customer-pbx-info.component';
 export * from './form-customer-pbx/form-customer-pbx.component';
 export * from './pic-preview/pic-preview.component';
@@ -23,4 +19,5 @@ export * from './create-meeting-modal/create-meeting-modal.component';
 export * from './edit-netcast-modal/edit-netcast-modal.component';
 export * from './edit-meeting-modal/edit-meeting-modal.component';
 export * from './edit-avatar-popover/edit-avatar-popover.component';
-
+export * from './phone-call/phone-call.component';
+export * from './phone-call-action-popover/phone-call-action-popover.component';

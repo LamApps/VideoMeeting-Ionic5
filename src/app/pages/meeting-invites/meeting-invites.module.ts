@@ -5,18 +5,18 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { MeetingInvitesPageRoutingModule } from './meeting-invites-routing.module';
+import { SharedModule } from 'src/app/shared.module';
 
 import { MeetingInvitesPage } from './meeting-invites.page';
-
-import { PhoneRingerComponent } from 'src/app/components';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    MeetingInvitesPageRoutingModule
+    MeetingInvitesPageRoutingModule,
+    SharedModule
   ],
-  declarations: [MeetingInvitesPage, PhoneRingerComponent]
+  declarations: [MeetingInvitesPage],
 })
 export class MeetingInvitesPageModule {}

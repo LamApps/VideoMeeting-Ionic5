@@ -187,7 +187,7 @@ export class CompanyProfilePage implements OnInit {
 		return;
 	}
 
-	async gotoCustomerPbxLine(pbxlineId: number): Promise<void> {
+	async gotoCustomerPbxLine(pbxlineId: any): Promise<void> {
 		console.log("gotCustomerPbxLine pbxlineId: ", pbxlineId);
 		// this.navCtrl.setRoot(CustomerPbxPage, { pbxlineId: pbxlineId });
 	}

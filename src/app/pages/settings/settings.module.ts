@@ -5,18 +5,17 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { SettingsPageRoutingModule } from './settings-routing.module';
+import { SharedModule } from 'src/app/shared.module';
 
 import { SettingsPage } from './settings.page';
-
-import { PhoneRingerComponent } from 'src/app/components';
-
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    SettingsPageRoutingModule
+    SettingsPageRoutingModule,
+    SharedModule
   ],
-  declarations: [SettingsPage, PhoneRingerComponent]
+  declarations: [SettingsPage],
 })
 export class SettingsPageModule {}

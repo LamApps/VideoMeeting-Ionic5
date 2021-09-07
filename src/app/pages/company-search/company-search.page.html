@@ -77,7 +77,7 @@
                               <ion-item>
                                   <ion-label position="stacked">Select Country: </ion-label>
                                   <ion-select formControlName="countryIsoCode">
-                                      <ion-option value="{{c.countryIsoCode}}" *ngFor="let c of countries">{{c.countryName}}</ion-option>
+                                      <ion-select-option value="{{c.countryIsoCode}}" *ngFor="let c of countries">{{c.countryName}}</ion-select-option>
                                   </ion-select>
                               </ion-item>
                             </ion-list>

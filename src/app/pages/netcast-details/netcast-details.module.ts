@@ -5,18 +5,18 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { NetcastDetailsPageRoutingModule } from './netcast-details-routing.module';
+import { SharedModule } from 'src/app/shared.module';
 
 import { NetcastDetailsPage } from './netcast-details.page';
-
-import { PhoneRingerComponent } from '../../components/index';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    NetcastDetailsPageRoutingModule
+    NetcastDetailsPageRoutingModule,
+    SharedModule
   ],
-  declarations: [NetcastDetailsPage, PhoneRingerComponent]
+  declarations: [NetcastDetailsPage],
 })
 export class NetcastDetailsPageModule {}

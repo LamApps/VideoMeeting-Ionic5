@@ -5,15 +5,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { MeetingDashboardPageRoutingModule } from './meeting-dashboard-routing.module';
+import { SharedModule } from 'src/app/shared.module';
 
 import { MeetingDashboardPage } from './meeting-dashboard.page';
-import { PhoneRingerComponent,
-  CreateMeetingModalComponent,
-  EditMeetingModalComponent,
-  PicPreviewComponent,
-  ShowFormErrorsComponent,
-  MeetingDetailsComponent
- } from '../../components/index';
+
 
 @NgModule({
   imports: [
@@ -21,15 +16,10 @@ import { PhoneRingerComponent,
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    MeetingDashboardPageRoutingModule
+    MeetingDashboardPageRoutingModule,
+    SharedModule
   ],
-  declarations: [MeetingDashboardPage, 
-    PhoneRingerComponent, 
-    PicPreviewComponent, 
-    ShowFormErrorsComponent,
-    CreateMeetingModalComponent,
-    EditMeetingModalComponent,
-    MeetingDetailsComponent,
-  ]
+  declarations: [MeetingDashboardPage ],
+
 })
 export class MeetingDashboardPageModule {}

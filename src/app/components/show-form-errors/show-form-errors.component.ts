@@ -15,7 +15,7 @@ export class ShowFormErrorsComponent implements OnInit {
 	}
 
 	@Input()
-	private control: AbstractControlDirective | AbstractControl;
+	control: AbstractControlDirective | AbstractControl;
 
 	ngOnInit() {}
 	shouldShowErrors(): boolean {

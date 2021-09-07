@@ -1,0 +1,43 @@
+{
+  "project_info": {
+    "project_number": "404930055489",
+    "firebase_url": "https://livenetvideo-93441.firebaseio.com",
+    "project_id": "livenetvideo-93441",
+    "storage_bucket": "livenetvideo-93441.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:404930055489:android:aac41cd8f07117a9",
+        "android_client_info": {
+          "package_name": "io.cordova.myappae3400"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "404930055489-e5dr9qp8u2uk2re40terduajnung0thg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpidOOIdkcM6dphRccRmBI1MWExHhDBMA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+
+  ],
+  "configuration_version": "1"
+}

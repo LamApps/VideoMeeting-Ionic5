@@ -5,12 +5,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { AccountPageRoutingModule } from './account-routing.module';
-
+import { SharedModule } from 'src/app/shared.module';
 import { AccountPage } from './account.page';
-
-import { ShowFormErrorsComponent } from 'src/app/components';
-import { PicPreviewComponent } from 'src/app/components';
-import { PhoneRingerComponent } from 'src/app/components';
 
 @NgModule({
   imports: [
@@ -18,8 +14,9 @@ import { PhoneRingerComponent } from 'src/app/components';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    AccountPageRoutingModule
+    AccountPageRoutingModule,
+    SharedModule
   ],
-  declarations: [AccountPage, ShowFormErrorsComponent, PicPreviewComponent, PhoneRingerComponent]
+  declarations: [AccountPage],
 })
 export class AccountPageModule {}

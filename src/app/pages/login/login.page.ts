@@ -44,8 +44,8 @@ export class LoginPage implements OnInit {
 
   showPasswordText: boolean = false;
 
-  private loginForm: FormGroup;
-  private guestForm: FormGroup;
+  loginForm: FormGroup;
+  guestForm: FormGroup;
 
   invalidCredentials: boolean = false;
 

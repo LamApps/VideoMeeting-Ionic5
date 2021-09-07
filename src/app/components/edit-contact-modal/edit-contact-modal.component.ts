@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {
+	ModalController,
 	NavParams,
 } from '@ionic/angular';
 
@@ -30,7 +31,7 @@ export class EditContactModalComponent implements OnInit {
 		private formBuilder: FormBuilder,
 		//private contactService: ContactService,
 		//private jsHelperService: JsHelperService,
-		// private viewCtrl: ViewController,
+		private viewCtrl: ModalController,
 		private service: Service,
 	) {
 		this.phoneContact = this.navParams.data;
@@ -66,11 +67,11 @@ export class EditContactModalComponent implements OnInit {
 				this.service.updateContact(this.phoneContact, accessToken)
 					.then((data: PhoneContactType) => {
 						this.editContactLoading = false;
-						// this.viewCtrl.dismiss(data)
+						this.viewCtrl.dismiss(data)
 					})
 					.catch(() => {
 						this.editContactLoading = false;
-						// this.viewCtrl.dismiss()
+						this.viewCtrl.dismiss()
 					})
 			})
 		//if (!this.jsHelperService.isEmpty(jwtToken)) {
@@ -81,6 +82,6 @@ export class EditContactModalComponent implements OnInit {
     }
 
     cancel() {
-        // this.viewCtrl.dismiss();
+        this.viewCtrl.dismiss();
     }
 }

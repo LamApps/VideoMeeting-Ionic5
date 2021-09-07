@@ -7,20 +7,20 @@
 			<form [formGroup]="formGroup">
 				<ion-list>
 					<ion-item>
-						<ion-label floating>Name</ion-label>
+						<ion-label position="floating">Name</ion-label>
 						<ion-input type="text"
 								   formControlName="name"></ion-input>
 					</ion-item>
 					<ion-item *ngIf="formGroup.get('name').errors">
-						<show-form-errors [control]="formGroup.get('name')"></show-form-errors>
+						<app-show-form-errors [control]="formGroup.get('name')"></app-show-form-errors>
 					</ion-item>
 					<ion-item>
-						<ion-label floating>Subject</ion-label>
+						<ion-label position="floating">Subject</ion-label>
 						<ion-input type="text"
 								   formControlName="subject"></ion-input>
 					</ion-item>
 					<ion-item *ngIf="formGroup.get('subject').errors">
-						<show-form-errors [control]="formGroup.get('subject')"></show-form-errors>
+						<app-show-form-errors [control]="formGroup.get('subject')"></app-show-form-errors>
 					</ion-item>
 					<ion-item>
 						<label>Message</label>
@@ -28,20 +28,22 @@
 									  placeholder="Enter your message"></ion-textarea>
 					</ion-item>
 					<ion-item *ngIf="formGroup.get('message').errors">
-						<show-form-errors [control]="formGroup.get('message')"></show-form-errors>
+						<app-show-form-errors [control]="formGroup.get('message')"></app-show-form-errors>
 					</ion-item>
 				</ion-list>
 				<ion-grid>
 					<ion-row>
-						<ion-col col-12>
-							<button ion-button icon-start (click)="submit()" *ngIf="!showProgress">
+						<ion-col size="6">
+							<ion-button expand="block" (click)="submit()">
 								<ion-icon name="paper-plane"></ion-icon>
 								Update
-							</button>
-							<button ion-button icon-start color="danger" (click)="cancel()" *ngIf="!showProgress">
+							</ion-button>
+						</ion-col>
+						<ion-col>
+							<ion-button expand="block" color="danger" (click)="cancel()">
 								<ion-icon name="close-circle"></ion-icon>
 								Cancel
-							</button>
+							</ion-button>
 						</ion-col>
 					</ion-row>
 				</ion-grid>
