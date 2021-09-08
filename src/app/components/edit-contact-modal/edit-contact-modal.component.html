@@ -5,50 +5,50 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-    <ion-navbar hideBackButton="true">
+    <ion-toolbar>
         <ion-title>Edit Contact</ion-title>
-        <ion-buttons end>
-            <button (click)="viewCtrl.dismiss()" ion-button icon-only>
+        <ion-buttons slot="end">
+            <ion-button (click)="cancel()">
                 <ion-icon name="close-circle"></ion-icon>
-            </button>
+            </ion-button>
         </ion-buttons>
-    </ion-navbar>
+    </ion-toolbar>
 </ion-header>
-<ion-content padding>
+<ion-content class="ion-padding">
 
 
   <form [formGroup]="editContactForm">
       <ion-grid>
           <ion-row>
-              <ion-col col-6 offset-3>
-                  <pic-preview [imageSource]="avatar" (onAvatarChanged)="onAvatarChanged($event)"></pic-preview>
+              <ion-col size="6" offset="3">
+                  <app-pic-preview [imageSource]="avatar" (onAvatarChanged)="onAvatarChanged($event)"></app-pic-preview>
               </ion-col>
           </ion-row>
           <ion-row>
               <ion-col>
                   <ion-list>
                       <ion-item>
-                          <ion-label stacked>Name</ion-label>
+                          <ion-label position="stacked">Name</ion-label>
                           <ion-input type="text" formControlName="name" placeholder="Name"></ion-input>
                       </ion-item>
-                      <ion-item text-wrap *ngIf="!editContactForm.controls.name.valid && editContactForm.controls.name.dirty">
-                          <show-form-errors [control]="editContactForm.controls.name"></show-form-errors>
+                      <ion-item *ngIf="!editContactForm.controls.name.valid && editContactForm.controls.name.dirty">
+                          <app-show-form-errors [control]="editContactForm.controls.name"></app-show-form-errors>
                       </ion-item>
                       <ion-item>
-                          <ion-label stacked>Email</ion-label>
+                          <ion-label position="stacked">Email</ion-label>
                           <ion-input type="text" formControlName="email" placeholder="Email"></ion-input>
                       </ion-item>
-                      <ion-item text-wrap *ngIf="!editContactForm.controls.email.valid && editContactForm.controls.email.dirty">
-                          <show-form-errors [control]="editContactForm.controls.email"></show-form-errors>
+                      <ion-item *ngIf="!editContactForm.controls.email.valid && editContactForm.controls.email.dirty">
+                          <app-show-form-errors [control]="editContactForm.controls.email"></app-show-form-errors>
                       </ion-item>
                   </ion-list>
                  </ion-col>
           </ion-row>
           <ion-row>
               <ion-col>
-                  <button *ngIf="!editContactLoading" [disabled]="!editContactForm.valid" (click)="saveChanges()" ion-button color="brand-orange">Save Changes</button>
+                  <ion-button *ngIf="!editContactLoading" [disabled]="!editContactForm.valid" (click)="saveChanges()" color="primary">Save Changes</ion-button>
                   <!--<button *ngIf="editContactLoading" ion-button color="brand-orange"><ion-spinner name="dots"></ion-spinner></button>-->
-                  <button (click)="cancel()" ion-button color="light">cancel</button>
+                  <ion-button (click)="cancel()" color="light">cancel</ion-button>
               </ion-col>
           </ion-row>
       </ion-grid>

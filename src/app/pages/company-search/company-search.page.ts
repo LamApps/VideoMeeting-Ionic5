@@ -136,7 +136,7 @@ export class CompanySearchPage implements OnInit {
           this.profiles = new Array<ListItemType>();
           value.forEach((v) => {
               let item = new ListItemType();
-              item.id = v.companyProfileId.toString();
+              item.id = v.companyProfileId;
               item.imgSrc = this.service.isEmpty(v.logoFilename) ? this.service.defaultAvatar
                   : this.service.pbxContentUrl + v.companyProfileId.toString() + "/" + v.logoFilename + "?" + Date.now().toString();
               item.title = v.companyName;

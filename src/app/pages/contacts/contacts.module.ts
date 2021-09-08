@@ -5,12 +5,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { ContactsPageRoutingModule } from './contacts-routing.module';
+import { SharedModule } from 'src/app/shared.module';
 
 import { ContactsPage } from './contacts.page';
-
-import { PhoneRingerComponent } from 'src/app/components';
-import { ShowFormErrorsComponent } from 'src/app/components';
-import { PicPreviewComponent } from 'src/app/components';
 
 import { AddContactsPage } from '../add-contacts/add-contacts.page';
 
@@ -20,8 +17,9 @@ import { AddContactsPage } from '../add-contacts/add-contacts.page';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    ContactsPageRoutingModule
+    ContactsPageRoutingModule,
+    SharedModule
   ],
-  declarations: [ContactsPage, AddContactsPage, PhoneRingerComponent, ShowFormErrorsComponent, PicPreviewComponent]
+  declarations: [ContactsPage, AddContactsPage],
 })
 export class ContactsPageModule {}

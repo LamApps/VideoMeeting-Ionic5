@@ -1,6 +1,6 @@
 ﻿export class ListItemType {
 	constructor() {
-		this.id = "";
+		this.id = null;
 		this.imgSrc = "";
 		this.title = "";
 		this.subTitle = "";
@@ -8,7 +8,7 @@
 		this.links = null;
 	}
 
-	id: string;
+	id: number;
 	imgSrc: string;
 	title: string;
 	subTitle: string;

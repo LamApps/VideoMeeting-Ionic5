@@ -73,6 +73,8 @@
     "@types/node": "^12.11.1",
     "@typescript-eslint/eslint-plugin": "4.16.1",
     "@typescript-eslint/parser": "4.16.1",
+    "cordova-android": "^9.1.0",
+    "cordova-plugin-androidx-adapter": "^1.1.3",
     "eslint": "^7.6.0",
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-jsdoc": "30.7.6",
@@ -94,18 +96,25 @@
       "cordova-plugin-whitelist": {},
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
-      "cordova-plugin-ionic-webview": {},
+      "cordova-plugin-ionic-webview": {
+        "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
+      },
       "cordova-plugin-ionic-keyboard": {},
-      "cordova-plugin-camera": {},
+      "cordova-plugin-camera": {
+        "ANDROID_SUPPORT_V4_VERSION": "27.+"
+      },
       "cordova-plugin-contacts": {},
       "cordova-plugin-nativestorage": {},
       "cordova-plugin-network-information": {},
-      "cordova.plugins.diagnostic": {},
+      "cordova.plugins.diagnostic": {
+        "ANDROIDX_VERSION": "1.+"
+      },
       "cordova-plugin-iosrtc": {
         "MANUAL_INIT_AUDIO_DEVICE": "FALSE"
       },
       "cordova-plugin-datepicker": {},
-      "cordova-plugin-statusbar": {}
+      "cordova-plugin-statusbar": {},
+      "cordova-plugin-androidx-adapter": {}
     },
     "platforms": [
       "ios"

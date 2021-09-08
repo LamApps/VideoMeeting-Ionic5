@@ -22,7 +22,7 @@
 <ion-list>
   <ion-item-sliding *ngFor="let meeting of meetings">
     <ion-item>
-      <meeting-invite [meeting]="meeting" [email]="email"></meeting-invite>
+      <app-meeting-invite [meeting]="meeting" [email]="email"></app-meeting-invite>
     </ion-item>
     <ion-item-options side="end">
       <ion-item-option

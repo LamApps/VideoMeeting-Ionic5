@@ -22,7 +22,7 @@
 <ion-list>
   <ion-item-sliding *ngFor="let meeting of meetings">
     <ion-item>
-      <meeting-item [meeting]="meeting"></meeting-item>
+      <app-meeting-item [meeting]="meeting"></app-meeting-item>
     </ion-item>
           <ion-item-options side="right">
               <ion-item-option *ngIf="service.canEnterMeetingTime(meeting)"
@@ -78,7 +78,7 @@
 
         <ul class="list list-unstyled" *ngIf="meetings && !loading">
           <li *ngFor="let meeting of meetings">
-            <meeting-item [meeting]="meeting" (onMeetingDeleted)="deleteMeeting($event)"></meeting-item>
+            <app-meeting-item [meeting]="meeting" (onMeetingDeleted)="deleteMeeting($event)"></app-meeting-item>
           </li>
         </ul>
 

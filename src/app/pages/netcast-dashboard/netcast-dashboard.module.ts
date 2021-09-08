@@ -5,15 +5,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { NetcastDashboardPageRoutingModule } from './netcast-dashboard-routing.module';
+import { SharedModule } from 'src/app/shared.module';
 
 import { NetcastDashboardPage } from './netcast-dashboard.page';
 
-import { PhoneRingerComponent,
-  CreateNetcastModalComponent,
-  EditNetcastModalComponent,
-  PicPreviewComponent,
-  ShowFormErrorsComponent
- } from '../../components/index';
 
 @NgModule({
   imports: [
@@ -21,15 +16,12 @@ import { PhoneRingerComponent,
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    NetcastDashboardPageRoutingModule
+    NetcastDashboardPageRoutingModule,
+    SharedModule
   ],
   declarations: [
-    NetcastDashboardPage, 
-    PhoneRingerComponent, 
-    CreateNetcastModalComponent, 
-    EditNetcastModalComponent, 
-    PicPreviewComponent,
-    ShowFormErrorsComponent
-  ]
+    NetcastDashboardPage
+  ],
+
 })
 export class NetcastDashboardPageModule {}

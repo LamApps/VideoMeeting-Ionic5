@@ -5,15 +5,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { NetcastListPageRoutingModule } from './netcast-list-routing.module';
+import { SharedModule } from 'src/app/shared.module';
 
 import { NetcastListPage } from './netcast-list.page';
 
-import { PhoneRingerComponent,
-  CreateNetcastModalComponent,
-  EditNetcastModalComponent,
-  PicPreviewComponent,
-  ShowFormErrorsComponent
- } from '../../components/index';
 
 @NgModule({
   imports: [
@@ -21,15 +16,10 @@ import { PhoneRingerComponent,
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    NetcastListPageRoutingModule
+    NetcastListPageRoutingModule,
+    SharedModule
   ],
-  declarations: [
-    NetcastListPage, 
-    PhoneRingerComponent, 
-    CreateNetcastModalComponent, 
-    EditNetcastModalComponent, 
-    PicPreviewComponent,
-    ShowFormErrorsComponent
-  ]
+  declarations: [ NetcastListPage],
+
 })
 export class NetcastListPageModule {}

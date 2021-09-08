@@ -115,7 +115,7 @@ export class CompanyProfilePage implements OnInit {
 		this._pbxlines = new Array<ListItemType>();
 		value.forEach((v) => {
 			let item = new ListItemType();
-			item.id = v.pbxLineId.toString();
+			item.id = v.pbxLineId;
 			item.imgSrc = this.service.isEmpty(v.iconFilename) ? this.service.defaultAvatar
 				: this.service.pbxContentUrl + v.companyProfileId.toString() + "/"
 				+ this.service.pbxLineImageFolder.toString() + "/"
@@ -187,7 +187,7 @@ export class CompanyProfilePage implements OnInit {
 		return;
 	}
 
-	async gotoCustomerPbxLine(pbxlineId: number): Promise<void> {
+	async gotoCustomerPbxLine(pbxlineId: any): Promise<void> {
 		console.log("gotCustomerPbxLine pbxlineId: ", pbxlineId);
 		// this.navCtrl.setRoot(CustomerPbxPage, { pbxlineId: pbxlineId });
 	}

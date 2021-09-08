@@ -4,7 +4,7 @@
           Add A Contact
       </ion-title>
       <ion-buttons slot="end">
-          <ion-button (click)="viewCtrl.dismiss()">
+          <ion-button (click)="cancel()">
               <ion-icon name="close-circle"></ion-icon>
           </ion-button>
       </ion-buttons>
@@ -46,7 +46,7 @@
                             <ion-button expand="block" [disabled]="!contactForm.valid" (click)="add()">Add</ion-button>
                             </ion-col>
                             <ion-col>
-                            <ion-button expand="block" color="light" (click)="viewCtrl.dismiss()">cancel</ion-button>
+                            <ion-button expand="block" color="light" (click)="cancel()">cancel</ion-button>
                             </ion-col>
                     </ion-row>
                 </ion-grid>

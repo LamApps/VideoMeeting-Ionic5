@@ -314,7 +314,7 @@ ionViewWillLeave() {
           this.items = new Array<ListItemType>();
           value.forEach((v) => {
               let item = new ListItemType();
-              item.id = v.netcastId.toString();
+              item.id = v.netcastId;
               item.imgSrc = this.service.isEmpty(v.imageFilename) ? this.service.defaultAvatar
                   : this.service.netcastImageUrl + v.netcastId.toString() + "/" + v.imageFilename + "?" + Date.now().toString();
               item.title = v.title;

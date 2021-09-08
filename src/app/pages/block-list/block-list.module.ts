@@ -5,18 +5,18 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { BlockListPageRoutingModule } from './block-list-routing.module';
+import { SharedModule } from 'src/app/shared.module';
 
 import { BlockListPage } from './block-list.page';
-
-import { PhoneRingerComponent } from 'src/app/components';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    BlockListPageRoutingModule
+    BlockListPageRoutingModule,
+    SharedModule
   ],
-  declarations: [BlockListPage, PhoneRingerComponent]
+  declarations: [BlockListPage],
 })
 export class BlockListPageModule {}

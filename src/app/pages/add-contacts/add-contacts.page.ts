@@ -120,4 +120,7 @@ export class AddContactsPage implements OnInit {
 
       this.viewCtrl.dismiss(this.phoneContact)
   }
+  cancel() {
+      this.viewCtrl.dismiss();
+  }
 }

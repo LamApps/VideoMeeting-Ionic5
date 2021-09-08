@@ -5,12 +5,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { NetcastSearchPageRoutingModule } from './netcast-search-routing.module';
+import { SharedModule } from 'src/app/shared.module';
 
 import { NetcastSearchPage } from './netcast-search.page';
-
-import { PhoneRingerComponent,
-  ShowFormErrorsComponent
- } from '../../components/index';
 
 @NgModule({
   imports: [
@@ -18,8 +15,9 @@ import { PhoneRingerComponent,
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    NetcastSearchPageRoutingModule
+    NetcastSearchPageRoutingModule,
+    SharedModule
   ],
-  declarations: [NetcastSearchPage, PhoneRingerComponent, ShowFormErrorsComponent]
+  declarations: [NetcastSearchPage ],
 })
 export class NetcastSearchPageModule {}

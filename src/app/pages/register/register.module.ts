@@ -5,11 +5,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { RegisterPageRoutingModule } from './register-routing.module';
+import { SharedModule } from 'src/app/shared.module';
 
 import { RegisterPage } from './register.page';
-
-import { PicPreviewComponent } from 'src/app/components';
-import { ShowFormErrorsComponent } from 'src/app/components';
 
 @NgModule({
   imports: [
@@ -17,8 +15,9 @@ import { ShowFormErrorsComponent } from 'src/app/components';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    RegisterPageRoutingModule
+    RegisterPageRoutingModule,
+    SharedModule
   ],
-  declarations: [RegisterPage, PicPreviewComponent, ShowFormErrorsComponent]
+  declarations: [RegisterPage ],
 })
 export class RegisterPageModule {}

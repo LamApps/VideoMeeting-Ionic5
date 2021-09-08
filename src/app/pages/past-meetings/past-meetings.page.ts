@@ -21,7 +21,7 @@ import { Router } from '@angular/router';
 })
 export class PastMeetingsPage implements OnInit {
   constructor(
-    private service: Service,
+    public service: Service,
     private alertCtrl: AlertController,
     public navCtrl: NavController,
     private loadingCtrl: LoadingController,

@@ -20,7 +20,7 @@ import { Router } from '@angular/router';
 export class MeetingsPage implements OnInit {
 
   constructor(
-    private service: Service,
+    public service: Service,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
     private modalCtrl: ModalController,

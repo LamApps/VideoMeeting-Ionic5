@@ -55,6 +55,9 @@ export class HomePage implements OnInit {
     navigateToNetcast() {
       this.router.navigate(['netcast']);
     }
+    navigateToContacts() {
+      this.router.navigate(['contacts']);
+    }
     logOut() {
       this.service
           .doLogout()

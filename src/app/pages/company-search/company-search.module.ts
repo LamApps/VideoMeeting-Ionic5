@@ -5,11 +5,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { CompanySearchPageRoutingModule } from './company-search-routing.module';
+import { SharedModule } from 'src/app/shared.module';
 
 import { CompanySearchPage } from './company-search.page';
-
-import { PhoneRingerComponent } from 'src/app/components';
-import { ShowFormErrorsComponent } from 'src/app/components';
 
 @NgModule({
   imports: [
@@ -17,8 +15,9 @@ import { ShowFormErrorsComponent } from 'src/app/components';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    CompanySearchPageRoutingModule
+    CompanySearchPageRoutingModule,
+    SharedModule
   ],
-  declarations: [CompanySearchPage, PhoneRingerComponent, ShowFormErrorsComponent]
+  declarations: [CompanySearchPage],
 })
 export class CompanySearchPageModule {}

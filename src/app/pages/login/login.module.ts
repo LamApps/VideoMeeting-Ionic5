@@ -5,10 +5,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { LoginPageRoutingModule } from './login-routing.module';
+import { SharedModule } from 'src/app/shared.module';
 
 import { LoginPage } from './login.page';
-
-import { ShowFormErrorsComponent } from 'src/app/components';
 
 @NgModule({
   imports: [
@@ -16,8 +15,9 @@ import { ShowFormErrorsComponent } from 'src/app/components';
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    LoginPageRoutingModule
+    LoginPageRoutingModule,
+    SharedModule
   ],
-  declarations: [LoginPage, ShowFormErrorsComponent]
+  declarations: [LoginPage],
 })
 export class LoginPageModule {}

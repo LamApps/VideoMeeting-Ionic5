@@ -47,7 +47,7 @@
           <ion-row>
               <ion-col class="text-center">
                   <ion-button (click)="updateNameAndAvatar($event)" [disabled]="!nameForm.valid">Update Name & Avatar</ion-button>
-                  <ion-button (click)="resetNameForm($event)" color="light">Cancel</ion-button>
+                  <ion-button (click)="resetNameForm()" color="light">Cancel</ion-button>
               </ion-col>
           </ion-row>
       </ion-grid>
@@ -82,7 +82,7 @@
           <ion-row>
               <ion-col class="text-center">
                   <ion-button (click)="updateEmail($event)" [disabled]="!emailForm.valid">Update Email</ion-button>
-                  <ion-button (click)="resetEmailForm($event)" color="light">Cancel</ion-button>
+                  <ion-button (click)="resetEmailForm()" color="light">Cancel</ion-button>
               </ion-col>
           </ion-row>
           <ion-row>
@@ -129,7 +129,7 @@
           <ion-row>
               <ion-col class="text-center">
                   <ion-button (click)="updatePassword($event)" [disabled]="!passwordForm.valid">Update Password</ion-button>
-                  <ion-button (click)="resetPasswordForm($event)" color="light">Cancel</ion-button>
+                  <ion-button (click)="resetPasswordForm()" color="light">Cancel</ion-button>
               </ion-col>
           </ion-row>
           <ion-row>
